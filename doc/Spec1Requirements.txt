@@ -1,0 +1,31 @@
+Brain storm
+----
+- Subscribe to podcast
+- Determine which ones to download + not download
+- Download podcasts automatically
+- Play podcasts
+- Transfer to device
+- Notify of new podcasts
+- Rules for podcasts
+
+
+Phase 1
+----
+- Subscribe to podcasts
+- Download newest episodes of podcasts automatically
+- Play selected episodes
+
+
+Architecture
+----
+WinApp
+AppServices
+DomainServices
+Utility
+  PodcastDownloader
+Repository
+  PodcastRepository
+ViewModel
+Model
+  Podcast
+  Episode
