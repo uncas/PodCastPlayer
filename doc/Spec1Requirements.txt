@@ -1,18 +1,18 @@
 Brain storm
 ----
-- Subscribe to podcast
+- Subscribe to PodCast
 - Determine which ones to download + not download
-- Download podcasts automatically
-- Play podcasts
+- Download PodCasts automatically
+- Play PodCasts
 - Transfer to device
-- Notify of new podcasts
-- Rules for podcasts
+- Notify of new PodCasts
+- Rules for PodCasts
 
 
 Phase 1
 ----
-- Subscribe to podcasts
-- Download newest episodes of podcasts automatically
+- Subscribe to PodCasts
+- Download newest episodes of PodCasts automatically
 - Play selected episodes
 
 
@@ -22,10 +22,10 @@ WinApp
 AppServices
 DomainServices
 Utility
-  PodcastDownloader
+  PodCastDownloader
 Repository
-  PodcastRepository
+  PodCastRepository
 ViewModel
 Model
-  Podcast
+  PodCast
   Episode

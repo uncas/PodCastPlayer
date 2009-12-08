@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{990A3CDC-71BB-4235-9B19-FE87D3F81266}</ProjectGuid>
+    <ProjectGuid>{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Uncas.PodCastPlayer.Model</RootNamespace>
-    <AssemblyName>Uncas.PodCastPlayer.Model</AssemblyName>
+    <RootNamespace>Uncas.PodCastPlayer.Utility</RootNamespace>
+    <AssemblyName>Uncas.PodCastPlayer.Utility</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -47,9 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Episode.cs" />
-    <Compile Include="PodCast.cs" />
+    <Compile Include="IPodCastDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.Model\Uncas.PodCastPlayer.Model.csproj">
+      <Project>{990A3CDC-71BB-4235-9B19-FE87D3F81266}</Project>
+      <Name>Uncas.PodCastPlayer.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\UncasPodCastPlayerKey.snk">

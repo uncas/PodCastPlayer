@@ -22,6 +22,8 @@
  </ProjectOptions>
  <Targets>
   <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Model/bin/Debug/Uncas.PodCastPlayer.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Repository/bin/Debug/Uncas.PodCastPlayer.Repository.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Utility/bin/Debug/Uncas.PodCastPlayer.Utility.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>

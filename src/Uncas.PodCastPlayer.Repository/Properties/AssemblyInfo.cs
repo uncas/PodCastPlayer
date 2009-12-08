@@ -11,11 +11,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Uncas.PodCastPlayer.Tests")]
+[assembly: AssemblyTitle("Uncas.PodCastPlayer.Repository")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("A")]
-[assembly: AssemblyProduct("Uncas.PodCastPlayer.Tests")]
+[assembly: AssemblyProduct("Uncas.PodCastPlayer.Repository")]
 [assembly: AssemblyCopyright("Copyright © A 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("68337c4e-6866-44cc-b126-1517bc6f185a")]
+[assembly: Guid("197b73f0-9794-44d1-8e41-4a2cd886f312")]
 
 // Version information for an assembly consists of the following four values:
 //

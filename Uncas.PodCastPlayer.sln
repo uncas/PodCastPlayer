@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Model",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Tests", "src\Uncas.PodCastPlayer.Tests\Uncas.PodCastPlayer.Tests.csproj", "{3C6DDE9F-A35E-403A-98B5-4D3A9BA4CAA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Repository", "src\Uncas.PodCastPlayer.Repository\Uncas.PodCastPlayer.Repository.csproj", "{BFFE8668-0233-4CF0-98C7-E39934692C9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Utility", "src\Uncas.PodCastPlayer.Utility\Uncas.PodCastPlayer.Utility.csproj", "{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{3C6DDE9F-A35E-403A-98B5-4D3A9BA4CAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C6DDE9F-A35E-403A-98B5-4D3A9BA4CAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C6DDE9F-A35E-403A-98B5-4D3A9BA4CAA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFFE8668-0233-4CF0-98C7-E39934692C9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFE8668-0233-4CF0-98C7-E39934692C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFFE8668-0233-4CF0-98C7-E39934692C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFFE8668-0233-4CF0-98C7-E39934692C9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
