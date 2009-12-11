@@ -18,14 +18,32 @@ Phase 1
 
 Architecture
 ----
-WinApp
-AppServices
-DomainServices
-Utility
+UI
+  WinApp
+AppLayer
+  AppServices
   PodCastDownloader
-Repository
+Domain Layer
+  DomainServices
+  Repository
   PodCastRepository
-ViewModel
-Model
-  PodCast
-  Episode
+    IList<PodCast> GetPodCasts()
+    IList<Episode> GetEpisodes(PodCast)
+    [ byte[] StreamEpisode(Episode, offset, bufferSize) ]
+  ViewModel
+  Model
+    PodCast
+      NumberToDownload
+    Episode
+
+
+Subscribe:
+  List of podcasts
+  Add/edit pod cast
+
+Download:
+  Async: queue of episodes
+  Download N newest automatically
+
+Play:
+  Select episode and play

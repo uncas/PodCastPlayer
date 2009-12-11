@@ -6,6 +6,7 @@
 
 namespace Uncas.PodCastPlayer.Tests.Fakes
 {
+    using System.Collections.Generic;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
 
@@ -14,7 +15,48 @@ namespace Uncas.PodCastPlayer.Tests.Fakes
     /// </summary>
     internal class FakePodCastRepository : IPodCastRepository
     {
+        #region Private fields and properties
+
+        /// <summary>
+        /// The pod casts.
+        /// </summary>
+        private static List<PodCast> podCasts;
+
+        /// <summary>
+        /// Gets the pod casts.
+        /// </summary>
+        /// <value>The pod casts.</value>
+        private static List<PodCast> PodCasts
+        {
+            get
+            {
+                if (podCasts == null)
+                {
+                    podCasts = new List<PodCast>();
+
+                    podCasts.Add(
+                        new PodCast(
+                            "Hanselminutes",
+                            null,
+                            3));
+                }
+
+                return podCasts;
+            }
+        }
+
+        #endregion
+
         #region IPodCastRepository Members
+
+        /// <summary>
+        /// Gets the pod casts.
+        /// </summary>
+        /// <returns>A list of pod casts.</returns>
+        public IList<PodCast> GetPodCasts()
+        {
+            return PodCasts;
+        }
 
         /// <summary>
         /// Saves the pod cast.
@@ -22,7 +64,7 @@ namespace Uncas.PodCastPlayer.Tests.Fakes
         /// <param name="podCast">The pod cast.</param>
         public void SavePodCast(PodCast podCast)
         {
-            throw new System.NotImplementedException();
+            PodCasts.Add(podCast);
         }
 
         #endregion

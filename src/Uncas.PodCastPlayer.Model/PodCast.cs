@@ -14,13 +14,28 @@ namespace Uncas.PodCastPlayer.Model
     /// </summary>
     public class PodCast
     {
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCast"/> class.
         /// </summary>
-        public PodCast()
+        /// <param name="name">The name of the pod cast.</param>
+        /// <param name="url">The URL of the pod cast.</param>
+        /// <param name="numberToDownload">The number of episodes to download.</param>
+        public PodCast(
+            string name,
+            Uri url,
+            int? numberToDownload)
         {
             this.Episodes = new List<Episode>();
+            this.Name = name;
+            this.NumberToDownload = numberToDownload;
+            this.Url = url;
         }
+
+        #endregion
+
+        #region Public properties
 
         /// <summary>
         /// Gets the episodes.
@@ -35,9 +50,17 @@ namespace Uncas.PodCastPlayer.Model
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of episodes to download.
+        /// </summary>
+        /// <value>The number of episodes to download.</value>
+        public int? NumberToDownload { get; set; }
+
+        /// <summary>
         /// Gets or sets the URL to the pod cast.
         /// </summary>
         /// <value>The URL to the pod cast.</value>
         public Uri Url { get; set; }
+
+        #endregion
     }
 }
