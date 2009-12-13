@@ -64,6 +64,10 @@
       <Project>{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}</Project>
       <Name>Uncas.PodCastPlayer.Utility</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.ViewModel\Uncas.PodCastPlayer.ViewModel.csproj">
+      <Project>{CCC24751-87D9-4FD1-BBB6-F723231933D1}</Project>
+      <Name>Uncas.PodCastPlayer.ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

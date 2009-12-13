@@ -9,6 +9,7 @@ namespace Uncas.PodCastPlayer.Repository
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using Uncas.PodCastPlayer.Model;
+    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Handles storage of pod cast info.
@@ -18,12 +19,12 @@ namespace Uncas.PodCastPlayer.Repository
         /// <summary>
         /// Gets the pod casts.
         /// </summary>
-        /// <returns>A list of pod casts.</returns>
+        /// <returns>The pod casts.</returns>
         [SuppressMessage(
             "Microsoft.Design",
             "CA1024:UsePropertiesWhereAppropriate",
             Justification = "Reads from repository; might be expensive.")]
-        IList<PodCast> GetPodCasts();
+        IList<PodCastIndexViewModel> GetPodCasts();
 
         /// <summary>
         /// Saves the pod cast.

@@ -7,8 +7,10 @@
 namespace Uncas.PodCastPlayer.Tests.Fakes
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
+    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Fakes storage of pod cast info and media.
@@ -53,9 +55,13 @@ namespace Uncas.PodCastPlayer.Tests.Fakes
         /// Gets the pod casts.
         /// </summary>
         /// <returns>A list of pod casts.</returns>
-        public IList<PodCast> GetPodCasts()
+        public IList<PodCastIndexViewModel> GetPodCasts()
         {
-            return PodCasts;
+            var result
+                = PodCasts
+                .Select(pc =>
+                new PodCastIndexViewModel());
+            return result.ToList();
         }
 
         /// <summary>

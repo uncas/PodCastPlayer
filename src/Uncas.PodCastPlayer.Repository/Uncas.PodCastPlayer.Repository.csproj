@@ -23,6 +23,8 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\Uncas.PodCastPlayer.Repository.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,6 +61,10 @@
     <ProjectReference Include="..\Uncas.PodCastPlayer.Model\Uncas.PodCastPlayer.Model.csproj">
       <Project>{990A3CDC-71BB-4235-9B19-FE87D3F81266}</Project>
       <Name>Uncas.PodCastPlayer.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.ViewModel\Uncas.PodCastPlayer.ViewModel.csproj">
+      <Project>{CCC24751-87D9-4FD1-BBB6-F723231933D1}</Project>
+      <Name>Uncas.PodCastPlayer.ViewModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
