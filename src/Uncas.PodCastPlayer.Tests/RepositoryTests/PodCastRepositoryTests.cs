@@ -8,9 +8,9 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
 {
     using System.Diagnostics;
     using NUnit.Framework;
+    using Uncas.PodCastPlayer.Fakes;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
-    using Uncas.PodCastPlayer.Tests.Fakes;
 
     /// <summary>
     /// Tests pod cast repository.
@@ -37,6 +37,9 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
             foreach (var podCast in podCasts)
             {
                 Trace.WriteLine(podCast.Name);
+                Trace.WriteLine(podCast.Url);
+                Assert.IsNotNull(podCast.Name);
+                Assert.IsNotNull(podCast.Url);
             }
         }
 

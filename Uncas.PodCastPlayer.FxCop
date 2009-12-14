@@ -5,7 +5,7 @@
   <Stylesheet Apply="False">c:\program files\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
   <SaveMessages>
    <Project Status="None" NewOnly="False" />
-   <Report Status="None" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
   </SaveMessages>
   <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
   <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
@@ -21,6 +21,7 @@
   <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.AppServices/bin/Debug/Uncas.PodCastPlayer.AppServices.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Model/bin/Debug/Uncas.PodCastPlayer.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Repository/bin/Debug/Uncas.PodCastPlayer.Repository.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.UI/bin/Debug/Uncas.PodCastPlayer.UI.exe" Analyze="True" AnalyzeAllChildren="True" />

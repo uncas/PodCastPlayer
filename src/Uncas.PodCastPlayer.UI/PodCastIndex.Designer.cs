@@ -17,6 +17,11 @@ namespace Uncas.PodCastPlayer.UI
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
+        /// List box with pod casts.
+        /// </summary>
+        private System.Windows.Forms.ListBox podCastsListBox;
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -38,9 +43,28 @@ namespace Uncas.PodCastPlayer.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.podCastsListBox = new System.Windows.Forms.ListBox();
+            this.SuspendLayout();
+            // 
+            // podCastsListBox
+            // 
+            this.podCastsListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.podCastsListBox.FormattingEnabled = true;
+            this.podCastsListBox.Location = new System.Drawing.Point(0, 0);
+            this.podCastsListBox.Name = "podCastsListBox";
+            this.podCastsListBox.Size = new System.Drawing.Size(292, 264);
+            this.podCastsListBox.TabIndex = 0;
+            // 
+            // PodCastIndex
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(292, 273);
+            this.Controls.Add(this.podCastsListBox);
+            this.Name = "PodCastIndex";
             this.Text = "PodCastIndex";
+            this.ResumeLayout(false);
+
         }
 
         #endregion

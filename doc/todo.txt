@@ -1,0 +1,7 @@
+Phase 1
+----
+- View form with list of pod casts
+
+
+- Download newest episodes of PodCasts automatically
+- Play selected episodes

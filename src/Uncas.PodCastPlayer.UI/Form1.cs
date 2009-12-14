@@ -19,6 +19,22 @@ namespace Uncas.PodCastPlayer.UI
         public Form1()
         {
             this.InitializeComponent();
+            this.Load += new System.EventHandler(
+                this.Form1_Load);
+        }
+
+        /// <summary>
+        /// Handles the Load event of the Form1 control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void Form1_Load(
+            object sender,
+            System.EventArgs e)
+        {
+            PodCastIndex podCastIndex =
+                new PodCastIndex();
+            podCastIndex.Show();
         }
     }
 }

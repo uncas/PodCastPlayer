@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<project name="PodCastPlayer" default="all">
+
+    <property name="configuration" value="Debug" />
+
+    <property name="version.major" value="0" />
+    <property name="version.minor" value="0" />
+    <property name="version.release" value="1" />
+    <property name="version.year" value="2009" />
+    <!-- Stage: 'Alpha', 'Beta', 'ReleaseCandidate' or 'Release' -->
+    <property name="version.stage" value="Alpha" />
+
+    <property name="FxCop"
+        value="C:\Program Files\Microsoft FxCop 1.36\FxCopCmd.exe" />
+    <property name="msbuild" value="C:\WINDOWS\Microsoft.NET\Framework\v3.5\msbuild.exe" />
+    <property name="svn" value="C:\Program Files\Subversion\bin\svn.exe" />
+    <property name="NUnit.folder" value="C:\Program Files\NUnit 2.4.8\bin" />
+
+
+    <!-- Loading local properties -->
+    <if test="${file::exists('local.properties.xml')}">
+        <echo message="Loading local.properties.xml" />
+        <include buildfile="local.properties.xml" />
+    </if>
+
+
+    <!-- Public build targets -->
+
+    <target name="build"
+        unless="${target::has-executed('build')}"
+        description="Compiles the solution"
+        depends="init">
+        <!-- COMPILES SOLUTION -->
+        <exec program="${msbuild}">
+            <arg value="Uncas.PodCastPlayer.sln" />
+            <arg value="/p:Configuration=${configuration}" />
+        </exec>
+    </target>
+
+    <target name="test">
+
+        <echo message="Gets updates from svn:" />
+        <exec program="${svn}">
+            <arg value="update" />
+        </exec>
+
+        <echo message="Compiles the solution:" />
+        <call target="build" />
+
+        <echo message="Checks the solution in FxCop:" />
+        <call target="FxCop" />
+
+        <echo message="Runs unit tests for the solution:" />
+        <call target="unitTest" />
+
+        <echo message="**** **** ****" />
+        <echo message="If you got this far, the tests succeeded." />
+        <echo message="Please proceed with the commit procedure:..." />
+        <echo message=" 1) Choose files, 2) Commit" />
+        <echo message="**** **** ****" />
+
+    </target>
+
+
+    <!-- Initialization targets -->
+
+    <target name="all"/>
+
+    <target name="cleanProject">
+        <delete dir="${projectFolder}\bin" />
+        <delete dir="${projectFolder}\obj" />
+    </target>
+
+    <target name="clean"
+        unless="${target::has-executed('clean')}">
+        <delete dir="build"
+            if="${directory::exists('build')}" />
+    </target>
+
+    <target name="cleanAll"
+            depends="clean"
+            description="remove all build products">
+
+        <property name="projectFolder"
+            value="src\Uncas.PodCastPlayer.UI" />
+        <call target="cleanProject" />
+    </target>
+
+    <target name="init"
+        unless="${target::has-executed('init')}"
+        depends="clean">
+        <mkdir dir="build" />
+        <mkdir dir="build\test" />
+    </target>
+
+
+    <!-- Private build targets -->
+
+    <target name="unitTest"
+        description="Runs unit tests">
+
+        <!-- The assembly to test: -->
+        <property name="assemblyToTest" value="Uncas.PodCastPlayer.Tests" />
+
+        <!-- Executes test: -->
+        <call target="testBase" />
+    </target>
+
+    <target name="testBase">
+
+        <echo message="Preparing to test ${assemblyToTest} (${configuration}):" />
+
+        <!-- Prepares files for testing: -->
+        <copy todir="build\test" flatten="true">
+            <fileset basedir="src\${assemblyToTest}\bin\${configuration}">
+                <include name="**\*.dll" />
+                <include name="*.exe" />
+                <include name="*.exe.config" />
+            </fileset>
+        </copy>
+        <copy todir="build\test" flatten="true">
+            <fileset basedir="${NUnit.folder}">
+                <include name="*.dll" />
+            </fileset>
+        </copy>
+
+        <!-- Runs the tests: -->
+        <property name="test.extension" value="dll" />
+        <call target="runNUnit" />
+        <property name="test.extension" value="exe" />
+        <call target="runNUnit" />
+
+    </target>
+
+    <target name="runNUnit">
+        <property name="testFileName"
+            value="build\test\${assemblyToTest}.${test.extension}" />
+        <if test="${file::exists(testFileName)}">
+            <echo message="Testing ${assemblyToTest}.${test.extension}:" />
+            <exec basedir="${NUnit.folder}"
+                managed="true"
+                workingdir="build\test"
+                program="nunit-console.exe">
+                <arg value="${assemblyToTest}.${test.extension}" />
+                <arg value="/xml=${assemblyToTest}-Result.xml" />
+            </exec>
+        </if>
+        <property name="testFileName"
+            value="build\test\${assemblyToTest}.exe" />
+    </target>
+
+    <target name="getSubversionRevision"
+        unless="${target::has-executed('getSubversionRevision')}">
+        <!-- Retrieve subversion revision number -->
+        <echo message="Retrieving Subversion revision number"/>
+        <property name="svn.revision" value="0"/>
+        <exec
+            program="${svn}"
+            commandline='log --xml --limit 1'
+            output="build\revision.xml"
+            failonerror="false"/>
+        <xmlpeek
+            file="build\revision.xml"
+            xpath="/log/logentry/@revision"
+            property="svn.revision"
+            failonerror="false"/>
+        <echo message="Using Subversion revision number: ${svn.revision}"/>
+
+        <property name="fullVersionNumber"
+            value="${version.major}.${version.minor}.${version.release}.${svn.revision}" />
+        <echo message="Full version number: ${fullVersionNumber}" />
+    </target>
+
+    <target name="updateAssemblyInfo" depends="getSubversionRevision">
+        <asminfo output="src\VersionInfo.cs" language="CSharp">
+            <imports>
+                <import namespace="System.Reflection" />
+                <import namespace="System.Runtime.InteropServices" />
+            </imports>
+            <attributes>
+                <attribute type="AssemblyConfigurationAttribute"
+                    value="${configuration}" />
+                <attribute type="AssemblyCompanyAttribute"
+                    value="Apollon IT ApS" />
+                <attribute type="AssemblyProductAttribute"
+                    value="Econnector" />
+                <attribute type="AssemblyCopyrightAttribute"
+                    value="Copyright (c) ${version.year} Apollon IT ApS" />
+                <attribute type="AssemblyTrademarkAttribute"
+                    value="" />
+                <attribute type="AssemblyCultureAttribute"
+                    value="" />
+                 <attribute type="AssemblyVersionAttribute"
+                    value="${fullVersionNumber}" />
+                <attribute type="AssemblyFileVersionAttribute"
+                    value="${fullVersionNumber}" />
+            </attributes>
+        </asminfo>
+    </target>
+
+    <target name="FxCop">
+        <property name="FxCop.output" value="build\fxcopresults.xml" />
+        <delete file="${FxCop.output}" />
+        <exec program="${FxCop}"
+            commandline="/p:Uncas.PodCastPlayer.FxCop /o:${FxCop.output} /s"
+            failonerror="false"/>
+        <if test="${file::exists(FxCop.output)}">
+            <echo message="FxCop errors encountered" />
+            <loadfile file="${FxCop.output}" property="FxCop.contents" />
+            <echo message="${FxCop.contents}" />
+            <fail message="FxCop errors encountered" />
+        </if>
+        <echo message="FxCop says OK!" />
+    </target>
+
+</project>

@@ -4,8 +4,9 @@
 // </copyright>
 //-------------
 
-namespace Uncas.PodCastPlayer.Tests.Fakes
+namespace Uncas.PodCastPlayer.Fakes
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Uncas.PodCastPlayer.Model;
@@ -15,7 +16,7 @@ namespace Uncas.PodCastPlayer.Tests.Fakes
     /// <summary>
     /// Fakes storage of pod cast info and media.
     /// </summary>
-    internal class FakePodCastRepository : IPodCastRepository
+    public class FakePodCastRepository : IPodCastRepository
     {
         #region Private fields and properties
 
@@ -36,11 +37,15 @@ namespace Uncas.PodCastPlayer.Tests.Fakes
                 {
                     podCasts = new List<PodCast>();
 
-                    podCasts.Add(
-                        new PodCast(
+                    var uri = new Uri(
+                        "http://www.hanselminutes.com");
+                    var podCast
+                        = new PodCast(
                             "Hanselminutes",
-                            null,
-                            3));
+                            uri,
+                            3);
+
+                    podCasts.Add(podCast);
                 }
 
                 return podCasts;
@@ -60,7 +65,9 @@ namespace Uncas.PodCastPlayer.Tests.Fakes
             var result
                 = PodCasts
                 .Select(pc =>
-                new PodCastIndexViewModel());
+                new PodCastIndexViewModel(
+                    pc.Name,
+                    pc.Url));
             return result.ToList();
         }
 
