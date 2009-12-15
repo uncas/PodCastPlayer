@@ -18,12 +18,27 @@ namespace Uncas.PodCastPlayer.Fakes
     /// </summary>
     public class FakePodCastRepository : IPodCastRepository
     {
-        #region Private fields and properties
+        #region Private fields
 
         /// <summary>
         /// The pod casts.
         /// </summary>
         private static List<PodCast> podCasts;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FakePodCastRepository"/> class.
+        /// </summary>
+        internal FakePodCastRepository()
+        {
+        }
+
+        #endregion
+
+        #region Private properties
 
         /// <summary>
         /// Gets the pod casts.
@@ -41,6 +56,7 @@ namespace Uncas.PodCastPlayer.Fakes
                         "http://www.hanselminutes.com");
                     var podCast
                         = new PodCast(
+                            1,
                             "Hanselminutes",
                             uri,
                             3);
@@ -66,6 +82,7 @@ namespace Uncas.PodCastPlayer.Fakes
                 = PodCasts
                 .Select(pc =>
                 new PodCastIndexViewModel(
+                    pc.Id,
                     pc.Name,
                     pc.Url));
             return result.ToList();
@@ -75,9 +92,29 @@ namespace Uncas.PodCastPlayer.Fakes
         /// Saves the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
-        public void SavePodCast(PodCast podCast)
+        public void SavePodCast(PodCastIndexViewModel podCast)
         {
-            PodCasts.Add(podCast);
+            if (podCast.Id.HasValue)
+            {
+                var existingPodCast =
+                    PodCasts.Where(pc =>
+                        pc.Id.Value == podCast.Id.Value)
+                    .SingleOrDefault();
+                if (existingPodCast != null)
+                {
+                    existingPodCast.Name = podCast.Name;
+                    existingPodCast.Url = podCast.Url;
+                    return;
+                }
+            }
+
+            var newPodCast =
+                new PodCast(
+                    null,
+                    podCast.Name,
+                    podCast.Url,
+                    null);
+            PodCasts.Add(newPodCast);
         }
 
         #endregion

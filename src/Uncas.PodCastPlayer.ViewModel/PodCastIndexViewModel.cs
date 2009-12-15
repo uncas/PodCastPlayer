@@ -7,20 +7,24 @@
 namespace Uncas.PodCastPlayer.ViewModel
 {
     using System;
+    using Uncas.PodCastPlayer.Model;
 
     /// <summary>
     /// Represents data for the index of pod casts.
     /// </summary>
-    public class PodCastIndexViewModel
+    public class PodCastIndexViewModel : Entity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastIndexViewModel"/> class.
         /// </summary>
+        /// <param name="id">The id of the pod cast.</param>
         /// <param name="name">The name of the pod cast.</param>
         /// <param name="url">The URL of the pod cast.</param>
         public PodCastIndexViewModel(
+            int? id,
             string name,
             Uri url)
+            : base(id)
         {
             this.Name = name;
             this.Url = url;

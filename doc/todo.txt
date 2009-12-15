@@ -1,6 +1,14 @@
 Phase 1
 ----
-- View form with list of pod casts
+X View form with list of pod casts
+X View pod cast details
+X Save pod cast details
+- Add pod cast
+- Delete pod cast
+- View episoded of pod cast
+
+
+
 
 
 - Download newest episodes of PodCasts automatically

@@ -12,20 +12,23 @@ namespace Uncas.PodCastPlayer.Model
     /// <summary>
     /// Represents a pod cast.
     /// </summary>
-    public class PodCast
+    public class PodCast : Entity
     {
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCast"/> class.
         /// </summary>
+        /// <param name="id">The id of the pod cast.</param>
         /// <param name="name">The name of the pod cast.</param>
         /// <param name="url">The URL of the pod cast.</param>
         /// <param name="numberToDownload">The number of episodes to download.</param>
         public PodCast(
+            int? id,
             string name,
             Uri url,
             int? numberToDownload)
+            : base(id)
         {
             this.Episodes = new List<Episode>();
             this.Name = name;

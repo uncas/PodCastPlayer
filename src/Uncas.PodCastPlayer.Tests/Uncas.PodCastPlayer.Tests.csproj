@@ -49,6 +49,7 @@
     <Compile Include="ModelTests\PodCastTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryTests\PodCastRepositoryTests.cs" />
+    <Compile Include="TestApp.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Uncas.PodCastPlayer.Fakes\Uncas.PodCastPlayer.Fakes.csproj">

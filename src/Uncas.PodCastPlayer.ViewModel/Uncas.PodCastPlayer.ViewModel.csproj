@@ -55,6 +55,12 @@
       <Link>UncasPodCastPlayerKey.snk</Link>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.Model\Uncas.PodCastPlayer.Model.csproj">
+      <Project>{990A3CDC-71BB-4235-9B19-FE87D3F81266}</Project>
+      <Name>Uncas.PodCastPlayer.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

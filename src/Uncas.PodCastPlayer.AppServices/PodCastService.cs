@@ -42,5 +42,15 @@ namespace Uncas.PodCastPlayer.AppServices
         {
             return this.repository.GetPodCasts();
         }
+
+        /// <summary>
+        /// Saves the pod cast.
+        /// </summary>
+        /// <param name="podCast">The pod cast.</param>
+        public void SavePodCast(
+            PodCastIndexViewModel podCast)
+        {
+            this.repository.SavePodCast(podCast);
+        }
     }
 }

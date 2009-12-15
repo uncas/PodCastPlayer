@@ -30,6 +30,6 @@ namespace Uncas.PodCastPlayer.Repository
         /// Saves the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
-        void SavePodCast(PodCast podCast);
+        void SavePodCast(PodCastIndexViewModel podCast);
     }
 }

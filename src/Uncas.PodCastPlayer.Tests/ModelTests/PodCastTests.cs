@@ -31,6 +31,7 @@ namespace Uncas.PodCastPlayer.Tests.ModelTests
             // Testing:
             var podcast
                 = new PodCast(
+                    1,
                     name,
                     url,
                     numberToDownload);

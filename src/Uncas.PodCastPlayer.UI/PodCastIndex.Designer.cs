@@ -17,9 +17,9 @@ namespace Uncas.PodCastPlayer.UI
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// List box with pod casts.
+        /// Grid with pod casts.
         /// </summary>
-        private System.Windows.Forms.ListBox podCastsListBox;
+        private System.Windows.Forms.DataGridView podCastsGrid;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -43,26 +43,28 @@ namespace Uncas.PodCastPlayer.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.podCastsListBox = new System.Windows.Forms.ListBox();
+            this.podCastsGrid = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.podCastsGrid)).BeginInit();
             this.SuspendLayout();
             // 
-            // podCastsListBox
+            // podCastsGrid
             // 
-            this.podCastsListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.podCastsListBox.FormattingEnabled = true;
-            this.podCastsListBox.Location = new System.Drawing.Point(0, 0);
-            this.podCastsListBox.Name = "podCastsListBox";
-            this.podCastsListBox.Size = new System.Drawing.Size(292, 264);
-            this.podCastsListBox.TabIndex = 0;
+            this.podCastsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.podCastsGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.podCastsGrid.Location = new System.Drawing.Point(0, 0);
+            this.podCastsGrid.Name = "podCastsGrid";
+            this.podCastsGrid.Size = new System.Drawing.Size(292, 273);
+            this.podCastsGrid.TabIndex = 1;
             // 
             // PodCastIndex
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 273);
-            this.Controls.Add(this.podCastsListBox);
+            this.Controls.Add(this.podCastsGrid);
             this.Name = "PodCastIndex";
             this.Text = "PodCastIndex";
+            ((System.ComponentModel.ISupportInitialize)(this.podCastsGrid)).EndInit();
             this.ResumeLayout(false);
 
         }

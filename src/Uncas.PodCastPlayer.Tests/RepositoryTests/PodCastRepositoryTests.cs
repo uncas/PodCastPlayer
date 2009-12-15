@@ -7,9 +7,9 @@
 namespace Uncas.PodCastPlayer.Tests.RepositoryTests
 {
     using System.Diagnostics;
+    using System.Linq;
     using NUnit.Framework;
     using Uncas.PodCastPlayer.Fakes;
-    using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
 
     /// <summary>
@@ -22,7 +22,7 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
         /// The pod cast repository.
         /// </summary>
         private readonly IPodCastRepository repository
-            = new FakePodCastRepository();
+            = TestApp.Repositories.PodCastRepository;
 
         /// <summary>
         /// Gets the pod casts.
@@ -44,26 +44,30 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
         }
 
         /// <summary>
-        /// Saves the pod cast_ one_ success.
+        /// Saves existing pod cast and checks it is updated.
         /// </summary>
         [Test]
-        public void SavePodCast_One_Success()
+        public void SavePodCast_Existing_Updated()
         {
-            // Setting up:
-            var podCast = new PodCast(
-                "A",
-                null,
-                null);
-            int numberOfPodCasts =
-                this.repository.GetPodCasts().Count;
+            // Arrange:
+            var podCasts =
+                this.repository.GetPodCasts();
+            var podCast =
+                podCasts.FirstOrDefault();
+            int? id = podCast.Id;
+            string newName = podCast.Name + "x";
+            podCast.Name = newName;
 
-            // Testing:
+            // Act:
             this.repository.SavePodCast(podCast);
 
-            // Asserting:
-            Assert.AreEqual(
-                numberOfPodCasts + 1,
-                this.repository.GetPodCasts().Count);
+            // Assert:
+            podCasts =
+                this.repository.GetPodCasts();
+            var updatedPodCast =
+                podCasts.Where(pc => pc.Id == id)
+                .SingleOrDefault();
+            Assert.AreEqual(newName, updatedPodCast.Name);
         }
     }
 }
