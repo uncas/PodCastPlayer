@@ -6,6 +6,7 @@
 
 namespace Uncas.PodCastPlayer.Utility
 {
+    using System.Collections.Generic;
     using Uncas.PodCastPlayer.Model;
 
     /// <summary>
@@ -18,5 +19,12 @@ namespace Uncas.PodCastPlayer.Utility
         /// </summary>
         /// <param name="episode">The episode.</param>
         void DownloadEpisode(Episode episode);
+
+        /// <summary>
+        /// Downloads the episode list.
+        /// </summary>
+        /// <param name="podCast">The pod cast.</param>
+        /// <returns>A list of episodes.</returns>
+        IList<Episode> DownloadEpisodeList(PodCast podCast);
     }
 }

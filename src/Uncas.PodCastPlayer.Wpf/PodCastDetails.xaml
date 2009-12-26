@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Uncas.PodCastPlayer.Wpf.PodCastDetails"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0">Name</Label>
+        <TextBox x:Name="nameTextBox" Grid.Row="0" Grid.Column="1"></TextBox>
+        <Label Grid.Row="1" Grid.Column="0">Url</Label>
+        <TextBox x:Name="urlTextBox" Grid.Row="1" Grid.Column="1"></TextBox>
+        <Button x:Name="saveButton" Height="30" Grid.Row="2" Grid.ColumnSpan="2" Content="Save"></Button>
+    </Grid>
+</UserControl>

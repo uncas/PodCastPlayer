@@ -5,8 +5,8 @@ X View pod cast details
 X Save pod cast details
 - Add pod cast
 - Delete pod cast
-- View episoded of pod cast
-
+- View episodes of pod cast
+- Update episode list
 
 
 

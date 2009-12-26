@@ -62,6 +62,16 @@ namespace Uncas.PodCastPlayer.Fakes
                             3);
 
                     podCasts.Add(podCast);
+
+                    var uri2 = new Uri(
+                        "http://podcast.stackoverflow.com");
+                    var podCast2
+                        = new PodCast(
+                            2,
+                            "StackOverflow",
+                            uri2,
+                            4);
+                    podCasts.Add(podCast2);
                 }
 
                 return podCasts;

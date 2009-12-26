@@ -1,0 +1,13 @@
+﻿<Window x:Class="Uncas.PodCastPlayer.Wpf.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Pod cast downloader" Height="300" Width="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Button x:Name="podCastsButton"  Grid.Column="0" Height="30" VerticalAlignment="Top" Content="Pod casts"></Button>
+        <ContentControl x:Name="contentControl" Grid.Column="1"></ContentControl>
+    </Grid>
+</Window>

@@ -9,13 +9,6 @@ Brain storm
 - Rules for PodCasts
 
 
-Phase 1
-----
-- Subscribe to PodCasts
-- Download newest episodes of PodCasts automatically
-- Play selected episodes
-
-
 Architecture
 ----
 UI

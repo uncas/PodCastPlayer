@@ -16,6 +16,17 @@ namespace Uncas.PodCastPlayer.UI
     /// </summary>
     public partial class PodCastIndex : Form
     {
+        #region Private fields
+
+        /// <summary>
+        /// Indicates if the button column has been added.
+        /// </summary>
+        private bool buttonColumnAdded;
+
+        #endregion
+
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastIndex"/> class.
         /// </summary>
@@ -27,6 +38,10 @@ namespace Uncas.PodCastPlayer.UI
             this.Load +=
                 new EventHandler(this.PodCastIndex_Load);
         }
+
+        #endregion
+
+        #region Private methods
 
         /// <summary>
         /// Shows the details.
@@ -68,14 +83,16 @@ namespace Uncas.PodCastPlayer.UI
             var podCasts = podCastService.GetPodCasts();
 
             this.podCastsGrid.DataSource = podCasts;
-            DataGridViewButtonColumn buttonColumn =
-                new DataGridViewButtonColumn();
 
-            // TODO: Set text on button:
-            buttonColumn.Tag = "Edit";
+            if (!this.buttonColumnAdded)
+            {
+                // TODO: Set text on button.
+                DataGridViewButtonColumn buttonColumn =
+                    new DataGridViewButtonColumn();
+                this.podCastsGrid.Columns.Add(buttonColumn);
+                this.buttonColumnAdded = true;
+            }
 
-            // TODO: Avoid adding button more than once:
-            this.podCastsGrid.Columns.Add(buttonColumn);
             this.podCastsGrid.Columns["Id"].Visible = false;
 
             // TODO: Localize header texts:
@@ -131,7 +148,9 @@ namespace Uncas.PodCastPlayer.UI
             this.podCastsGrid.CellDoubleClick +=
                 new DataGridViewCellEventHandler(
                 this.PodCastsGrid_CellDoubleClick);
-            this.podCastsGrid.CellContentClick += new DataGridViewCellEventHandler(this.PodCastsGrid_CellContentClick);
+            this.podCastsGrid.CellContentClick +=
+                new DataGridViewCellEventHandler(
+                    this.PodCastsGrid_CellContentClick);
 
             this.LoadPodCasts();
         }
@@ -150,5 +169,7 @@ namespace Uncas.PodCastPlayer.UI
                 this.ShowDetails(e.RowIndex);
             }
         }
+
+        #endregion
     }
 }
