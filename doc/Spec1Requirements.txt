@@ -7,3 +7,71 @@ Brain storm
 - Transfer to device
 - Notify of new PodCasts
 - Rules for PodCasts
+
+
+Phase 1
+----
+- Subscribe to PodCasts
+- Download newest episodes of PodCasts automatically
+- Play selected episodes
+
+
+Architecture
+----
+UI
+  WinApp
+AppLayer
+  AppServices
+  PodCastDownloader
+Domain Layer
+  DomainServices
+  Repository
+  PodCastRepository
+    IList<PodCast> GetPodCasts()
+    IList<Episode> GetEpisodes(PodCast)
+    [ byte[] StreamEpisode(Episode, offset, bufferSize) ]
+  ViewModel
+  Model
+    PodCast
+      NumberToDownload
+    Episode
+
+SQLite database
+  http://www.sqlite.org/
+  http://sqlite.phxsoftware.com/
+
+
+Functional specs
+----
+1) Subscribe:
+  List of podcasts
+  Add/edit pod cast
+
+Form 1a (list of pod casts):
+  [New]
+  Pod cast  Url  Episodes  Auto-download
+  ...       ...  ...       ...            [Episodes] [Edit] [Delete]
+
+Form 1b (create/edit pod cast):
+  Display name        [    ]
+  Url                 [    ]
+  Number to download  [    ]
+  [OK] [Cancel] [Apply] [Help]
+
+Form 1c (list of episodes):
+  [Pod cast name]
+  No  Episode  Date  Length  Status
+  ..  ...      ...   ...     ...     [Play]
+
+  Status: 
+  Ready: [Queue for download]/[Download now]
+  Downloading: [Cancel download]
+  Downloaded: [Delete file]
+
+
+Download:
+  Async: queue of episodes
+  Download N newest automatically
+
+Play:
+  Select episode and play
