@@ -9,6 +9,7 @@ namespace Uncas.PodCastPlayer.Wpf
     using System;
     using System.Windows;
     using System.Windows.Controls;
+    using Uncas.PodCastPlayer.AppServices;
     using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
@@ -21,6 +22,8 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         private readonly PodCastIndexViewModel podCast;
 
+        private readonly PodCastService service;
+
         // TODO: Consider using automatic updating in WPF
 
         /// <summary>
@@ -32,6 +35,9 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             this.InitializeComponent();
             this.podCast = podCast;
+            this.service =
+                new PodCastService(
+                    App.Repositories.PodCastRepository);
             this.Loaded +=
                 new RoutedEventHandler(
                     this.PodCastDetails_Loaded);
@@ -67,6 +73,9 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
+            this.podCast.Name = nameTextBox.Text;
+            this.podCast.Url = new Uri(urlTextBox.Text);
+            this.service.SavePodCast(this.podCast);
             if (this.PodCastSaved != null)
             {
                 this.PodCastSaved(this, new EventArgs());
