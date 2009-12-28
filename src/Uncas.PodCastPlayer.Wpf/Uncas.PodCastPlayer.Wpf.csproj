@@ -65,6 +65,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="EpisodeIndex.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PodCastDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -87,6 +91,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EpisodeIndex.xaml.cs">
+      <DependentUpon>EpisodeIndex.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PodCastDetails.xaml.cs">
       <DependentUpon>PodCastDetails.xaml</DependentUpon>
     </Compile>

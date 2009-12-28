@@ -49,7 +49,24 @@ namespace Uncas.PodCastPlayer.Wpf
             podCastIndex.PodCastSelected +=
                 new System.EventHandler<PodCastSelectedEventArgs>(
                     this.PodCastIndex_PodCastSelected);
+            podCastIndex.EpisodesSelected +=
+                new EventHandler<PodCastSelectedEventArgs>(
+                    this.PodCastIndex_EpisodesSelected);
+
             this.contentControl.Content = podCastIndex;
+        }
+
+        /// <summary>
+        /// Handles the EpisodesSelected event of the PodCastIndex control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="Uncas.PodCastPlayer.Wpf.PodCastSelectedEventArgs"/> instance containing the event data.</param>
+        private void PodCastIndex_EpisodesSelected(
+            object sender,
+            PodCastSelectedEventArgs e)
+        {
+            EpisodeIndex index = new EpisodeIndex(e.PodCast);
+            contentControl.Content = index;
         }
 
         /// <summary>

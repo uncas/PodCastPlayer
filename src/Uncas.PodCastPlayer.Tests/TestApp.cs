@@ -32,7 +32,7 @@ namespace Uncas.PodCastPlayer.Tests
                     repositories =
                         new FakeRepositoryFactory();
                 }
-
+                
                 return repositories;
             }
         }

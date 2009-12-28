@@ -22,6 +22,9 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         private readonly PodCastIndexViewModel podCast;
 
+        /// <summary>
+        /// The service.
+        /// </summary>
         private readonly PodCastService service;
 
         // TODO: Consider using automatic updating in WPF

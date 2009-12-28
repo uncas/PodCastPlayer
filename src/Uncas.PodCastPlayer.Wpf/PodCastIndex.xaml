@@ -2,6 +2,21 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <ListBox x:Name="podCastsListBox"></ListBox>
+        <ListBox x:Name="podCastsListBox">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{Binding Name}" />
+                        <Label Content="{Binding Url}" Grid.Column="1" />
+                        <Button Content="Episodes" Grid.Column="2" Click="Episodes_Click" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

@@ -42,6 +42,12 @@ namespace Uncas.PodCastPlayer.Wpf
             PodCastSelected;
 
         /// <summary>
+        /// Occurs when [episodes selected].
+        /// </summary>
+        internal event EventHandler<PodCastSelectedEventArgs>
+            EpisodesSelected;
+
+        /// <summary>
         /// Handles the Loaded event of the PodCastIndex control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -50,7 +56,6 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            podCastsListBox.DisplayMemberPath = "Name";
             podCastsListBox.ItemsSource =
                 this.service.GetPodCasts();
             podCastsListBox.SelectionChanged +=
@@ -70,17 +75,45 @@ namespace Uncas.PodCastPlayer.Wpf
             var selectedPodCast =
                 (PodCastIndexViewModel)
                 podCastsListBox.SelectedItem;
-            if (this.PodCastSelected != null)
+            this.FireEvent(
+                selectedPodCast,
+                this.PodCastSelected);
+        }
+
+        /// <summary>
+        /// Fires the event.
+        /// </summary>
+        /// <param name="selectedPodCast">The selected pod cast.</param>
+        /// <param name="eventHandler">The event handler.</param>
+        private void FireEvent(
+            PodCastIndexViewModel selectedPodCast,
+            EventHandler<PodCastSelectedEventArgs> eventHandler)
+        {
+            if (eventHandler != null)
             {
                 var podCastSelectedArgs =
                     new PodCastSelectedEventArgs
                     {
                         PodCast = selectedPodCast
                     };
-                this.PodCastSelected(
+                eventHandler(
                     this,
                     podCastSelectedArgs);
             }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the Episodes control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        private void Episodes_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var podCast = (PodCastIndexViewModel)button.DataContext;
+            this.FireEvent(
+                podCast,
+                this.EpisodesSelected);
         }
     }
 }
