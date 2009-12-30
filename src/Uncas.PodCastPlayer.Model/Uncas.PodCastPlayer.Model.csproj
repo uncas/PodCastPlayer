@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Entity.cs" />
     <Compile Include="Episode.cs" />
+    <Compile Include="EpisodeMediaInfo.cs" />
     <Compile Include="PodCast.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

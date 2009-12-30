@@ -65,6 +65,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="DownloadIndex.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EpisodeIndex.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundDownloader.cs" />
+    <Compile Include="DownloadIndex.xaml.cs">
+      <DependentUpon>DownloadIndex.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EpisodeIndex.xaml.cs">
       <DependentUpon>EpisodeIndex.xaml</DependentUpon>
     </Compile>

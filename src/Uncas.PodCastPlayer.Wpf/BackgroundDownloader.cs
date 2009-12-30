@@ -10,7 +10,7 @@ namespace Uncas.PodCastPlayer.Wpf
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Threading;
+    using Uncas.PodCastPlayer.AppServices;
 
     /// <summary>
     /// Handles background downloads.
@@ -18,6 +18,11 @@ namespace Uncas.PodCastPlayer.Wpf
     public class BackgroundDownloader : IDisposable
     {
         #region Private fields
+
+        /// <summary>
+        /// The service.
+        /// </summary>
+        private readonly EpisodeService service;
 
         /// <summary>
         /// The background worker.
@@ -33,6 +38,10 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         public BackgroundDownloader()
         {
+            this.service = new EpisodeService(
+                App.Repositories,
+                App.Downloader);
+
             this.worker = new BackgroundWorker();
             this.worker.WorkerSupportsCancellation = true;
             this.worker.DoWork +=
@@ -48,7 +57,7 @@ namespace Uncas.PodCastPlayer.Wpf
         #region Public methods
 
         /// <summary>
-        /// Starts this instance.
+        /// Starts downloads of episodes in a background thread.
         /// </summary>
         public void Start()
         {
@@ -58,7 +67,7 @@ namespace Uncas.PodCastPlayer.Wpf
         }
 
         /// <summary>
-        /// Stops this instance.
+        /// Stops downloads of episodes in a background thread.
         /// </summary>
         public void Stop()
         {
@@ -120,7 +129,7 @@ namespace Uncas.PodCastPlayer.Wpf
             DoWorkEventArgs e)
         {
             WriteTrace("Worker_DoWork Begin");
-            Thread.Sleep(500);
+            this.service.DownloadPendingEpisodes();
             WriteTrace("Worker_DoWork End");
         }
 

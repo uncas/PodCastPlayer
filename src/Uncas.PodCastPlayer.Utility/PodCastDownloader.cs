@@ -8,10 +8,11 @@ namespace Uncas.PodCastPlayer.Utility
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Net;
     using Uncas.PodCastPlayer.Model;
-    using System.Diagnostics;
 
     /// <summary>
     /// Handles downloads of pod casts.
@@ -20,78 +21,58 @@ namespace Uncas.PodCastPlayer.Utility
     {
         #region IPodCastDownloader Members
 
-        // The stream of data retrieved from the web server
-        private Stream strResponse;
-        // The stream of data that we write to the harddrive
-        private Stream strLocal;
-        // The request to the web server for file information
-        private HttpWebRequest webRequest;
-        // The response from the web server containing information about the file
-        private HttpWebResponse webResponse;
-        // The progress of the download in percentage
-        //private static int PercentProgress;
+        /// <summary>
+        /// Occurs when an episode buffer has been downloaded.
+        /// </summary>
+        public event EventHandler<EpisodeDownloadEventArgs>
+            EpisodeBufferDownloaded;
 
         /// <summary>
         /// Downloads the episode.
         /// </summary>
         /// <param name="episode">The episode.</param>
-        public void DownloadEpisode(Episode episode)
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>Info about the downloaded media.</returns>
+        /// <remarks>
+        /// http://www.geekpedia.com/tutorial179_Creating-a-download-manager-in-Csharp.html
+        /// </remarks>
+        public EpisodeMediaInfo DownloadEpisode(
+            Episode episode,
+            string fileName)
         {
-            // TODO: FEATURE: Implement proper file path:
-            string fileName = Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.MyDocuments),
-                "test1.mp3");
-
-            this.webRequest =
+            var webRequest =
                 (HttpWebRequest)WebRequest.Create(
                 episode.MediaUrl);
+
             // Set default authentication for retrieving the file
             webRequest.Credentials =
-                CredentialCache.DefaultCredentials;
+                            CredentialCache.DefaultCredentials;
+
             // Retrieve the response from the server
-            webResponse = (HttpWebResponse)webRequest.GetResponse();
+            var webResponse =
+                (HttpWebResponse)webRequest.GetResponse();
+
             // Ask the server for the file size and store it
-            Int64 fileSize = webResponse.ContentLength;
+            long fileSize = webResponse.ContentLength;
             Trace.WriteLine(fileSize);
 
-            // Open the URL for download
-            using (WebClient wcDownload = new WebClient())
+            /*DownloadWithWebclient(
+                episode,
+                fileName,
+                fileSize);*/
+
+            int downloadedBytes =
+                this.DownloadWithWebResponse(
+                fileName,
+                webRequest,
+                fileSize);
+
+            // DownloadInOnePiece(episode, fileName);
+            return new EpisodeMediaInfo
             {
-                strResponse = wcDownload.OpenRead(episode.MediaUrl);
-                // Create a new file stream where we will be saving the data (local drive)
-                strLocal = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
-            }
-
-            // It will store the current number of bytes we retrieved from the server
-            int bytesSize = 0;
-            // A buffer for storing and writing the data retrieved from the server
-            byte[] downBuffer = new byte[2048];
-
-            int bytesTotal = 0;
-
-            // Loop through the buffer until the buffer is empty
-            while ((bytesSize = strResponse.Read(downBuffer, 0, downBuffer.Length)) > 0)
-            {
-                // Write the data from the buffer to the local hard drive
-                strLocal.Write(downBuffer, 0, bytesSize);
-                bytesTotal += bytesSize;
-                Trace.WriteLine(
-                    string.Format(
-                        "{0}: {1}/{2} = {3:P1}",
-                        bytesSize,
-                        bytesTotal,
-                        fileSize,
-                        (1D * bytesTotal) / (1D * fileSize)));
-            }
-
-            // TODO: OPTIMIZE: Download async + in pieces.
-            /*using (WebClient client = new WebClient())
-            {
-                client.DownloadFile(
-                    episode.MediaUrl.AbsoluteUri,
-                    fileName);
-            }*/
+                FileSizeInBytes = (int)fileSize,
+                DownloadedBytes = downloadedBytes
+            };
         }
 
         /// <summary>
@@ -103,6 +84,187 @@ namespace Uncas.PodCastPlayer.Utility
             PodCast podCast)
         {
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        /// Downloads the in one piece.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        /// <param name="fileName">Name of the file.</param>
+        private static void DownloadInOnePiece(
+            Episode episode,
+            string fileName)
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(
+                    episode.MediaUrl.AbsoluteUri,
+                    fileName);
+            }
+        }
+
+        /// <summary>
+        /// Downloads the stream.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="fileSize">Size of the file.</param>
+        /// <param name="responseStream">The response stream.</param>
+        private void DownloadStream(
+            string fileName,
+            long fileSize,
+            Stream responseStream)
+        {
+            this.DownloadStream(
+                fileName,
+                fileSize,
+                responseStream,
+                false);
+        }
+
+        /// <summary>
+        /// Downloads the stream.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="fileSize">Size of the file.</param>
+        /// <param name="responseStream">The response stream.</param>
+        /// <param name="appendData">if set to <c>true</c> [append data].</param>
+        /// <returns>The number of bytes downloaded.</returns>
+        private int DownloadStream(
+            string fileName,
+            long fileSize,
+            Stream responseStream,
+            bool appendData)
+        {
+            // A buffer for storing retrieved data:
+            byte[] downBuffer = new byte[2048];
+
+            int bytesTotal = 0;
+            FileMode fileMode =
+                appendData ?
+                FileMode.Append :
+                FileMode.Create;
+            using (var fileStream = new FileStream(
+                 fileName,
+                 fileMode,
+                 FileAccess.Write,
+                 FileShare.None))
+            {
+                // Loop until no more data:
+                while (true)
+                {
+                    int bytesRead =
+                        responseStream.Read(
+                        downBuffer,
+                        0,
+                        downBuffer.Length);
+                    if (bytesRead == 0)
+                    {
+                        break;
+                    }
+
+                    // Writes to the local hard drive:
+                    fileStream.Write(downBuffer, 0, bytesRead);
+                    bytesTotal += bytesRead;
+                    Trace.WriteLine(
+                        string.Format(
+                            CultureInfo.CurrentCulture,
+                            "{0}: {1}/{2} = {3:P1}",
+                            bytesRead,
+                            bytesTotal,
+                            fileSize,
+                            (1D * bytesTotal) / (1D * fileSize)));
+                    if (this.EpisodeBufferDownloaded != null)
+                    {
+                        var eventArgs =
+                            new EpisodeDownloadEventArgs
+                            {
+                                BytesDownloaded = bytesTotal,
+                                FileSizeInBytes = fileSize
+                            };
+                        this.EpisodeBufferDownloaded(
+                            this,
+                            eventArgs);
+                    }
+                }
+            }
+
+            return bytesTotal;
+        }
+
+        /// <summary>
+        /// Downloads the with web client.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="fileSize">Size of the file.</param>
+        private void DownloadWithWebClient(
+            Episode episode,
+            string fileName,
+            long fileSize)
+        {
+            // Opens the URL for download:
+            using (var client = new WebClient())
+            {
+                using (var responseStream =
+                      client.OpenRead(episode.MediaUrl))
+                {
+                    this.DownloadStream(
+                        fileName,
+                        fileSize,
+                        responseStream);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Downloads the file with web response.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="webRequest">The web request.</param>
+        /// <param name="fileSize">Size of the file.</param>
+        /// <returns>The number of bytes downloaded.</returns>
+        private int DownloadWithWebResponse(
+            string fileName,
+            HttpWebRequest webRequest,
+            long fileSize)
+        {
+            // TODO: FEATURE: Proper offset!
+            int desiredOffset = 0;
+            if (desiredOffset > 0)
+            {
+                webRequest.AddRange(desiredOffset);
+            }
+
+            // Retrieves the response from the server:
+            var response =
+                (HttpWebResponse)webRequest.GetResponse();
+            bool supportsPartialContent = false;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                // The server ignored our range request.
+                // The download must restart.
+                // TODO: FEATURE: Save the whole response.
+                supportsPartialContent = false;
+            }
+            else if (response.StatusCode ==
+                HttpStatusCode.PartialContent)
+            {
+                // The server accepted our range request.
+                // TODO: FEATURE: Append the partial response.
+                supportsPartialContent = true;
+            }
+
+            var responseStream =
+                response.GetResponseStream();
+            return this.DownloadStream(
+                fileName,
+                fileSize,
+                responseStream,
+                supportsPartialContent);
         }
 
         #endregion

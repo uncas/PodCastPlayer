@@ -19,14 +19,10 @@ namespace Uncas.PodCastPlayer.Fakes
         #region IPodCastDownloader Members
 
         /// <summary>
-        /// Downloads the episode.
+        /// Occurs when an episode buffer has been downloaded.
         /// </summary>
-        /// <param name="episode">The episode.</param>
-        public void DownloadEpisode(
-            Episode episode)
-        {
-            throw new NotImplementedException();
-        }
+        public event EventHandler<EpisodeDownloadEventArgs>
+            EpisodeBufferDownloaded;
 
         /// <summary>
         /// Downloads the episode list.
@@ -40,6 +36,36 @@ namespace Uncas.PodCastPlayer.Fakes
             result.AddRange(podCast.Episodes);
             result.Add(new Episode());
             return result;
+        }
+
+        /// <summary>
+        /// Downloads the episode.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>Info about the downloaded media.</returns>
+        public EpisodeMediaInfo DownloadEpisode(
+            Episode episode,
+            string fileName)
+        {
+            if (this.EpisodeBufferDownloaded != null)
+            {
+                var eventArgs =
+                    new EpisodeDownloadEventArgs
+                    {
+                        BytesDownloaded = 1,
+                        FileSizeInBytes = 1
+                    };
+                this.EpisodeBufferDownloaded(
+                    this,
+                    eventArgs);
+            }
+
+            return new EpisodeMediaInfo
+            {
+                DownloadedBytes = 1,
+                FileSizeInBytes = 1
+            };
         }
 
         #endregion

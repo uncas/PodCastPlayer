@@ -7,7 +7,10 @@
             <ColumnDefinition Width="70" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Button x:Name="podCastsButton"  Grid.Column="0" Height="30" VerticalAlignment="Top" Content="Pod casts"></Button>
+        <StackPanel Grid.Column="0">
+            <Button x:Name="podCastsButton" Height="30" Content="Pod casts"></Button>
+            <Button x:Name="downloadsButton" Height="30" Content="Downloads"></Button>
+        </StackPanel>
         <ContentControl x:Name="contentControl" Grid.Column="1"></ContentControl>
     </Grid>
 </Window>

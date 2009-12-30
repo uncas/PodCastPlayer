@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppServiceTests\EpisodeServiceTests.cs" />
     <Compile Include="ModelTests\PodCastTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryTests\EpisodeRepositoryTests.cs" />
@@ -56,6 +57,10 @@
     <Compile Include="UtilityTests\PodCastDownloaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.AppServices\Uncas.PodCastPlayer.AppServices.csproj">
+      <Project>{DD33AE6A-8372-49A9-9F92-EF7E3259A4F8}</Project>
+      <Name>Uncas.PodCastPlayer.AppServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Uncas.PodCastPlayer.Fakes\Uncas.PodCastPlayer.Fakes.csproj">
       <Project>{7A4207E9-3507-447A-8181-867EAA3F76CF}</Project>
       <Name>Uncas.PodCastPlayer.Fakes</Name>

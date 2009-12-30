@@ -44,7 +44,7 @@ namespace Uncas.PodCastPlayer.Fakes
         /// Gets the pod casts.
         /// </summary>
         /// <value>The pod casts.</value>
-        private static List<PodCast> PodCasts
+        internal static List<PodCast> PodCasts
         {
             get
             {
@@ -61,8 +61,21 @@ namespace Uncas.PodCastPlayer.Fakes
                             uri,
                             3);
 
-                    podCast.Episodes.Add(new Episode());
-                    podCast.Episodes.Add(new Episode());
+                    podCast.Episodes.Add(
+                        new Episode
+                        {
+                            PendingDownload = true,
+                            PodCast = podCast,
+                            Id = "01",
+                            MediaUrl = new Uri(
+                                "http://perseus.franklins.net/hanselminutes_0079.mp3")
+                        });
+                    podCast.Episodes.Add(
+                        new Episode
+                        {
+                            PodCast = podCast,
+                            Id = "02"
+                        });
 
                     podCasts.Add(podCast);
 
@@ -75,9 +88,24 @@ namespace Uncas.PodCastPlayer.Fakes
                             uri2,
                             4);
 
-                    podCast2.Episodes.Add(new Episode());
-                    podCast2.Episodes.Add(new Episode());
-                    podCast2.Episodes.Add(new Episode());
+                    podCast2.Episodes.Add(
+                        new Episode
+                        {
+                            PodCast = podCast,
+                            Id = "11"
+                        });
+                    podCast2.Episodes.Add(
+                        new Episode
+                        {
+                            PodCast = podCast,
+                            Id = "12"
+                        });
+                    podCast2.Episodes.Add(
+                        new Episode
+                        {
+                            PodCast = podCast,
+                            Id = "13"
+                        });
 
                     podCasts.Add(podCast2);
                 }

@@ -7,9 +7,9 @@ X View episodes of pod cast
 X Add pod cast
 X Delete pod cast
 X Update episode list from service/utility/internet
-- Keep track of list of episodes to download
-- Rules for downloads
-- Select episodes to download
+X Rules for downloads
+X Keep track of list of episodes to download
+X View list of pending downloads
 - Background downloader:
   - Fetch list of episodes to download
   - Download the first episode on the list:
@@ -17,9 +17,14 @@ X Update episode list from service/utility/internet
     - Keep track of the following info for the episode:
       - Bytes downloaded
   - When finished: go to the next episode on the list 
-
   - Download newest episodes of PodCasts automatically
-- View list of downloads
+- Downloader:
+  X Return file info:
+    X Total size in bytes
+    X Bytes downloaded
+  X Return number of bytes downloaded with each buffer
+  - Possible to cancel
+- Select episodes to download
 - Play selected episode
 
 - Implement SqLite repository

@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.Repository
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.ViewModel;
 
@@ -22,6 +23,32 @@ namespace Uncas.PodCastPlayer.Repository
         /// <returns>An index of episodes.</returns>
         EpisodeIndexViewModel GetEpisodes(
             int podCastId);
+
+        /// <summary>
+        /// Gets the episodes to download.
+        /// </summary>
+        /// <returns>A list of episodes.</returns>
+        [SuppressMessage(
+            "Microsoft.Design",
+            "CA1024:UsePropertiesWhereAppropriate",
+            Justification = "This is an expensive read.")]
+        IList<Episode> GetEpisodesToDownload();
+
+        /// <summary>
+        /// Gets the view of episodes to download.
+        /// </summary>
+        /// <returns>An index of the episodes to download.</returns>
+        [SuppressMessage(
+            "Microsoft.Design",
+            "CA1024:UsePropertiesWhereAppropriate",
+            Justification = "This is an expensive read.")]
+        IEnumerable<DownloadIndexViewModel> GetDownloadIndex();
+
+        /// <summary>
+        /// Updates the episode.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        void UpdateEpisode(Episode episode);
 
         /// <summary>
         /// Updates the episode list.

@@ -1,0 +1,23 @@
+Download handling:
+
+UI.DownloadIndex:
+  Show episodes to download + progress
+
+UI.BackgroundDownloader:
+  Start()
+  Stop()
+
+AppServices.EpisodeService:
+X  DownloadPendingEpisodes()
+  CancelDownload()
+  GetEpisodesToDownload()
+  UpdateEpisode(episode)
+
+Utility.IPodCastDownloader:
+X  DownloadEpisode(episode)
+  EpisodeBufferDownloaded
+  CancelDownload()
+
+Repository.IEpisodeRepository:
+X  GetEpisodesToDownload()
+X  UpdateEpisode(episode)

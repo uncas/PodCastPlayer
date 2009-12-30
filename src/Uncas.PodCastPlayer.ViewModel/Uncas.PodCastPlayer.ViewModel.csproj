@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DownloadIndexViewModel.cs" />
     <Compile Include="EpisodeIndexItemViewModel.cs" />
     <Compile Include="EpisodeIndexViewModel.cs" />
     <Compile Include="PodCastIndexViewModel.cs" />

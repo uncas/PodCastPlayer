@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
 {
     using System;
+    using System.IO;
     using NUnit.Framework;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Utility;
@@ -35,9 +36,15 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
             {
                 MediaUrl = url
             };
+            string fileName = Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.MyDocuments),
+                "test1.mp3");
 
             // Act:
-            this.downloader.DownloadEpisode(episode);
+            this.downloader.DownloadEpisode(
+                episode,
+                fileName);
 
             // Assert:
         }

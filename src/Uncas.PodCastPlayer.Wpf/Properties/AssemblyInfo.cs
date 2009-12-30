@@ -13,6 +13,8 @@ using System.Windows;
 
 [module: SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Scope = "member", Target = "Uncas.PodCastPlayer.Wpf.PodCastDetails.#System.Windows.Markup.IComponentConnector.Connect(System.Int32,System.Object)")]
 
+[module: SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Scope = "member", Target = "Uncas.PodCastPlayer.Wpf.Window1.#System.Windows.Markup.IComponentConnector.Connect(System.Int32,System.Object)")]
+
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.

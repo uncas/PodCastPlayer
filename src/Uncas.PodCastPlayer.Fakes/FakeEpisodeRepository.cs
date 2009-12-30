@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.Fakes
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.ViewModel;
@@ -42,6 +43,46 @@ namespace Uncas.PodCastPlayer.Fakes
             FakePodCastRepository.UpdateEpisodeList(
                 podCastId,
                 episodes);
+        }
+
+        /// <summary>
+        /// Gets the episodes to download.
+        /// </summary>
+        /// <returns>A list of episodes.</returns>
+        public IList<Episode> GetEpisodesToDownload()
+        {
+            var result = new List<Episode>();
+            foreach (var podCast in FakePodCastRepository.PodCasts)
+            {
+                result.AddRange(
+                    podCast.Episodes.Where(
+                        e => e.PendingDownload));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Updates the episode.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        public void UpdateEpisode(Episode episode)
+        {
+        }
+
+        /// <summary>
+        /// Gets the view of episodes to download.
+        /// </summary>
+        /// <returns>An index of the episodes to download.</returns>
+        public IEnumerable<DownloadIndexViewModel> GetDownloadIndex()
+        {
+            return this.GetEpisodesToDownload()
+                .Select(e => new DownloadIndexViewModel
+                {
+                    EpisodeDate = e.Date,
+                    EpisodeId = e.Id,
+                    PodCastName = e.PodCast.Name
+                });
         }
 
         #endregion

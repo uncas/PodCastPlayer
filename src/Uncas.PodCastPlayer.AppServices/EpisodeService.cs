@@ -6,6 +6,12 @@
 
 namespace Uncas.PodCastPlayer.AppServices
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.Utility;
     using Uncas.PodCastPlayer.ViewModel;
@@ -30,6 +36,63 @@ namespace Uncas.PodCastPlayer.AppServices
         }
 
         #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Downloads the pending episodes.
+        /// </summary>
+        public void DownloadPendingEpisodes()
+        {
+            while (true)
+            {
+                var episodesToDownload =
+                    this.EpisodeRepository.GetEpisodesToDownload();
+                if (episodesToDownload.Count == 0)
+                {
+                    break;
+                }
+
+                var episode = episodesToDownload.First();
+
+                // TODO: FEATURE: Implement proper file path:
+                string fileName =
+                    string.Format(
+                    CultureInfo.InvariantCulture,
+                    "episode{0}.mp3",
+                    episode.Id);
+                string filePath =
+                    Path.Combine(
+                        Environment.GetFolderPath(
+                            Environment.SpecialFolder.MyDocuments),
+                        fileName);
+                var mediaInfo =
+                    this.Downloader.DownloadEpisode(
+                    episode,
+                    filePath);
+
+                episode.MediaInfo = mediaInfo;
+                episode.PendingDownload =
+                    !mediaInfo.DownloadCompleted;
+
+                // TODO: FEATURE: Only store relative path of file name:
+                episode.FileName = filePath;
+                this.EpisodeRepository.UpdateEpisode(episode);
+            }
+        }
+
+        /// <summary>
+        /// Gets an index of the episodes to download.
+        /// </summary>
+        /// <returns>An index of the episodes to download.</returns>
+        [SuppressMessage(
+            "Microsoft.Design",
+            "CA1024:UsePropertiesWhereAppropriate",
+            Justification = "This is an expensive read.")]
+        public IEnumerable<DownloadIndexViewModel> GetDownloadIndex()
+        {
+            return this.EpisodeRepository.GetDownloadIndex();
+        }
 
         /// <summary>
         /// Gets the episodes.
@@ -64,5 +127,7 @@ namespace Uncas.PodCastPlayer.AppServices
                 podCastId,
                 episodes);
         }
+
+        #endregion
     }
 }

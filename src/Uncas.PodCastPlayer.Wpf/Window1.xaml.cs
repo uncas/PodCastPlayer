@@ -14,6 +14,8 @@ namespace Uncas.PodCastPlayer.Wpf
     /// </summary>
     public sealed partial class Window1 : Window
     {
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Window1"/> class.
         /// </summary>
@@ -25,6 +27,8 @@ namespace Uncas.PodCastPlayer.Wpf
                     this.Window1_Loaded);
         }
 
+        #endregion
+
         /// <summary>
         /// Handles the Loaded event of the Window1 control.
         /// </summary>
@@ -34,10 +38,26 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            podCastsButton.Click +=
+            this.podCastsButton.Click +=
                 new RoutedEventHandler(
                     this.PodCastsButton_Click);
+            this.downloadsButton.Click +=
+                new RoutedEventHandler(
+                    this.DownloadsButton_Click);
             this.ShowPodCastIndex();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the DownloadsButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        private void DownloadsButton_Click(
+            object sender,
+            RoutedEventArgs e)
+        {
+            DownloadIndex downloads = new DownloadIndex();
+            this.contentControl.Content = downloads;
         }
 
         /// <summary>

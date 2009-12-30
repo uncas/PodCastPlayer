@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EpisodeDownloadEventArgs.cs" />
     <Compile Include="IPodCastDownloader.cs" />
     <Compile Include="PodCastDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
