@@ -8,7 +8,7 @@ namespace Uncas.PodCastPlayer.Wpf
 {
     using System.Windows;
     using System.Windows.Controls;
-    using Uncas.PodCastPlayer.ViewModel;
+    using Uncas.PodCastPlayer.AppServices;
 
     /// <summary>
     /// Interaction logic for EpisodeIndex.xaml
@@ -18,17 +18,24 @@ namespace Uncas.PodCastPlayer.Wpf
         /// <summary>
         /// The pod cast.
         /// </summary>
-        private readonly PodCastIndexViewModel podCast;
+        private readonly int podCastId;
+
+        /// <summary>
+        /// The service.
+        /// </summary>
+        private readonly PodCastService service;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EpisodeIndex"/> class.
         /// </summary>
-        /// <param name="podCast">The pod cast.</param>
+        /// <param name="podCastId">The pod cast id.</param>
         public EpisodeIndex(
-            PodCastIndexViewModel podCast)
+            int podCastId)
         {
             this.InitializeComponent();
-            this.podCast = podCast;
+            this.service = new PodCastService(
+                App.Repositories.PodCastRepository);
+            this.podCastId = podCastId;
             this.Loaded +=
                 new RoutedEventHandler(
                     this.EpisodeIndex_Loaded);
@@ -43,9 +50,37 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            // TODO: Fetch episodes for pod cast.
-            // HACK: The following is wrong:
-            episodesListBox.DataContext = this.podCast;
+            this.updateEpisodesButton.Click +=
+                new RoutedEventHandler(
+                    this.UpdateEpisodesButton_Click);
+            this.LoadEpisodes();
+        }
+
+        /// <summary>
+        /// Loads the episodes.
+        /// </summary>
+        private void LoadEpisodes()
+        {
+            var episodeIndex =
+                this.service.GetEpisodes(
+                this.podCastId);
+            episodesListBox.ItemsSource =
+                episodeIndex.Episodes;
+        }
+
+        /// <summary>
+        /// Handles the Click event of the UpdateEpisodesButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        private void UpdateEpisodesButton_Click(
+            object sender,
+            RoutedEventArgs e)
+        {
+            // TODO: FEATURE: Update from internet
+
+            // Updates the list of episodes:
+            this.LoadEpisodes();
         }
     }
 }

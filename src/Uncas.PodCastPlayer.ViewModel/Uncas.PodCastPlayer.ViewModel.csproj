@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EpisodeIndexItemViewModel.cs" />
+    <Compile Include="EpisodeIndexViewModel.cs" />
     <Compile Include="PodCastIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -86,7 +86,6 @@ namespace Uncas.PodCastPlayer.UI
 
             if (!this.buttonColumnAdded)
             {
-                // TODO: Set text on button.
                 DataGridViewButtonColumn buttonColumn =
                     new DataGridViewButtonColumn();
                 this.podCastsGrid.Columns.Add(buttonColumn);
@@ -95,7 +94,6 @@ namespace Uncas.PodCastPlayer.UI
 
             this.podCastsGrid.Columns["Id"].Visible = false;
 
-            // TODO: Localize header texts:
             this.podCastsGrid.Columns["Name"].HeaderText = "Name";
             this.podCastsGrid.Columns["Url"].HeaderText = "Url";
         }
@@ -140,7 +138,6 @@ namespace Uncas.PodCastPlayer.UI
             object sender,
             EventArgs e)
         {
-            // TODO: Localize this:
             this.Text = "Pod casts";
 
             this.podCastsGrid.RowHeadersVisible = false;

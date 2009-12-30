@@ -3,13 +3,15 @@ Phase 1
 X View form with list of pod casts
 X View pod cast details
 X Save pod cast details
-- Add pod cast
-- Delete pod cast
-- View episodes of pod cast
-- Update episode list
+X View episodes of pod cast
+X Add pod cast
+X Delete pod cast
+- Update episode list from internet
+- Select episodes to download
+- Background downloader
+  - Download newest episodes of PodCasts automatically
+- View list of downloads
+- Play selected episode
 
-
-
-
-- Download newest episodes of PodCasts automatically
-- Play selected episodes
+- Implement SqLite repository
+- Implement PodCastUtility for real

@@ -65,8 +65,13 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             PodCastSelectedEventArgs e)
         {
-            EpisodeIndex index = new EpisodeIndex(e.PodCast);
-            contentControl.Content = index;
+            if (e.PodCast.Id.HasValue)
+            {
+                EpisodeIndex index =
+                    new EpisodeIndex(
+                    e.PodCast.Id.Value);
+                contentControl.Content = index;
+            }
         }
 
         /// <summary>

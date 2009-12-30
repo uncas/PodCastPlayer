@@ -61,6 +61,9 @@ namespace Uncas.PodCastPlayer.Fakes
                             uri,
                             3);
 
+                    podCast.Episodes.Add(new Episode());
+                    podCast.Episodes.Add(new Episode());
+
                     podCasts.Add(podCast);
 
                     var uri2 = new Uri(
@@ -71,6 +74,11 @@ namespace Uncas.PodCastPlayer.Fakes
                             "StackOverflow",
                             uri2,
                             4);
+
+                    podCast2.Episodes.Add(new Episode());
+                    podCast2.Episodes.Add(new Episode());
+                    podCast2.Episodes.Add(new Episode());
+
                     podCasts.Add(podCast2);
                 }
 
@@ -118,13 +126,63 @@ namespace Uncas.PodCastPlayer.Fakes
                 }
             }
 
+            int newId =
+                (PodCasts.Max(pc => pc.Id) ?? 0)
+                + 1;
+
             var newPodCast =
                 new PodCast(
-                    null,
+                    newId,
                     podCast.Name,
                     podCast.Url,
                     null);
             PodCasts.Add(newPodCast);
+        }
+
+        /// <summary>
+        /// Gets the episodes.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <returns>An index of episodes.</returns>
+        public EpisodeIndexViewModel GetEpisodes(int podCastId)
+        {
+            var podCast =
+                PodCasts.Where(
+                pc => pc.Id == podCastId)
+                .SingleOrDefault();
+            if (podCast == null)
+            {
+                return null;
+            }
+
+            var episodes = podCast.Episodes
+                .Select(e => new EpisodeIndexItemViewModel
+                {
+                    Date = e.Date
+                });
+            return new EpisodeIndexViewModel
+            {
+                PodCastName = podCast.Name,
+                Episodes = episodes
+            };
+        }
+
+        /// <summary>
+        /// Deletes the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        public void DeletePodCast(int podCastId)
+        {
+            var podCast =
+                PodCasts.Where(
+                pc => pc.Id == podCastId)
+                .SingleOrDefault();
+            if (podCast == null)
+            {
+                return;
+            }
+
+            PodCasts.Remove(podCast);
         }
 
         #endregion

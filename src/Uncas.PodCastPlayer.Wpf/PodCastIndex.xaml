@@ -2,7 +2,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <ListBox x:Name="podCastsListBox">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <ListBox x:Name="podCastsListBox" Grid.Row="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -18,5 +22,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button x:Name="addPodCastButton" Content="Add new" Grid.Row="1" />
     </Grid>
 </UserControl>

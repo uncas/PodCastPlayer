@@ -31,5 +31,18 @@ namespace Uncas.PodCastPlayer.Repository
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
         void SavePodCast(PodCastIndexViewModel podCast);
+
+        /// <summary>
+        /// Gets the episodes.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <returns>An index of episodes.</returns>
+        EpisodeIndexViewModel GetEpisodes(int podCastId);
+
+        /// <summary>
+        /// Deletes the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        void DeletePodCast(int podCastId);
     }
 }

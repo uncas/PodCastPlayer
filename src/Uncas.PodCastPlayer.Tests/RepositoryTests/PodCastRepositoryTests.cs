@@ -9,7 +9,6 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
     using System.Diagnostics;
     using System.Linq;
     using NUnit.Framework;
-    using Uncas.PodCastPlayer.Fakes;
     using Uncas.PodCastPlayer.Repository;
 
     /// <summary>
@@ -68,6 +67,21 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 podCasts.Where(pc => pc.Id == id)
                 .SingleOrDefault();
             Assert.AreEqual(newName, updatedPodCast.Name);
+        }
+
+        /// <summary>
+        /// Gets the episodes_1_ OK.
+        /// </summary>
+        [Test]
+        public void GetEpisodes_1_OK()
+        {
+            // Arrange:
+
+            // Act:
+            var episodeIndex = this.repository.GetEpisodes(1);
+
+            // Assert:
+            Assert.IsNotNull(episodeIndex);
         }
     }
 }

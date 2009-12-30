@@ -32,7 +32,6 @@ namespace Uncas.PodCastPlayer.UI
             object sender,
             System.EventArgs e)
         {
-            // TODO: Localize this:
             this.Text = "Uncas Pod Cast Player";
             PodCastIndex podCastIndex =
                 new PodCastIndex(this);

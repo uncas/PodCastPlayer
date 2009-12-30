@@ -61,6 +61,24 @@ namespace Uncas.PodCastPlayer.Wpf
             podCastsListBox.SelectionChanged +=
                 new SelectionChangedEventHandler(
                     this.PodCastsListBox_SelectionChanged);
+            addPodCastButton.Click +=
+                new RoutedEventHandler(
+                    this.AddPodCastButton_Click);
+        }
+
+        /// <summary>
+        /// Handles the Click event of the AddPodCastButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        private void AddPodCastButton_Click(
+            object sender,
+            RoutedEventArgs e)
+        {
+            PodCastIndexViewModel podCast = null;
+            this.FireEvent(
+                podCast,
+                this.PodCastSelected);
         }
 
         /// <summary>
@@ -107,10 +125,13 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void Episodes_Click(object sender, RoutedEventArgs e)
+        private void Episodes_Click(
+            object sender,
+            RoutedEventArgs e)
         {
             var button = (Button)sender;
-            var podCast = (PodCastIndexViewModel)button.DataContext;
+            var podCast =
+                (PodCastIndexViewModel)button.DataContext;
             this.FireEvent(
                 podCast,
                 this.EpisodesSelected);

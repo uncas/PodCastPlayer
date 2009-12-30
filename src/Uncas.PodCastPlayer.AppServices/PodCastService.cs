@@ -52,5 +52,26 @@ namespace Uncas.PodCastPlayer.AppServices
         {
             this.repository.SavePodCast(podCast);
         }
+
+        /// <summary>
+        /// Gets the episodes.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <returns>An index of episodes.</returns>
+        public EpisodeIndexViewModel GetEpisodes(
+            int podCastId)
+        {
+            return this.repository.GetEpisodes(
+                podCastId);
+        }
+
+        /// <summary>
+        /// Deletes the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        public void DeletePodCast(int podCastId)
+        {
+            this.repository.DeletePodCast(podCastId);
+        }
     }
 }

@@ -69,7 +69,6 @@ namespace Uncas.PodCastPlayer.UI
             object sender,
             EventArgs e)
         {
-            // TODO: Localize strings:
             this.Text = "Pod cast details";
             this.saveAndExit.Text = "OK";
             this.nameTextBox.Text = this.podCast.Name;

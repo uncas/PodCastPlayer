@@ -9,12 +9,15 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0">Name</Label>
         <TextBox x:Name="nameTextBox" Grid.Row="0" Grid.Column="1"></TextBox>
         <Label Grid.Row="1" Grid.Column="0">Url</Label>
         <TextBox x:Name="urlTextBox" Grid.Row="1" Grid.Column="1"></TextBox>
-        <Button x:Name="saveButton" Height="30" Grid.Row="2" Grid.ColumnSpan="2" Content="Save"></Button>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" >
+            <Button x:Name="saveButton" Content="Save"></Button>
+            <Button x:Name="deleteButton" Content="Delete"></Button>
+        </StackPanel>
     </Grid>
 </UserControl>
