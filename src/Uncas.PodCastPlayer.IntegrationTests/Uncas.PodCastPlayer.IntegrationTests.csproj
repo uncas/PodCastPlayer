@@ -5,24 +5,20 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9B8DA5E7-DF0F-4FE9-9036-ABE23D70F594}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{A5BA852A-636C-4DCE-954F-75ED2DE5E07A}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Uncas.PodCastPlayer.Wpf</RootNamespace>
-    <AssemblyName>Uncas.PodCastPlayer.Wpf</AssemblyName>
+    <RootNamespace>Uncas.PodCastPlayer.IntegrationTests</RootNamespace>
+    <AssemblyName>Uncas.PodCastPlayer.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\UncasPodCastPlayerKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -35,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -47,86 +44,11 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Page Include="EpisodeIndex.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PodCastDetails.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PodCastIndex.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Window1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BackgroundDownloader.cs" />
-    <Compile Include="EpisodeIndex.xaml.cs">
-      <DependentUpon>EpisodeIndex.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PodCastDetails.xaml.cs">
-      <DependentUpon>PodCastDetails.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PodCastIndex.xaml.cs">
-      <DependentUpon>PodCastIndex.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PodCastSelectedEventArgs.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="..\UncasPodCastPlayerKey.snk">
-      <Link>UncasPodCastPlayerKey.snk</Link>
-    </None>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestApp.cs" />
+    <Compile Include="UtilityTests\PodCastDownloaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Uncas.PodCastPlayer.AppServices\Uncas.PodCastPlayer.AppServices.csproj">
@@ -145,6 +67,10 @@
       <Project>{BFFE8668-0233-4CF0-98C7-E39934692C9E}</Project>
       <Name>Uncas.PodCastPlayer.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.UI\Uncas.PodCastPlayer.UI.csproj">
+      <Project>{A756AAA1-096C-4A22-B0F6-A75BBCB22877}</Project>
+      <Name>Uncas.PodCastPlayer.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Uncas.PodCastPlayer.Utility\Uncas.PodCastPlayer.Utility.csproj">
       <Project>{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}</Project>
       <Name>Uncas.PodCastPlayer.Utility</Name>
@@ -152,6 +78,10 @@
     <ProjectReference Include="..\Uncas.PodCastPlayer.ViewModel\Uncas.PodCastPlayer.ViewModel.csproj">
       <Project>{CCC24751-87D9-4FD1-BBB6-F723231933D1}</Project>
       <Name>Uncas.PodCastPlayer.ViewModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.Wpf\Uncas.PodCastPlayer.Wpf.csproj">
+      <Project>{9B8DA5E7-DF0F-4FE9-9036-ABE23D70F594}</Project>
+      <Name>Uncas.PodCastPlayer.Wpf</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

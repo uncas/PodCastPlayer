@@ -8,11 +8,21 @@ X Add pod cast
 X Delete pod cast
 X Update episode list from service/utility/internet
 - Keep track of list of episodes to download
+- Rules for downloads
 - Select episodes to download
-- Background downloader
+- Background downloader:
+  - Fetch list of episodes to download
+  - Download the first episode on the list:
+    - One piece at a time
+    - Keep track of the following info for the episode:
+      - Bytes downloaded
+  - When finished: go to the next episode on the list 
+
   - Download newest episodes of PodCasts automatically
 - View list of downloads
 - Play selected episode
 
 - Implement SqLite repository
 - Implement PodCastUtility for real
+
+see: http://www.codeproject.com/KB/IP/MyDownloader.aspx

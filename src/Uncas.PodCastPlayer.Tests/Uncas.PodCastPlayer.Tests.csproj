@@ -52,6 +52,7 @@
     <Compile Include="RepositoryTests\EpisodeRepositoryTests.cs" />
     <Compile Include="RepositoryTests\PodCastRepositoryTests.cs" />
     <Compile Include="TestApp.cs" />
+    <Compile Include="UITests\BackgroundDownloaderTests.cs" />
     <Compile Include="UtilityTests\PodCastDownloaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +75,10 @@
     <ProjectReference Include="..\Uncas.PodCastPlayer.ViewModel\Uncas.PodCastPlayer.ViewModel.csproj">
       <Project>{CCC24751-87D9-4FD1-BBB6-F723231933D1}</Project>
       <Name>Uncas.PodCastPlayer.ViewModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.Wpf\Uncas.PodCastPlayer.Wpf.csproj">
+      <Project>{9B8DA5E7-DF0F-4FE9-9036-ABE23D70F594}</Project>
+      <Name>Uncas.PodCastPlayer.Wpf</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

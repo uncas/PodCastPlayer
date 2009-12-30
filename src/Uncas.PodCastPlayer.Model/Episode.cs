@@ -28,5 +28,11 @@ namespace Uncas.PodCastPlayer.Model
         /// </summary>
         /// <value>The date of the episode.</value>
         public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Gets or sets the media URL.
+        /// </summary>
+        /// <value>The media URL.</value>
+        public Uri MediaUrl { get; set; }
     }
 }
