@@ -12,6 +12,12 @@ namespace Uncas.PodCastPlayer.Repository
     public interface IRepositoryFactory
     {
         /// <summary>
+        /// Gets the episode repository.
+        /// </summary>
+        /// <value>The episode repository.</value>
+        IEpisodeRepository EpisodeRepository { get; }
+
+        /// <summary>
         /// Gets the pod cast repository.
         /// </summary>
         /// <value>The pod cast repository.</value>

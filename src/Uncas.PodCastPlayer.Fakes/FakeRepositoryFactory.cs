@@ -16,6 +16,15 @@ namespace Uncas.PodCastPlayer.Fakes
         #region IRepositoryFactory Members
 
         /// <summary>
+        /// Gets the episode repository.
+        /// </summary>
+        /// <value>The episode repository.</value>
+        public IEpisodeRepository EpisodeRepository
+        {
+            get { return new FakeEpisodeRepository(); }
+        }
+
+        /// <summary>
         /// Gets the pod cast repository.
         /// </summary>
         /// <value>The pod cast repository.</value>

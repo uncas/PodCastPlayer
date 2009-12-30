@@ -8,6 +8,7 @@ namespace Uncas.PodCastPlayer.Tests
 {
     using Uncas.PodCastPlayer.Fakes;
     using Uncas.PodCastPlayer.Repository;
+    using Uncas.PodCastPlayer.Utility;
 
     /// <summary>
     /// Statics for the test application.
@@ -15,9 +16,31 @@ namespace Uncas.PodCastPlayer.Tests
     internal static class TestApp
     {
         /// <summary>
+        /// The pod cast downloader.
+        /// </summary>
+        private static IPodCastDownloader podCastDownloader;
+
+        /// <summary>
         /// The repositories.
         /// </summary>
         private static IRepositoryFactory repositories;
+
+        /// <summary>
+        /// Gets the pod cast downloader.
+        /// </summary>
+        /// <value>The pod cast downloader.</value>
+        internal static IPodCastDownloader PodCastDownloader
+        {
+            get
+            {
+                if (podCastDownloader == null)
+                {
+                    podCastDownloader = new FakePodCastDownloader();
+                }
+
+                return podCastDownloader;
+            }
+        }
 
         /// <summary>
         /// Gets the repositories.
@@ -32,7 +55,7 @@ namespace Uncas.PodCastPlayer.Tests
                     repositories =
                         new FakeRepositoryFactory();
                 }
-                
+
                 return repositories;
             }
         }

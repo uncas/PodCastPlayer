@@ -27,7 +27,7 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         private PodCastIndexViewModel podCast;
 
-        // TODO: Consider using automatic updating in WPF
+        // TODO: REFACTOR: Consider using automatic updating in WPF
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastDetails"/> class.

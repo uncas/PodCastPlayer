@@ -6,7 +6,8 @@ X Save pod cast details
 X View episodes of pod cast
 X Add pod cast
 X Delete pod cast
-- Update episode list from internet
+X Update episode list from service/utility/internet
+- Keep track of list of episodes to download
 - Select episodes to download
 - Background downloader
   - Download newest episodes of PodCasts automatically

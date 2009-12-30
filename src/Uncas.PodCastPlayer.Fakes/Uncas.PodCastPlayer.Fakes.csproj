@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeEpisodeRepository.cs" />
     <Compile Include="FakePodCastDownloader.cs" />
     <Compile Include="FakePodCastRepository.cs" />
     <Compile Include="FakeRepositoryFactory.cs" />

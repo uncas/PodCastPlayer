@@ -68,20 +68,5 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 .SingleOrDefault();
             Assert.AreEqual(newName, updatedPodCast.Name);
         }
-
-        /// <summary>
-        /// Gets the episodes_1_ OK.
-        /// </summary>
-        [Test]
-        public void GetEpisodes_1_OK()
-        {
-            // Arrange:
-
-            // Act:
-            var episodeIndex = this.repository.GetEpisodes(1);
-
-            // Assert:
-            Assert.IsNotNull(episodeIndex);
-        }
     }
 }

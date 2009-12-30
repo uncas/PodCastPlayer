@@ -21,6 +21,8 @@ namespace Uncas.PodCastPlayer.Model
             this.Date = DateTime.Now;
         }
 
+        // TODO: FEATURE: Include field to identify an episode.
+
         /// <summary>
         /// Gets or sets the date of the episode.
         /// </summary>

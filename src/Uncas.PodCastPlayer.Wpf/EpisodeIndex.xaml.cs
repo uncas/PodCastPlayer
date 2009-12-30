@@ -23,7 +23,7 @@ namespace Uncas.PodCastPlayer.Wpf
         /// <summary>
         /// The service.
         /// </summary>
-        private readonly PodCastService service;
+        private readonly EpisodeService service;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EpisodeIndex"/> class.
@@ -33,8 +33,10 @@ namespace Uncas.PodCastPlayer.Wpf
             int podCastId)
         {
             this.InitializeComponent();
-            this.service = new PodCastService(
-                App.Repositories.PodCastRepository);
+            this.service =
+                new EpisodeService(
+                App.Repositories,
+                App.Downloader);
             this.podCastId = podCastId;
             this.Loaded +=
                 new RoutedEventHandler(
@@ -77,7 +79,8 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            // TODO: FEATURE: Update from internet
+            // Updates from service:
+            this.service.UpdateEpisodes(this.podCastId);
 
             // Updates the list of episodes:
             this.LoadEpisodes();

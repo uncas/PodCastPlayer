@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseService.cs" />
+    <Compile Include="EpisodeService.cs" />
     <Compile Include="PodCastService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

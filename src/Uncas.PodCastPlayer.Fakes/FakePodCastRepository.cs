@@ -140,11 +140,46 @@ namespace Uncas.PodCastPlayer.Fakes
         }
 
         /// <summary>
-        /// Gets the episodes.
+        /// Deletes the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        public void DeletePodCast(int podCastId)
+        {
+            var podCast =
+                PodCasts.Where(
+                pc => pc.Id == podCastId)
+                .SingleOrDefault();
+            if (podCast == null)
+            {
+                return;
+            }
+
+            PodCasts.Remove(podCast);
+        }
+
+        /// <summary>
+        /// Gets the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <returns>The pod cast.</returns>
+        public PodCast GetPodCast(int podCastId)
+        {
+            return PodCasts.Where(
+                pc => pc.Id == podCastId)
+                .SingleOrDefault();
+        }
+
+        #endregion
+
+        #region Internal methods
+
+        /// <summary>
+        /// Gets the episodes by pod cast.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>An index of episodes.</returns>
-        public EpisodeIndexViewModel GetEpisodes(int podCastId)
+        internal static EpisodeIndexViewModel GetEpisodesByPodCast(
+            int podCastId)
         {
             var podCast =
                 PodCasts.Where(
@@ -168,10 +203,13 @@ namespace Uncas.PodCastPlayer.Fakes
         }
 
         /// <summary>
-        /// Deletes the pod cast.
+        /// Updates the episode list.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
-        public void DeletePodCast(int podCastId)
+        /// <param name="episodes">The episodes.</param>
+        internal static void UpdateEpisodeList(
+            int podCastId,
+            IList<Episode> episodes)
         {
             var podCast =
                 PodCasts.Where(
@@ -182,7 +220,11 @@ namespace Uncas.PodCastPlayer.Fakes
                 return;
             }
 
-            PodCasts.Remove(podCast);
+            podCast.Episodes.Clear();
+            foreach (var episode in episodes)
+            {
+                podCast.Episodes.Add(episode);
+            }
         }
 
         #endregion

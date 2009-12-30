@@ -36,7 +36,10 @@ namespace Uncas.PodCastPlayer.Fakes
         public IList<Episode> DownloadEpisodeList(
             PodCast podCast)
         {
-            throw new NotImplementedException();
+            var result = new List<Episode>();
+            result.AddRange(podCast.Episodes);
+            result.Add(new Episode());
+            return result;
         }
 
         #endregion
