@@ -7,6 +7,8 @@
 namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using NUnit.Framework;
     using Uncas.PodCastPlayer.Model;
@@ -32,6 +34,7 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
         {
             // Arrange:
             Uri url = new Uri("http://perseus.franklins.net/hanselminutes_0079.mp3");
+
             Episode episode = new Episode
             {
                 MediaUrl = url
@@ -47,6 +50,27 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
                 fileName);
 
             // Assert:
+        }
+
+        [Test]
+        public void Rss()
+        {
+            var items = new List<RssItem>();
+            items.Add(
+                new RssItem
+                {
+                    Guid = "x",
+                    PubDate = DateTime.Now,
+                    Title = "test x",
+                });
+            RssFeed feed = new RssFeed
+            {
+                Channel = new RssChannel { Items = items }
+            };
+
+            StringWriter sw = new StringWriter();
+            feed.Save(sw);
+            Trace.WriteLine(sw);
         }
     }
 }

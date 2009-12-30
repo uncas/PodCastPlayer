@@ -10,24 +10,26 @@ X Update episode list from service/utility/internet
 X Rules for downloads
 X Keep track of list of episodes to download
 X View list of pending downloads
-- Background downloader:
-  - Fetch list of episodes to download
-  - Download the first episode on the list:
-    - One piece at a time
-    - Keep track of the following info for the episode:
-      - Bytes downloaded
-  - When finished: go to the next episode on the list 
-  - Download newest episodes of PodCasts automatically
-- Downloader:
+X Implement download podcast for real
+X Background downloader:
+  X Fetch list of episodes to download
+  X Download the first episode on the list:
+    X One piece at a time
+    X Keep track of the following info for the episode:
+      X Bytes downloaded
+  X When finished: go to the next episode on the list 
+  X Download newest episodes of PodCasts automatically
+X Downloader:
   X Return file info:
     X Total size in bytes
     X Bytes downloaded
   X Return number of bytes downloaded with each buffer
-  - Possible to cancel
+- Update list of episodes for real
+- Save location: [My music]\PodCasts\[PodCastName]\[EpisodeName].mp3
 - Select episodes to download
+- Cancel download
 - Play selected episode
 
 - Implement SqLite repository
-- Implement PodCastUtility for real
 
 see: http://www.codeproject.com/KB/IP/MyDownloader.aspx

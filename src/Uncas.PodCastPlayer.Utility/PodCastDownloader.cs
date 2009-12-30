@@ -13,6 +13,7 @@ namespace Uncas.PodCastPlayer.Utility
     using System.IO;
     using System.Net;
     using Uncas.PodCastPlayer.Model;
+    using System.Xml.Serialization;
 
     /// <summary>
     /// Handles downloads of pod casts.
@@ -56,18 +57,12 @@ namespace Uncas.PodCastPlayer.Utility
             long fileSize = webResponse.ContentLength;
             Trace.WriteLine(fileSize);
 
-            /*DownloadWithWebclient(
-                episode,
-                fileName,
-                fileSize);*/
-
             int downloadedBytes =
                 this.DownloadWithWebResponse(
                 fileName,
                 webRequest,
                 fileSize);
 
-            // DownloadInOnePiece(episode, fileName);
             return new EpisodeMediaInfo
             {
                 FileSizeInBytes = (int)fileSize,
@@ -83,7 +78,14 @@ namespace Uncas.PodCastPlayer.Utility
         public IList<Episode> DownloadEpisodeList(
             PodCast podCast)
         {
-            throw new NotImplementedException();
+            var result = new List<Episode>();
+            using (WebClient client = new WebClient())
+            {
+                string rssFeed =
+                    client.DownloadString(
+                    podCast.Url);
+            }
+            return result;
         }
 
         #endregion
@@ -91,38 +93,116 @@ namespace Uncas.PodCastPlayer.Utility
         #region Private methods
 
         /// <summary>
-        /// Downloads the in one piece.
+        /// Downloads the buffer.
         /// </summary>
-        /// <param name="episode">The episode.</param>
-        /// <param name="fileName">Name of the file.</param>
-        private static void DownloadInOnePiece(
-            Episode episode,
-            string fileName)
+        /// <param name="responseStream">The response stream.</param>
+        /// <param name="downBuffer">Down buffer.</param>
+        /// <param name="fileStream">The file stream.</param>
+        /// <returns>The number of bytes read.</returns>
+        private static int DownloadBuffer(
+            Stream responseStream,
+            byte[] downBuffer,
+            FileStream fileStream)
         {
-            using (WebClient client = new WebClient())
+            int bytesRead =
+                responseStream.Read(
+                downBuffer,
+                0,
+                downBuffer.Length);
+            if (bytesRead == 0)
             {
-                client.DownloadFile(
-                    episode.MediaUrl.AbsoluteUri,
-                    fileName);
+                return 0;
             }
+
+            // Writes to the local hard drive:
+            fileStream.Write(downBuffer, 0, bytesRead);
+            return bytesRead;
         }
 
         /// <summary>
-        /// Downloads the stream.
+        /// Checks if the response supports partial content.
         /// </summary>
-        /// <param name="fileName">Name of the file.</param>
+        /// <param name="response">The response.</param>
+        /// <returns>True if it supports partial content.</returns>
+        private static bool CheckIfResponseSupportsPartialContent(
+            HttpWebResponse response)
+        {
+            bool supportsPartialContent = false;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                // The server ignored our range request.
+                // The download must restart.
+                // TODO: FEATURE: Save the whole response.
+                supportsPartialContent = false;
+            }
+            else if (response.StatusCode ==
+                HttpStatusCode.PartialContent)
+            {
+                // The server accepted our range request.
+                // TODO: FEATURE: Append the partial response.
+                supportsPartialContent = true;
+            }
+
+            return supportsPartialContent;
+        }
+
+        /// <summary>
+        /// Gets the response.
+        /// </summary>
+        /// <param name="webRequest">The web request.</param>
+        /// <param name="desiredOffset">The desired offset.</param>
+        /// <returns>The response.</returns>
+        private static HttpWebResponse GetResponse(
+            HttpWebRequest webRequest,
+            int desiredOffset)
+        {
+            if (desiredOffset > 0)
+            {
+                webRequest.AddRange(desiredOffset);
+            }
+
+            // Retrieves the response from the server:
+            var response =
+                (HttpWebResponse)webRequest.GetResponse();
+            return response;
+        }
+
+        /// <summary>
+        /// Downloads the buffers.
+        /// </summary>
         /// <param name="fileSize">Size of the file.</param>
         /// <param name="responseStream">The response stream.</param>
-        private void DownloadStream(
-            string fileName,
+        /// <param name="downBuffer">Down buffer.</param>
+        /// <param name="bytesTotal">The bytes total.</param>
+        /// <param name="fileStream">The file stream.</param>
+        /// <returns>The total number of bytes downloaded.</returns>
+        private int DownloadBuffers(
             long fileSize,
-            Stream responseStream)
+            Stream responseStream,
+            byte[] downBuffer,
+            int bytesTotal,
+            FileStream fileStream)
         {
-            this.DownloadStream(
-                fileName,
-                fileSize,
-                responseStream,
-                false);
+            while (true)
+            {
+                int bytesRead =
+                    DownloadBuffer(
+                    responseStream,
+                    downBuffer,
+                    fileStream);
+                if (bytesRead == 0)
+                {
+                    break;
+                }
+
+                bytesTotal += bytesRead;
+                this.NotifyOfDownloadStatus(
+                    bytesRead,
+                    fileSize,
+                    bytesTotal);
+            }
+
+            return bytesTotal;
         }
 
         /// <summary>
@@ -153,71 +233,16 @@ namespace Uncas.PodCastPlayer.Utility
                  FileAccess.Write,
                  FileShare.None))
             {
-                // Loop until no more data:
-                while (true)
-                {
-                    int bytesRead =
-                        responseStream.Read(
-                        downBuffer,
-                        0,
-                        downBuffer.Length);
-                    if (bytesRead == 0)
-                    {
-                        break;
-                    }
-
-                    // Writes to the local hard drive:
-                    fileStream.Write(downBuffer, 0, bytesRead);
-                    bytesTotal += bytesRead;
-                    Trace.WriteLine(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            "{0}: {1}/{2} = {3:P1}",
-                            bytesRead,
-                            bytesTotal,
-                            fileSize,
-                            (1D * bytesTotal) / (1D * fileSize)));
-                    if (this.EpisodeBufferDownloaded != null)
-                    {
-                        var eventArgs =
-                            new EpisodeDownloadEventArgs
-                            {
-                                BytesDownloaded = bytesTotal,
-                                FileSizeInBytes = fileSize
-                            };
-                        this.EpisodeBufferDownloaded(
-                            this,
-                            eventArgs);
-                    }
-                }
+                bytesTotal =
+                  this.DownloadBuffers(
+                    fileSize,
+                    responseStream,
+                    downBuffer,
+                    bytesTotal,
+                    fileStream);
             }
 
             return bytesTotal;
-        }
-
-        /// <summary>
-        /// Downloads the with web client.
-        /// </summary>
-        /// <param name="episode">The episode.</param>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="fileSize">Size of the file.</param>
-        private void DownloadWithWebClient(
-            Episode episode,
-            string fileName,
-            long fileSize)
-        {
-            // Opens the URL for download:
-            using (var client = new WebClient())
-            {
-                using (var responseStream =
-                      client.OpenRead(episode.MediaUrl))
-                {
-                    this.DownloadStream(
-                        fileName,
-                        fileSize,
-                        responseStream);
-                }
-            }
         }
 
         /// <summary>
@@ -234,30 +259,13 @@ namespace Uncas.PodCastPlayer.Utility
         {
             // TODO: FEATURE: Proper offset!
             int desiredOffset = 0;
-            if (desiredOffset > 0)
-            {
-                webRequest.AddRange(desiredOffset);
-            }
-
-            // Retrieves the response from the server:
             var response =
-                (HttpWebResponse)webRequest.GetResponse();
-            bool supportsPartialContent = false;
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                // The server ignored our range request.
-                // The download must restart.
-                // TODO: FEATURE: Save the whole response.
-                supportsPartialContent = false;
-            }
-            else if (response.StatusCode ==
-                HttpStatusCode.PartialContent)
-            {
-                // The server accepted our range request.
-                // TODO: FEATURE: Append the partial response.
-                supportsPartialContent = true;
-            }
-
+                GetResponse(
+                    webRequest,
+                    desiredOffset);
+            bool supportsPartialContent =
+                CheckIfResponseSupportsPartialContent(
+                    response);
             var responseStream =
                 response.GetResponseStream();
             return this.DownloadStream(
@@ -267,6 +275,130 @@ namespace Uncas.PodCastPlayer.Utility
                 supportsPartialContent);
         }
 
+        /// <summary>
+        /// Notifies the of download status.
+        /// </summary>
+        /// <param name="bytesRead">The bytes read.</param>
+        /// <param name="fileSize">Size of the file.</param>
+        /// <param name="bytesTotal">The bytes total.</param>
+        private void NotifyOfDownloadStatus(
+            int bytesRead,
+            long fileSize,
+            int bytesTotal)
+        {
+            if (this.EpisodeBufferDownloaded != null)
+            {
+                var eventArgs =
+                    new EpisodeDownloadEventArgs
+                    {
+                        BytesDownloaded = bytesTotal,
+                        FileSizeInBytes = fileSize
+                    };
+                this.EpisodeBufferDownloaded(
+                    this,
+                    eventArgs);
+            }
+
+            Trace.WriteLine(
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    "{0}: {1}/{2} = {3:P1}",
+                    bytesRead,
+                    bytesTotal,
+                    fileSize,
+                    (1D * bytesTotal) / (1D * fileSize)));
+        }
+
         #endregion
+
+    }
+
+    /// <summary>
+    /// Represents an rss feed.
+    /// </summary>
+    [XmlType("rss")]
+    public class RssFeed
+    {
+        /// <summary>
+        /// Gets or sets the channel.
+        /// </summary>
+        /// <value>The channel.</value>
+        [XmlElement("channel")]
+        public RssChannel Channel { get; set; }
+
+        /// <summary>
+        /// Saves the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        public void Save(TextWriter stream)
+        {
+            XmlSerializer serializer =
+                new XmlSerializer(
+                    typeof(RssFeed));
+            serializer.Serialize(
+                stream,
+                this);
+        }
+    }
+
+    /// <summary>
+    /// Represents an rss channel.
+    /// </summary>
+    public class RssChannel
+    {
+        /// <summary>
+        /// Gets or sets the items.
+        /// </summary>
+        /// <value>The items.</value>
+        public List<RssItem> Items { get; set; }
+    }
+
+    /// <summary>
+    /// Represents an rss item.
+    /// </summary>
+    [XmlType("item")]
+    public class RssItem
+    {
+        /// <summary>
+        /// Gets or sets the enclosure.
+        /// </summary>
+        /// <value>The enclosure.</value>
+        public Enclosure Enclosure { get; set; }
+
+        /// <summary>
+        /// Gets or sets the GUID.
+        /// </summary>
+        /// <value>The GUID.</value>
+        public string Guid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pub date.
+        /// </summary>
+        /// <value>The pub date.</value>
+        public DateTime PubDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        /// <value>The title.</value>
+        public string Title { get; set; }
+    }
+
+    /// <summary>
+    /// Represents an encosure.
+    /// </summary>
+    public class Enclosure
+    {
+        /// <summary>
+        /// Gets or sets the URL.
+        /// </summary>
+        /// <value>The URL.</value>
+        public string Url { get; set; }
+
+        /// <summary>
+        /// Gets or sets the length.
+        /// </summary>
+        /// <value>The length.</value>
+        public int Length { get; set; }
     }
 }

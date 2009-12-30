@@ -12,6 +12,7 @@ namespace Uncas.PodCastPlayer.AppServices
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.Utility;
     using Uncas.PodCastPlayer.ViewModel;
@@ -53,31 +54,10 @@ namespace Uncas.PodCastPlayer.AppServices
                     break;
                 }
 
-                var episode = episodesToDownload.First();
-
-                // TODO: FEATURE: Implement proper file path:
-                string fileName =
-                    string.Format(
-                    CultureInfo.InvariantCulture,
-                    "episode{0}.mp3",
-                    episode.Id);
-                string filePath =
-                    Path.Combine(
-                        Environment.GetFolderPath(
-                            Environment.SpecialFolder.MyDocuments),
-                        fileName);
-                var mediaInfo =
-                    this.Downloader.DownloadEpisode(
-                    episode,
-                    filePath);
-
-                episode.MediaInfo = mediaInfo;
-                episode.PendingDownload =
-                    !mediaInfo.DownloadCompleted;
-
-                // TODO: FEATURE: Only store relative path of file name:
-                episode.FileName = filePath;
-                this.EpisodeRepository.UpdateEpisode(episode);
+                foreach (var episode in episodesToDownload)
+                {
+                    this.DownloadEpisode(episode);
+                }
             }
         }
 
@@ -126,6 +106,42 @@ namespace Uncas.PodCastPlayer.AppServices
             this.EpisodeRepository.UpdateEpisodeList(
                 podCastId,
                 episodes);
+        }
+
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        /// Downloads the episode.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        private void DownloadEpisode(
+           Episode episode)
+        {
+            // TODO: FEATURE: Implement proper file path:
+            string fileName =
+                string.Format(
+                CultureInfo.InvariantCulture,
+                "episode{0}.mp3",
+                episode.Id);
+            string filePath =
+                Path.Combine(
+                    Environment.GetFolderPath(
+                        Environment.SpecialFolder.MyDocuments),
+                    fileName);
+            var mediaInfo =
+                this.Downloader.DownloadEpisode(
+                episode,
+                filePath);
+
+            episode.MediaInfo = mediaInfo;
+            episode.PendingDownload =
+                !mediaInfo.DownloadCompleted;
+
+            // TODO: FEATURE: Only store relative path of file name:
+            episode.FileName = filePath;
+            this.EpisodeRepository.UpdateEpisode(episode);
         }
 
         #endregion
