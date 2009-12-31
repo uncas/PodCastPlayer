@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.Model
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
     /// Represents an episode of a pod cast.
@@ -32,6 +33,12 @@ namespace Uncas.PodCastPlayer.Model
         /// </summary>
         /// <value>The date of the episode.</value>
         public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the file.
@@ -69,6 +76,31 @@ namespace Uncas.PodCastPlayer.Model
         /// <value>The pod cast.</value>
         public PodCast PodCast { get; set; }
 
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        /// <value>The title.</value>
+        public string Title { get; set; }
+
         #endregion
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                "Title: {0}\nDate: {1}\nId: {2}\nMediaUrl: {3}\nMediaLength: {4}\nDescription: {5}",
+                /*0*/ this.Title,
+                /*1*/ this.Date,
+                /*2*/ this.Id,
+                /*3*/ this.MediaUrl,
+                /*4*/ this.MediaInfo.FileSizeInBytes,
+                /*5*/ this.Description);
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Uncas.PodCastPlayer.Model
         /// Gets or sets the file size in bytes.
         /// </summary>
         /// <value>The file size in bytes.</value>
-        public int FileSizeInBytes { get; set; }
+        public long FileSizeInBytes { get; set; }
 
         /// <summary>
         /// Gets or sets the downloaded bytes.

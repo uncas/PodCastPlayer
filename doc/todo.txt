@@ -24,6 +24,8 @@ X Downloader:
     X Total size in bytes
     X Bytes downloaded
   X Return number of bytes downloaded with each buffer
+X Read list of episodes for real
+
 - Update list of episodes for real
 - Save location: [My music]\PodCasts\[PodCastName]\[EpisodeName].mp3
 - Select episodes to download

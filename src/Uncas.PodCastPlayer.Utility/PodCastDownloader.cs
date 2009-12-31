@@ -11,9 +11,11 @@ namespace Uncas.PodCastPlayer.Utility
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Net;
+    using System.ServiceModel.Syndication;
+    using System.Xml;
     using Uncas.PodCastPlayer.Model;
-    using System.Xml.Serialization;
 
     /// <summary>
     /// Handles downloads of pod casts.
@@ -78,14 +80,8 @@ namespace Uncas.PodCastPlayer.Utility
         public IList<Episode> DownloadEpisodeList(
             PodCast podCast)
         {
-            var result = new List<Episode>();
-            using (WebClient client = new WebClient())
-            {
-                string rssFeed =
-                    client.DownloadString(
-                    podCast.Url);
-            }
-            return result;
+            return DownloadEpisodeList(
+                podCast.Url);
         }
 
         #endregion
@@ -311,94 +307,53 @@ namespace Uncas.PodCastPlayer.Utility
 
         #endregion
 
-    }
-
-    /// <summary>
-    /// Represents an rss feed.
-    /// </summary>
-    [XmlType("rss")]
-    public class RssFeed
-    {
         /// <summary>
-        /// Gets or sets the channel.
+        /// Reads the pod cast.
         /// </summary>
-        /// <value>The channel.</value>
-        [XmlElement("channel")]
-        public RssChannel Channel { get; set; }
-
-        /// <summary>
-        /// Saves the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        public void Save(TextWriter stream)
+        /// <param name="podCastUrl">The pod cast URL.</param>
+        /// <returns>A list of episodes.</returns>
+        private static IList<Episode> DownloadEpisodeList(
+            Uri podCastUrl)
         {
-            XmlSerializer serializer =
-                new XmlSerializer(
-                    typeof(RssFeed));
-            serializer.Serialize(
-                stream,
-                this);
+            var result = new List<Episode>();
+
+            // Loads the pod cast:
+            using (XmlReader reader =
+                XmlReader.Create(podCastUrl.ToString()))
+            {
+                SyndicationFeed feed =
+                    SyndicationFeed.Load(reader);
+                Trace.WriteLine(feed.Title.Text);
+                foreach (SyndicationItem item in feed.Items)
+                {
+                    // Gets episode info:
+                    Episode episode = new Episode
+                    {
+                        Date = item.PublishDate.Date,
+                        Id = item.Id,
+                        Title = item.Title.Text,
+                        Description = item.Summary.Text
+                    };
+
+                    // Gets enclosure info:
+                    var enclosure = item.Links.Where(
+                        l => l.RelationshipType == "enclosure")
+                        .SingleOrDefault();
+                    if (enclosure != null)
+                    {
+                        episode.MediaUrl = enclosure.Uri;
+                        episode.MediaInfo =
+                            new EpisodeMediaInfo
+                            {
+                                FileSizeInBytes = enclosure.Length
+                            };
+                    }
+
+                    result.Add(episode);
+                }
+            }
+
+            return result;
         }
-    }
-
-    /// <summary>
-    /// Represents an rss channel.
-    /// </summary>
-    public class RssChannel
-    {
-        /// <summary>
-        /// Gets or sets the items.
-        /// </summary>
-        /// <value>The items.</value>
-        public List<RssItem> Items { get; set; }
-    }
-
-    /// <summary>
-    /// Represents an rss item.
-    /// </summary>
-    [XmlType("item")]
-    public class RssItem
-    {
-        /// <summary>
-        /// Gets or sets the enclosure.
-        /// </summary>
-        /// <value>The enclosure.</value>
-        public Enclosure Enclosure { get; set; }
-
-        /// <summary>
-        /// Gets or sets the GUID.
-        /// </summary>
-        /// <value>The GUID.</value>
-        public string Guid { get; set; }
-
-        /// <summary>
-        /// Gets or sets the pub date.
-        /// </summary>
-        /// <value>The pub date.</value>
-        public DateTime PubDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
-        /// <value>The title.</value>
-        public string Title { get; set; }
-    }
-
-    /// <summary>
-    /// Represents an encosure.
-    /// </summary>
-    public class Enclosure
-    {
-        /// <summary>
-        /// Gets or sets the URL.
-        /// </summary>
-        /// <value>The URL.</value>
-        public string Url { get; set; }
-
-        /// <summary>
-        /// Gets or sets the length.
-        /// </summary>
-        /// <value>The length.</value>
-        public int Length { get; set; }
     }
 }

@@ -7,7 +7,6 @@
 namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using NUnit.Framework;
@@ -52,25 +51,32 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
             // Assert:
         }
 
+        /// <summary>
+        /// Downloads the episode list_ hanselminutes_ OK.
+        /// </summary>
         [Test]
-        public void Rss()
+        public void DownloadEpisodeList_Hanselminutes_OK()
         {
-            var items = new List<RssItem>();
-            items.Add(
-                new RssItem
-                {
-                    Guid = "x",
-                    PubDate = DateTime.Now,
-                    Title = "test x",
-                });
-            RssFeed feed = new RssFeed
-            {
-                Channel = new RssChannel { Items = items }
-            };
+            // Arrange:
+            var podCast =
+                new PodCast(
+                    1,
+                    "hanselminutes",
+                    new Uri("http://feeds.feedburner.com/HanselminutesCompleteMP3"),
+                    1);
 
-            StringWriter sw = new StringWriter();
-            feed.Save(sw);
-            Trace.WriteLine(sw);
+            // Act:
+            var episodes =
+                this.downloader.DownloadEpisodeList(
+                podCast);
+
+            // Assert:
+            Assert.IsTrue(0 < episodes.Count);
+            foreach (var episode in episodes)
+            {
+                Trace.WriteLine(episode.ToString());
+                Trace.WriteLine("---");
+            }
         }
     }
 }
