@@ -19,9 +19,20 @@ namespace Uncas.PodCastPlayer.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="Episode"/> class.
         /// </summary>
-        public Episode()
+        /// <param name="id">The id of the episode.</param>
+        /// <param name="date">The publish date.</param>
+        /// <param name="title">The title of the episode.</param>
+        /// <param name="description">The description.</param>
+        private Episode(
+            string id,
+            DateTime date,
+            string title,
+            string description)
         {
-            this.Date = DateTime.Now;
+            this.Id = id;
+            this.Date = date;
+            this.Title = title;
+            this.Description = description;
         }
 
         #endregion
@@ -84,6 +95,61 @@ namespace Uncas.PodCastPlayer.Model
 
         #endregion
 
+        #region Public methods
+
+        /// <summary>
+        /// Constructs the episode.
+        /// </summary>
+        /// <param name="id">The id of the episode.</param>
+        /// <param name="date">The date of the episode.</param>
+        /// <param name="title">The title of the episode.</param>
+        /// <param name="description">The description.</param>
+        /// <returns>The episode.</returns>
+        public static Episode ConstructEpisode(
+            string id,
+            DateTime date,
+            string title,
+            string description)
+        {
+            return new Episode(
+                id,
+                date,
+                title,
+                description);
+        }
+
+        /// <summary>
+        /// Constructs the episode.
+        /// </summary>
+        /// <param name="id">The id of the episode.</param>
+        /// <param name="date">The date of the episode.</param>
+        /// <param name="title">The title of the episode.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="mediaUrl">The media URL.</param>
+        /// <param name="podCast">The pod cast.</param>
+        /// <param name="pendingDownload">if set to <c>true</c> [pending download].</param>
+        /// <returns>The episode.</returns>
+        public static Episode ConstructEpisode(
+            string id,
+            DateTime date,
+            string title,
+            string description,
+            Uri mediaUrl,
+            PodCast podCast,
+            bool pendingDownload)
+        {
+            var result =
+                new Episode(
+                id,
+                date,
+                title,
+                description);
+            result.PodCast = podCast;
+            result.MediaUrl = mediaUrl;
+            result.PendingDownload = pendingDownload;
+            return result;
+        }
+
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
         /// </summary>
@@ -102,5 +168,26 @@ namespace Uncas.PodCastPlayer.Model
                 /*4*/ this.MediaInfo.FileSizeInBytes,
                 /*5*/ this.Description);
         }
+
+        /// <summary>
+        /// Updates from other episode.
+        /// </summary>
+        /// <param name="other">The other episode.</param>
+        public void UpdateFromOtherEpisode(Episode other)
+        {
+            this.Date = other.Date;
+            this.Description = other.Description;
+            this.MediaUrl = other.MediaUrl;
+            this.Title = other.Title;
+            if (this.MediaInfo == null)
+            {
+                this.MediaInfo = new EpisodeMediaInfo();
+            }
+
+            this.MediaInfo.FileSizeInBytes =
+                other.MediaInfo.FileSizeInBytes;
+        }
+
+        #endregion
     }
 }

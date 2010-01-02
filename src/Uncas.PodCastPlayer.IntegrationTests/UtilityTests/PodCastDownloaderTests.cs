@@ -29,15 +29,20 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
         /// Downloads an episode from hanselminutes.
         /// </summary>
         [Test]
+        [Ignore]
         public void DownloadEpisode_Hanselminutes_OK()
         {
             // Arrange:
             Uri url = new Uri("http://perseus.franklins.net/hanselminutes_0079.mp3");
 
-            Episode episode = new Episode
-            {
-                MediaUrl = url
-            };
+            Episode episode = Episode.ConstructEpisode(
+                "a",
+                DateTime.Now,
+                "a",
+                "a",
+                url,
+                null,
+                false);
             string fileName = Path.Combine(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.MyDocuments),

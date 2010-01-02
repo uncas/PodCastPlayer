@@ -89,6 +89,33 @@ namespace Uncas.PodCastPlayer.Utility
         #region Private methods
 
         /// <summary>
+        /// Checks if the response supports partial content.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>True if it supports partial content.</returns>
+        private static bool CheckIfResponseSupportsPartialContent(
+            HttpWebResponse response)
+        {
+            bool supportsPartialContent = false;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                // The server ignored our range request.
+                // The download must restart.
+                // TODO: FEATURE: Save the whole response.
+                supportsPartialContent = false;
+            }
+            else if (response.StatusCode ==
+                HttpStatusCode.PartialContent)
+            {
+                // The server accepted our range request.
+                // TODO: FEATURE: Append the partial response.
+                supportsPartialContent = true;
+            }
+
+            return supportsPartialContent;
+        }
+
+        /// <summary>
         /// Downloads the buffer.
         /// </summary>
         /// <param name="responseStream">The response stream.</param>
@@ -116,30 +143,50 @@ namespace Uncas.PodCastPlayer.Utility
         }
 
         /// <summary>
-        /// Checks if the response supports partial content.
+        /// Reads the pod cast.
         /// </summary>
-        /// <param name="response">The response.</param>
-        /// <returns>True if it supports partial content.</returns>
-        private static bool CheckIfResponseSupportsPartialContent(
-            HttpWebResponse response)
+        /// <param name="podCastUrl">The pod cast URL.</param>
+        /// <returns>A list of episodes.</returns>
+        private static IList<Episode> DownloadEpisodeList(
+            Uri podCastUrl)
         {
-            bool supportsPartialContent = false;
-            if (response.StatusCode == HttpStatusCode.OK)
+            var result = new List<Episode>();
+
+            // Loads the pod cast:
+            using (XmlReader reader =
+                XmlReader.Create(podCastUrl.ToString()))
             {
-                // The server ignored our range request.
-                // The download must restart.
-                // TODO: FEATURE: Save the whole response.
-                supportsPartialContent = false;
-            }
-            else if (response.StatusCode ==
-                HttpStatusCode.PartialContent)
-            {
-                // The server accepted our range request.
-                // TODO: FEATURE: Append the partial response.
-                supportsPartialContent = true;
+                SyndicationFeed feed =
+                    SyndicationFeed.Load(reader);
+                Trace.WriteLine(feed.Title.Text);
+                foreach (SyndicationItem item in feed.Items)
+                {
+                    // Gets episode info:
+                    Episode episode = Episode.ConstructEpisode(
+                        item.Id,
+                        item.PublishDate.Date,
+                        item.Title.Text,
+                        item.Summary.Text);
+
+                    // Gets enclosure info:
+                    var enclosure = item.Links.Where(
+                        l => l.RelationshipType == "enclosure")
+                        .SingleOrDefault();
+                    if (enclosure != null)
+                    {
+                        episode.MediaUrl = enclosure.Uri;
+                        episode.MediaInfo =
+                            new EpisodeMediaInfo
+                            {
+                                FileSizeInBytes = enclosure.Length
+                            };
+                    }
+
+                    result.Add(episode);
+                }
             }
 
-            return supportsPartialContent;
+            return result;
         }
 
         /// <summary>
@@ -306,54 +353,5 @@ namespace Uncas.PodCastPlayer.Utility
         }
 
         #endregion
-
-        /// <summary>
-        /// Reads the pod cast.
-        /// </summary>
-        /// <param name="podCastUrl">The pod cast URL.</param>
-        /// <returns>A list of episodes.</returns>
-        private static IList<Episode> DownloadEpisodeList(
-            Uri podCastUrl)
-        {
-            var result = new List<Episode>();
-
-            // Loads the pod cast:
-            using (XmlReader reader =
-                XmlReader.Create(podCastUrl.ToString()))
-            {
-                SyndicationFeed feed =
-                    SyndicationFeed.Load(reader);
-                Trace.WriteLine(feed.Title.Text);
-                foreach (SyndicationItem item in feed.Items)
-                {
-                    // Gets episode info:
-                    Episode episode = new Episode
-                    {
-                        Date = item.PublishDate.Date,
-                        Id = item.Id,
-                        Title = item.Title.Text,
-                        Description = item.Summary.Text
-                    };
-
-                    // Gets enclosure info:
-                    var enclosure = item.Links.Where(
-                        l => l.RelationshipType == "enclosure")
-                        .SingleOrDefault();
-                    if (enclosure != null)
-                    {
-                        episode.MediaUrl = enclosure.Uri;
-                        episode.MediaInfo =
-                            new EpisodeMediaInfo
-                            {
-                                FileSizeInBytes = enclosure.Length
-                            };
-                    }
-
-                    result.Add(episode);
-                }
-            }
-
-            return result;
-        }
     }
 }

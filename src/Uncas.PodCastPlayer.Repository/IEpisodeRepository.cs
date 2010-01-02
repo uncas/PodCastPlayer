@@ -51,10 +51,10 @@ namespace Uncas.PodCastPlayer.Repository
         void UpdateEpisode(Episode episode);
 
         /// <summary>
-        /// Updates the episode list.
+        /// Updates the episode list with the new list of episodes.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
-        /// <param name="episodes">The episodes.</param>
+        /// <param name="episodes">The updated list of episodes.</param>
         void UpdateEpisodeList(
             int podCastId,
             IList<Episode> episodes);

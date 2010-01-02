@@ -34,7 +34,11 @@ namespace Uncas.PodCastPlayer.Fakes
         {
             var result = new List<Episode>();
             result.AddRange(podCast.Episodes);
-            result.Add(new Episode());
+            result.Add(Episode.ConstructEpisode(
+                Guid.NewGuid().ToString(),
+                DateTime.Now,
+                "x",
+                "y"));
             return result;
         }
 

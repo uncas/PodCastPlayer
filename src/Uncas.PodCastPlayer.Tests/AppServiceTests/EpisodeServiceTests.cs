@@ -18,18 +18,10 @@ namespace Uncas.PodCastPlayer.Tests.AppServiceTests
         /// <summary>
         /// The service.
         /// </summary>
-        private readonly EpisodeService service;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EpisodeServiceTests"/> class.
-        /// </summary>
-        public EpisodeServiceTests()
-        {
-            this.service =
+        private readonly EpisodeService service =
                 new EpisodeService(
                 TestApp.Repositories,
                 TestApp.PodCastDownloader);
-        }
 
         /// <summary>
         /// Downloads the pending episodes_ fakes_ OK.

@@ -11,6 +11,7 @@ namespace Uncas.PodCastPlayer.AppServices
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.Utility;
@@ -118,16 +119,19 @@ namespace Uncas.PodCastPlayer.AppServices
         private void DownloadEpisode(
            Episode episode)
         {
-            // TODO: FEATURE: Implement proper file path:
-            string fileName =
-                string.Format(
-                CultureInfo.InvariantCulture,
-                "episode{0}.mp3",
-                episode.Id);
-            string filePath =
+            string fileName = episode.MediaUrl.Segments.Last();
+            string relativeFolderPath =
+                Path.Combine(
+                "PodCasts",
+                episode.PodCast.Name);
+            string absoluteFolderPath =
                 Path.Combine(
                     Environment.GetFolderPath(
                         Environment.SpecialFolder.MyDocuments),
+                    relativeFolderPath);
+            string filePath =
+                Path.Combine(
+                    absoluteFolderPath,
                     fileName);
             var mediaInfo =
                 this.Downloader.DownloadEpisode(
@@ -138,8 +142,7 @@ namespace Uncas.PodCastPlayer.AppServices
             episode.PendingDownload =
                 !mediaInfo.DownloadCompleted;
 
-            // TODO: FEATURE: Only store relative path of file name:
-            episode.FileName = filePath;
+            episode.FileName = fileName;
             this.EpisodeRepository.UpdateEpisode(episode);
         }
 

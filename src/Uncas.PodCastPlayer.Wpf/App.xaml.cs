@@ -64,7 +64,8 @@ namespace Uncas.PodCastPlayer.Wpf
             {
                 if (downloader == null)
                 {
-                    downloader = new PodCastDownloader();
+                    downloader = 
+                        new FakePodCastDownloader();
                 }
 
                 return downloader;
@@ -115,6 +116,7 @@ namespace Uncas.PodCastPlayer.Wpf
         }
 
         #endregion
+
         #region Private methods
 
         /// <summary>
@@ -128,7 +130,9 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             this.backgroundDownloader =
                 new BackgroundDownloader();
-            this.backgroundDownloader.Start();
+
+            // TODO: FEATURE: Start background downloader:
+            // this.backgroundDownloader.Start();
         }
 
         #endregion

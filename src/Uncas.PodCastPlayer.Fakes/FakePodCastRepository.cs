@@ -62,20 +62,14 @@ namespace Uncas.PodCastPlayer.Fakes
                             3);
 
                     podCast.Episodes.Add(
-                        new Episode
-                        {
-                            PendingDownload = true,
-                            PodCast = podCast,
-                            Id = "01",
-                            MediaUrl = new Uri(
-                                "http://perseus.franklins.net/hanselminutes_0079.mp3")
-                        });
+                        GetEpisode(
+                            "01",
+                            podCast,
+                            true));
                     podCast.Episodes.Add(
-                        new Episode
-                        {
-                            PodCast = podCast,
-                            Id = "02"
-                        });
+                        GetEpisode(
+                            "02",
+                            podCast));
 
                     podCasts.Add(podCast);
 
@@ -89,23 +83,17 @@ namespace Uncas.PodCastPlayer.Fakes
                             4);
 
                     podCast2.Episodes.Add(
-                        new Episode
-                        {
-                            PodCast = podCast,
-                            Id = "11"
-                        });
+                        GetEpisode(
+                            "11",
+                            podCast));
                     podCast2.Episodes.Add(
-                        new Episode
-                        {
-                            PodCast = podCast,
-                            Id = "12"
-                        });
+                        GetEpisode(
+                            "12",
+                            podCast));
                     podCast2.Episodes.Add(
-                        new Episode
-                        {
-                            PodCast = podCast,
-                            Id = "13"
-                        });
+                        GetEpisode(
+                            "13",
+                            podCast));
 
                     podCasts.Add(podCast2);
                 }
@@ -230,31 +218,44 @@ namespace Uncas.PodCastPlayer.Fakes
             };
         }
 
-        /// <summary>
-        /// Updates the episode list.
-        /// </summary>
-        /// <param name="podCastId">The pod cast id.</param>
-        /// <param name="episodes">The episodes.</param>
-        internal static void UpdateEpisodeList(
-            int podCastId,
-            IList<Episode> episodes)
-        {
-            var podCast =
-                PodCasts.Where(
-                pc => pc.Id == podCastId)
-                .SingleOrDefault();
-            if (podCast == null)
-            {
-                return;
-            }
+        #endregion
 
-            podCast.Episodes.Clear();
-            foreach (var episode in episodes)
-            {
-                podCast.Episodes.Add(episode);
-            }
+        /// <summary>
+        /// Gets the episode.
+        /// </summary>
+        /// <param name="id">The id of the episode.</param>
+        /// <param name="podCast">The pod cast.</param>
+        /// <returns>The episode.</returns>
+        private static Episode GetEpisode(
+            string id,
+            PodCast podCast)
+        {
+            return GetEpisode(
+                id,
+                podCast,
+                false);
         }
 
-        #endregion
+        /// <summary>
+        /// Gets the episode.
+        /// </summary>
+        /// <param name="id">The id of the episode.</param>
+        /// <param name="podCast">The pod cast.</param>
+        /// <param name="pendingDownload">if set to <c>true</c> [pending download].</param>
+        /// <returns>The episode.</returns>
+        private static Episode GetEpisode(
+            string id,
+            PodCast podCast,
+            bool pendingDownload)
+        {
+            return Episode.ConstructEpisode(
+                id,
+                DateTime.Now,
+                id,
+                id,
+                new Uri("http://perseus.franklins.net/hanselminutes_0079.mp3"),
+                podCast,
+                pendingDownload);
+        }
     }
 }

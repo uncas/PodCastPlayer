@@ -40,9 +40,32 @@ namespace Uncas.PodCastPlayer.Fakes
             int podCastId,
             IList<Episode> episodes)
         {
-            FakePodCastRepository.UpdateEpisodeList(
-                podCastId,
-                episodes);
+            var podCast =
+                FakePodCastRepository.PodCasts.Where(
+                pc => pc.Id == podCastId)
+                .SingleOrDefault();
+            if (podCast == null)
+            {
+                return;
+            }
+
+            foreach (var episode in episodes)
+            {
+                var existingEpisode =
+                    podCast.Episodes.Where(
+                        e => e.Id.Equals(episode.Id))
+                    .SingleOrDefault();
+                if (existingEpisode != null)
+                {
+                    existingEpisode.UpdateFromOtherEpisode(
+                        episode);
+                }
+                else
+                {
+                    podCast.Episodes.Add(
+                        episode);
+                }
+            }
         }
 
         /// <summary>
