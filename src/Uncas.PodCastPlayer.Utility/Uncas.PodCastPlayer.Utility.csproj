@@ -62,6 +62,10 @@
       <Project>{990A3CDC-71BB-4235-9B19-FE87D3F81266}</Project>
       <Name>Uncas.PodCastPlayer.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.ViewModel\Uncas.PodCastPlayer.ViewModel.csproj">
+      <Project>{CCC24751-87D9-4FD1-BBB6-F723231933D1}</Project>
+      <Name>Uncas.PodCastPlayer.ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\UncasPodCastPlayerKey.snk">

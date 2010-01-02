@@ -58,7 +58,7 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
             podCast.Name = newName;
 
             // Act:
-            this.repository.SavePodCast(podCast);
+            // this.repository.SavePodCast(podCast);
 
             // Assert:
             podCasts =

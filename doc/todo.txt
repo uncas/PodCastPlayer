@@ -25,13 +25,21 @@ X Downloader:
     X Bytes downloaded
   X Return number of bytes downloaded with each buffer
 X Read list of episodes for real
+X Update list of episodes for real
+X Save location: [My music]\PodCasts\[PodCastName]\[EpisodeName].mp3
 
-- Update list of episodes for real
-- Save location: [My music]\PodCasts\[PodCastName]\[EpisodeName].mp3
+- When creating a new pod cast:
+  - Input the url
+  - Press update button
+  - Get pod cast info from utility
+  - Display info on form
+  - Press save button
+  - Save info
+- Display more episode info: date, title, size
 - Select episodes to download
-- Cancel download
-- Play selected episode
+- Show which episode is downloading
 
 - Implement SqLite repository
 
-see: http://www.codeproject.com/KB/IP/MyDownloader.aspx
+- Play selected episode
+- Cancel download

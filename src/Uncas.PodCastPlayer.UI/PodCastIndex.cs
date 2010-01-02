@@ -79,7 +79,8 @@ namespace Uncas.PodCastPlayer.UI
         {
             PodCastService podCastService =
                 new PodCastService(
-                   App.Repositories.PodCastRepository);
+                   App.Repositories,
+                   null);
             var podCasts = podCastService.GetPodCasts();
 
             this.podCastsGrid.DataSource = podCasts;

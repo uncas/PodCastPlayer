@@ -65,7 +65,7 @@ namespace Uncas.PodCastPlayer.Wpf
                 if (downloader == null)
                 {
                     downloader = 
-                        new FakePodCastDownloader();
+                        new PodCastDownloader();
                 }
 
                 return downloader;

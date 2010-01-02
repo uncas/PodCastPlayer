@@ -29,7 +29,8 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             this.InitializeComponent();
             this.service = new PodCastService(
-                App.Repositories.PodCastRepository);
+                App.Repositories,
+                App.Downloader);
             this.Loaded +=
                 new RoutedEventHandler(
                     this.PodCastIndex_Loaded);

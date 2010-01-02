@@ -6,6 +6,7 @@
 
 namespace Uncas.PodCastPlayer.Repository
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using Uncas.PodCastPlayer.Model;
@@ -17,26 +18,20 @@ namespace Uncas.PodCastPlayer.Repository
     public interface IPodCastRepository
     {
         /// <summary>
+        /// Deletes the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        void DeletePodCast(int podCastId);
+
+        /// <summary>
         /// Gets the pod casts.
         /// </summary>
         /// <returns>The pod casts.</returns>
         [SuppressMessage(
             "Microsoft.Design",
             "CA1024:UsePropertiesWhereAppropriate",
-            Justification = "Reads from repository; might be expensive.")]
+            Justification = "Expensive read from repository.")]
         IList<PodCastIndexViewModel> GetPodCasts();
-
-        /// <summary>
-        /// Saves the pod cast.
-        /// </summary>
-        /// <param name="podCast">The pod cast.</param>
-        void SavePodCast(PodCastIndexViewModel podCast);
-
-        /// <summary>
-        /// Deletes the pod cast.
-        /// </summary>
-        /// <param name="podCastId">The pod cast id.</param>
-        void DeletePodCast(int podCastId);
 
         /// <summary>
         /// Gets the pod cast.
@@ -44,5 +39,18 @@ namespace Uncas.PodCastPlayer.Repository
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>The pod cast.</returns>
         PodCast GetPodCast(int podCastId);
+
+        /// <summary>
+        /// Saves the pod cast.
+        /// </summary>
+        /// <param name="podCast">The pod cast.</param>
+        [Obsolete("Use overload with PodCastDetailsViewModel")]
+        void SavePodCast(PodCastIndexViewModel podCast);
+
+        /// <summary>
+        /// Saves the pod cast.
+        /// </summary>
+        /// <param name="podCast">The pod cast.</param>
+        void SavePodCast(PodCastDetailsViewModel podCast);
     }
 }

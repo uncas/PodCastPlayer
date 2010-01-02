@@ -22,13 +22,6 @@ namespace Uncas.PodCastPlayer.UI
         private readonly PodCastIndexViewModel podCast;
 
         /// <summary>
-        /// The pod cast service.
-        /// </summary>
-        private readonly PodCastService service =
-            new PodCastService(
-                App.Repositories.PodCastRepository);
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="PodCastDetails"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
@@ -56,7 +49,8 @@ namespace Uncas.PodCastPlayer.UI
         {
             this.podCast.Name = this.nameTextBox.Text;
             this.podCast.Url = new Uri(this.urlTextBox.Text);
-            this.service.SavePodCast(this.podCast);
+            
+            // UNDONE: Save here
             this.Close();
         }
 

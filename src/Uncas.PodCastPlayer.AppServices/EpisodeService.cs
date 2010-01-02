@@ -127,7 +127,7 @@ namespace Uncas.PodCastPlayer.AppServices
             string absoluteFolderPath =
                 Path.Combine(
                     Environment.GetFolderPath(
-                        Environment.SpecialFolder.MyDocuments),
+                        Environment.SpecialFolder.MyMusic),
                     relativeFolderPath);
             string filePath =
                 Path.Combine(

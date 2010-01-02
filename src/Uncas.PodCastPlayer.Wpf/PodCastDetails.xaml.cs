@@ -17,39 +17,54 @@ namespace Uncas.PodCastPlayer.Wpf
     /// </summary>
     public sealed partial class PodCastDetails : UserControl
     {
+        #region Private fields
+
         /// <summary>
         /// The service.
         /// </summary>
         private readonly PodCastService service;
 
         /// <summary>
-        /// The pod cast.
+        /// The id of the pod cast.
         /// </summary>
-        private PodCastIndexViewModel podCast;
+        private int? podCastId;
+
+        #endregion
+
+        #region Constructor
 
         // TODO: REFACTOR: Consider using automatic updating in WPF
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastDetails"/> class.
         /// </summary>
-        /// <param name="podCast">The pod cast.</param>
+        /// <param name="podCastId">The pod cast id.</param>
         public PodCastDetails(
-            PodCastIndexViewModel podCast)
+            int? podCastId)
         {
             this.InitializeComponent();
-            this.podCast = podCast;
+            this.podCastId = podCastId;
             this.service =
                 new PodCastService(
-                    App.Repositories.PodCastRepository);
+                    App.Repositories,
+                    App.Downloader);
             this.Loaded +=
                 new RoutedEventHandler(
                     this.PodCastDetails_Loaded);
         }
 
+        #endregion
+
+        #region Public event
+
         /// <summary>
-        /// Occurs when [pod cast saved].
+        /// Occurs when pod cast saved.
         /// </summary>
         public event EventHandler PodCastSaved;
+
+        #endregion
+
+        #region Private methods
 
         /// <summary>
         /// Handles the Loaded event of the PodCastDetails control.
@@ -60,16 +75,18 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            if (this.podCast != null)
+            if (this.podCastId != null)
             {
-                this.nameTextBox.Text = this.podCast.Name;
-                this.urlTextBox.Text = this.podCast.Url.ToString();
+                PodCastDetailsViewModel podCast =
+                    this.service.GetPodCast(this.podCastId);
+                this.nameTextBox.Text = podCast.Name;
+                this.urlTextBox.Text = podCast.Url.ToString();
             }
 
             this.saveButton.Click +=
                 new RoutedEventHandler(
                     this.SaveButton_Click);
-            this.deleteButton.Click += 
+            this.deleteButton.Click +=
                 new RoutedEventHandler(
                     this.DeleteButton_Click);
         }
@@ -83,17 +100,11 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            if (this.podCast == null)
-            {
-                this.podCast = new PodCastIndexViewModel(
-                    null,
-                    nameTextBox.Text,
+            var podCast =
+                new PodCastDetailsViewModel(
+                    this.podCastId,
                     new Uri(urlTextBox.Text));
-            }
-
-            this.podCast.Name = nameTextBox.Text;
-            this.podCast.Url = new Uri(urlTextBox.Text);
-            this.service.SavePodCast(this.podCast);
+            this.service.SavePodCast(podCast);
             this.BackToIndex();
         }
 
@@ -117,9 +128,10 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            int podCastId = this.podCast.Id.Value;
-            this.service.DeletePodCast(podCastId);
+            this.service.DeletePodCast(this.podCastId.Value);
             this.BackToIndex();
         }
+
+        #endregion
     }
 }

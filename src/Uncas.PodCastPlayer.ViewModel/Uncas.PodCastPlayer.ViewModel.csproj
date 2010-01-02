@@ -50,6 +50,7 @@
     <Compile Include="DownloadIndexViewModel.cs" />
     <Compile Include="EpisodeIndexItemViewModel.cs" />
     <Compile Include="EpisodeIndexViewModel.cs" />
+    <Compile Include="PodCastDetailsViewModel.cs" />
     <Compile Include="PodCastIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

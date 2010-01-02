@@ -16,10 +16,12 @@ namespace Uncas.PodCastPlayer.Utility
     using System.ServiceModel.Syndication;
     using System.Xml;
     using Uncas.PodCastPlayer.Model;
+    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Handles downloads of pod casts.
     /// </summary>
+    /// <remarks>See http://www.codeproject.com/KB/IP/MyDownloader.aspx.</remarks>
     public class PodCastDownloader : IPodCastDownloader
     {
         #region IPodCastDownloader Members
@@ -82,6 +84,18 @@ namespace Uncas.PodCastPlayer.Utility
         {
             return DownloadEpisodeList(
                 podCast.Url);
+        }
+
+        /// <summary>
+        /// Downloads the pod cast info.
+        /// </summary>
+        /// <param name="podCastUrl">The pod cast URL.</param>
+        /// <returns>Details about the pod cast.</returns>
+        public PodCastDetailsViewModel DownloadPodCastInfo(
+            Uri podCastUrl)
+        {
+            // TODO: FEATURE: Utility: retrieve info...
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -53,7 +53,7 @@ namespace Uncas.PodCastPlayer.Fakes
                     podCasts = new List<PodCast>();
 
                     var uri = new Uri(
-                        "http://www.hanselminutes.com");
+                        "http://feeds.feedburner.com/HanselminutesCompleteMP3");
                     var podCast
                         = new PodCast(
                             1,
@@ -74,7 +74,7 @@ namespace Uncas.PodCastPlayer.Fakes
                     podCasts.Add(podCast);
 
                     var uri2 = new Uri(
-                        "http://podcast.stackoverflow.com");
+                        "http://rss.conversationsnetwork.org/series/stackoverflow.xml");
                     var podCast2
                         = new PodCast(
                             2,
@@ -120,6 +120,39 @@ namespace Uncas.PodCastPlayer.Fakes
                     pc.Name,
                     pc.Url));
             return result.ToList();
+        }
+
+        /// <summary>
+        /// Saves the pod cast.
+        /// </summary>
+        /// <param name="podCast">The pod cast.</param>
+        public void SavePodCast(PodCastDetailsViewModel podCast)
+        {
+            if (podCast.Id.HasValue)
+            {
+                var existingPodCast =
+                    PodCasts.Where(pc =>
+                        pc.Id.Value == podCast.Id.Value)
+                    .SingleOrDefault();
+                if (existingPodCast != null)
+                {
+                    existingPodCast.Name = podCast.Name;
+                    existingPodCast.Url = podCast.Url;
+                    return;
+                }
+            }
+
+            int newId =
+                (PodCasts.Max(pc => pc.Id) ?? 0)
+                + 1;
+
+            var newPodCast =
+                new PodCast(
+                    newId,
+                    podCast.Name,
+                    podCast.Url,
+                    null);
+            PodCasts.Add(newPodCast);
         }
 
         /// <summary>

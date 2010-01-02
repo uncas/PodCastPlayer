@@ -6,28 +6,43 @@
 
 namespace Uncas.PodCastPlayer.AppServices
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using Uncas.PodCastPlayer.Repository;
+    using Uncas.PodCastPlayer.Utility;
     using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Service for pod casts.
     /// </summary>
-    public class PodCastService
+    public class PodCastService : BaseService
     {
-        /// <summary>
-        /// The repository.
-        /// </summary>
-        private readonly IPodCastRepository repository;
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastService"/> class.
         /// </summary>
-        /// <param name="repository">The repository.</param>
-        public PodCastService(IPodCastRepository repository)
+        /// <param name="repositories">The repositories.</param>
+        /// <param name="downloader">The downloader.</param>
+        public PodCastService(
+            IRepositoryFactory repositories,
+            IPodCastDownloader downloader)
+            : base(
+                repositories,
+                downloader)
         {
-            this.repository = repository;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Deletes the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        public void DeletePodCast(int podCastId)
+        {
+            this.PodCastRepository.DeletePodCast(podCastId);
         }
 
         /// <summary>
@@ -40,7 +55,7 @@ namespace Uncas.PodCastPlayer.AppServices
            Justification = "Reads from repository; might be expensive.")]
         public IList<PodCastIndexViewModel> GetPodCasts()
         {
-            return this.repository.GetPodCasts();
+            return this.PodCastRepository.GetPodCasts();
         }
 
         /// <summary>
@@ -48,18 +63,36 @@ namespace Uncas.PodCastPlayer.AppServices
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
         public void SavePodCast(
-            PodCastIndexViewModel podCast)
+            PodCastDetailsViewModel podCast)
         {
-            this.repository.SavePodCast(podCast);
+            this.PodCastRepository.SavePodCast(podCast);
         }
 
         /// <summary>
-        /// Deletes the pod cast.
+        /// Retrieves the pod cast info.
+        /// </summary>
+        /// <param name="podCastUrl">The pod cast URL.</param>
+        /// <returns>Details about the pod cast.</returns>
+        public PodCastDetailsViewModel RetrievePodCastInfo(
+            Uri podCastUrl)
+        {
+            return this.Downloader.DownloadPodCastInfo(
+                podCastUrl);
+        }
+
+        /// <summary>
+        /// Gets the pod cast.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
-        public void DeletePodCast(int podCastId)
+        /// <returns>Details of the pod cast.</returns>
+        public PodCastDetailsViewModel GetPodCast(int? podCastId)
         {
-            this.repository.DeletePodCast(podCastId);
+            var podCast =
+                this.PodCastRepository.GetPodCast(
+                podCastId.Value);
+            return new PodCastDetailsViewModel(
+                podCastId,
+                podCast.Url);
         }
     }
 }

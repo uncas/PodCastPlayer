@@ -117,7 +117,7 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             PodCastDetails details =
                 new PodCastDetails(
-                    e.PodCast);
+                    e.PodCast.Id);
             contentControl.Content = details;
             details.PodCastSaved +=
                 new EventHandler(
