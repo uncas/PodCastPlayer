@@ -67,7 +67,7 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
                 new PodCast(
                     1,
                     "hanselminutes",
-                    new Uri("http://feeds.feedburner.com/HanselminutesCompleteMP3"),
+                    GetUri(),
                     1);
 
             // Act:
@@ -82,6 +82,33 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
                 Trace.WriteLine(episode.ToString());
                 Trace.WriteLine("---");
             }
+        }
+
+        /// <summary>
+        /// Downloads the pod cast info_ hanselminutes_ OK.
+        /// </summary>
+        [Test]
+        public void DownloadPodCastInfo_Hanselminutes_OK()
+        {
+            // Arrange:
+
+            // Act:
+            PodCast podCast =
+                this.downloader.DownloadPodCastInfo(
+                GetUri());
+
+            // Assert:
+            Trace.WriteLine(podCast);
+        }
+
+        /// <summary>
+        /// Gets the URI.
+        /// </summary>
+        /// <returns>The uri of a test pod cast.</returns>
+        private static Uri GetUri()
+        {
+            return new Uri(
+                "http://feeds.feedburner.com/HanselminutesCompleteMP3");
         }
     }
 }

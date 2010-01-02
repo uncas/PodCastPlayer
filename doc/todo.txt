@@ -29,12 +29,13 @@ X Update list of episodes for real
 X Save location: [My music]\PodCasts\[PodCastName]\[EpisodeName].mp3
 
 - When creating a new pod cast:
+  Separate form:
   - Input the url
-  - Press update button
+  - Press create button
+  - PodCastNewViewModel AppService.Create(Uri url)
   - Get pod cast info from utility
-  - Display info on form
-  - Press save button
-  - Save info
+    - If OK: save and show Details user control
+    - If not OK: stay on same control and show error message
 - Display more episode info: date, title, size
 - Select episodes to download
 - Show which episode is downloading

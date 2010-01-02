@@ -8,6 +8,7 @@ namespace Uncas.PodCastPlayer.Model
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
 
     /// <summary>
     /// Represents a pod cast.
@@ -36,9 +37,47 @@ namespace Uncas.PodCastPlayer.Model
             this.Url = url;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PodCast"/> class.
+        /// </summary>
+        /// <param name="id">The id of the pod cast.</param>
+        /// <param name="name">The name of the pod cast.</param>
+        /// <param name="url">The URL of the pod cast.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="author">The author.</param>
+        /// <param name="numberToDownload">The number of episodes to download.</param>
+        public PodCast(
+            int? id,
+            string name,
+            Uri url,
+            string description,
+            string author,
+            int? numberToDownload)
+            : base(id)
+        {
+            this.Author = author;
+            this.Description = description;
+            this.Episodes = new List<Episode>();
+            this.Name = name;
+            this.NumberToDownload = numberToDownload;
+            this.Url = url;
+        }
+
         #endregion
 
         #region Public properties
+
+        /// <summary>
+        /// Gets or sets the author.
+        /// </summary>
+        /// <value>The author.</value>
+        public string Author { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets the episodes.
@@ -63,6 +102,27 @@ namespace Uncas.PodCastPlayer.Model
         /// </summary>
         /// <value>The URL to the pod cast.</value>
         public Uri Url { get; set; }
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                "Id={0}, Name={1}, Url={2}, Episodes={3}",
+                this.Id,
+                this.Name,
+                this.Url,
+                this.Episodes.Count);
+        }
 
         #endregion
     }

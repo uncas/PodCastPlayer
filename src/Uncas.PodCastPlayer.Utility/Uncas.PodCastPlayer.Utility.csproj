@@ -56,6 +56,7 @@
     <Compile Include="IPodCastDownloader.cs" />
     <Compile Include="PodCastDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilityException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Uncas.PodCastPlayer.Model\Uncas.PodCastPlayer.Model.csproj">

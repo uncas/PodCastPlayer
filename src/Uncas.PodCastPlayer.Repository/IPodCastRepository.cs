@@ -41,11 +41,17 @@ namespace Uncas.PodCastPlayer.Repository
         PodCast GetPodCast(int podCastId);
 
         /// <summary>
+        /// Gets the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <returns>The pod cast.</returns>
+        PodCastDetailsViewModel GetPodCastDetails(int podCastId);
+
+        /// <summary>
         /// Saves the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
-        [Obsolete("Use overload with PodCastDetailsViewModel")]
-        void SavePodCast(PodCastIndexViewModel podCast);
+        void SavePodCast(PodCast podCast);
 
         /// <summary>
         /// Saves the pod cast.

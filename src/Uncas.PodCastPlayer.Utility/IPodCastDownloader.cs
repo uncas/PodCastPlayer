@@ -9,7 +9,6 @@ namespace Uncas.PodCastPlayer.Utility
     using System;
     using System.Collections.Generic;
     using Uncas.PodCastPlayer.Model;
-    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Handles download of pod cast.
@@ -44,6 +43,7 @@ namespace Uncas.PodCastPlayer.Utility
         /// </summary>
         /// <param name="podCastUrl">The pod cast URL.</param>
         /// <returns>Details about the pod cast.</returns>
-        PodCastDetailsViewModel DownloadPodCastInfo(Uri podCastUrl);
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        PodCast DownloadPodCastInfo(Uri podCastUrl);
     }
 }

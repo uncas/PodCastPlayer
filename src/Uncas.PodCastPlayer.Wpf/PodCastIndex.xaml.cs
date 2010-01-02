@@ -43,6 +43,11 @@ namespace Uncas.PodCastPlayer.Wpf
             PodCastSelected;
 
         /// <summary>
+        /// Occurs when [new pod cast click].
+        /// </summary>
+        internal event EventHandler NewPodCastClick;
+
+        /// <summary>
         /// Occurs when [episodes selected].
         /// </summary>
         internal event EventHandler<PodCastSelectedEventArgs>
@@ -76,10 +81,10 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            PodCastIndexViewModel podCast = null;
-            this.FireEvent(
-                podCast,
-                this.PodCastSelected);
+            if (this.NewPodCastClick != null)
+            {
+                this.NewPodCastClick(this, new EventArgs());
+            }
         }
 
         /// <summary>
@@ -110,11 +115,13 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             if (eventHandler != null)
             {
+                int? podCastId =
+                    selectedPodCast != null ?
+                    selectedPodCast.Id :
+                    null;
                 var podCastSelectedArgs =
-                    new PodCastSelectedEventArgs
-                    {
-                        PodCast = selectedPodCast
-                    };
+                    new PodCastSelectedEventArgs(
+                        podCastId);
                 eventHandler(
                     this,
                     podCastSelectedArgs);

@@ -52,6 +52,7 @@
     <Compile Include="EpisodeIndexViewModel.cs" />
     <Compile Include="PodCastDetailsViewModel.cs" />
     <Compile Include="PodCastIndexViewModel.cs" />
+    <Compile Include="PodCastNewViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@ namespace Uncas.PodCastPlayer.AppServices
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.Utility;
     using Uncas.PodCastPlayer.ViewModel;
@@ -69,30 +70,44 @@ namespace Uncas.PodCastPlayer.AppServices
         }
 
         /// <summary>
-        /// Retrieves the pod cast info.
-        /// </summary>
-        /// <param name="podCastUrl">The pod cast URL.</param>
-        /// <returns>Details about the pod cast.</returns>
-        public PodCastDetailsViewModel RetrievePodCastInfo(
-            Uri podCastUrl)
-        {
-            return this.Downloader.DownloadPodCastInfo(
-                podCastUrl);
-        }
-
-        /// <summary>
         /// Gets the pod cast.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>Details of the pod cast.</returns>
         public PodCastDetailsViewModel GetPodCast(int? podCastId)
         {
-            var podCast =
-                this.PodCastRepository.GetPodCast(
+            return this.PodCastRepository.GetPodCastDetails(
                 podCastId.Value);
-            return new PodCastDetailsViewModel(
-                podCastId,
-                podCast.Url);
+        }
+
+        /// <summary>
+        /// Creates the pod cast.
+        /// </summary>
+        /// <param name="podCastUrl">The pod cast URL.</param>
+        /// <returns>A view of the new pod cast.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        public PodCastNewViewModel CreatePodCast(
+            Uri podCastUrl)
+        {
+            // Gets pod cast info from utility:
+            PodCast podCast =
+                this.Downloader.DownloadPodCastInfo(
+                podCastUrl);
+
+            // If OK, saves to repository:
+            int? podCastId = null;
+            if (podCast != null)
+            {
+                this.PodCastRepository.SavePodCast(podCast);
+                podCastId = podCast.Id;
+            }
+
+            // Returns info:
+            return new PodCastNewViewModel
+            {
+                PodCastId = podCastId,
+                PodCastUrl = podCastUrl
+            };
         }
     }
 }

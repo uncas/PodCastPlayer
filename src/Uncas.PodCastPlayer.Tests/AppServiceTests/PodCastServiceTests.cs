@@ -57,13 +57,13 @@ namespace Uncas.PodCastPlayer.Tests.AppServiceTests
         /// Retrieves the pod cast info.
         /// </summary>
         [Test]
-        public void RetrievePodCastInfo()
+        public void CreatePodCast_SO_OK()
         {
             // Arrange:
             var url = new Uri("http://rss.conversationsnetwork.org/series/stackoverflow.xml");
 
             // Act:
-            var info = this.service.RetrievePodCastInfo(url);
+            var info = this.service.CreatePodCast(url);
 
             // Assert:
             Assert.IsNotNull(info);

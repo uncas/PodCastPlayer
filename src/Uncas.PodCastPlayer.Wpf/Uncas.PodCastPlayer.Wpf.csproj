@@ -81,6 +81,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="PodCastCreate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Window1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -107,6 +111,9 @@
     </Compile>
     <Compile Include="PodCastIndex.xaml.cs">
       <DependentUpon>PodCastIndex.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PodCastCreate.xaml.cs">
+      <DependentUpon>PodCastCreate.xaml</DependentUpon>
     </Compile>
     <Compile Include="PodCastSelectedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

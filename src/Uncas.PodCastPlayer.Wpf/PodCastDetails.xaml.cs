@@ -77,10 +77,12 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             if (this.podCastId != null)
             {
-                PodCastDetailsViewModel podCast =
+                var podCast =
                     this.service.GetPodCast(this.podCastId);
                 this.nameTextBox.Text = podCast.Name;
                 this.urlTextBox.Text = podCast.Url.ToString();
+                this.descriptionTextBlock.Text = podCast.Description;
+                this.authorTextBlock.Text = podCast.Author;
             }
 
             this.saveButton.Click +=

@@ -13,10 +13,10 @@ namespace Uncas.PodCastPlayer.Utility
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Security;
     using System.ServiceModel.Syndication;
     using System.Xml;
     using Uncas.PodCastPlayer.Model;
-    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Handles downloads of pod casts.
@@ -91,11 +91,25 @@ namespace Uncas.PodCastPlayer.Utility
         /// </summary>
         /// <param name="podCastUrl">The pod cast URL.</param>
         /// <returns>Details about the pod cast.</returns>
-        public PodCastDetailsViewModel DownloadPodCastInfo(
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        public PodCast DownloadPodCastInfo(
             Uri podCastUrl)
         {
-            // TODO: FEATURE: Utility: retrieve info...
-            throw new NotImplementedException();
+            var feed = GetFeed(podCastUrl);
+
+            string author = null;
+            if (feed.Authors.Count > 0)
+            {
+                author = feed.Authors.First().Name;
+            }
+
+            return new PodCast(
+                null,
+                feed.Title.Text,
+                podCastUrl,
+                feed.Description.Text,
+                author,
+                null);
         }
 
         #endregion
@@ -157,6 +171,59 @@ namespace Uncas.PodCastPlayer.Utility
         }
 
         /// <summary>
+        /// Gets the feed.
+        /// </summary>
+        /// <param name="podCastUrl">The pod cast URL.</param>
+        /// <returns>The retrieved feed.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        private static SyndicationFeed GetFeed(
+            Uri podCastUrl)
+        {
+            SyndicationFeed feed = null;
+
+            // Loads the pod cast:
+            try
+            {
+                using (XmlReader reader =
+                    XmlReader.Create(podCastUrl.ToString()))
+                {
+                    feed = SyndicationFeed.Load(reader);
+                }
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw GetException(ex);
+            }
+            catch (SecurityException ex)
+            {
+                throw GetException(ex);
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw GetException(ex);
+            }
+            catch (UriFormatException ex)
+            {
+                throw GetException(ex);
+            }
+
+            return feed;
+        }
+
+        /// <summary>
+        /// Gets the exception.
+        /// </summary>
+        /// <param name="innerException">The inner exception.</param>
+        /// <returns>The utility exception.</returns>
+        private static UtilityException GetException(
+            Exception innerException)
+        {
+            return new UtilityException(
+                "Exception in PodCastDownloader",
+                innerException);
+        }
+
+        /// <summary>
         /// Reads the pod cast.
         /// </summary>
         /// <param name="podCastUrl">The pod cast URL.</param>
@@ -167,37 +234,32 @@ namespace Uncas.PodCastPlayer.Utility
             var result = new List<Episode>();
 
             // Loads the pod cast:
-            using (XmlReader reader =
-                XmlReader.Create(podCastUrl.ToString()))
+            SyndicationFeed feed = GetFeed(podCastUrl);
+            Trace.WriteLine(feed.Title.Text);
+            foreach (SyndicationItem item in feed.Items)
             {
-                SyndicationFeed feed =
-                    SyndicationFeed.Load(reader);
-                Trace.WriteLine(feed.Title.Text);
-                foreach (SyndicationItem item in feed.Items)
+                // Gets episode info:
+                Episode episode = Episode.ConstructEpisode(
+                    item.Id,
+                    item.PublishDate.Date,
+                    item.Title.Text,
+                    item.Summary.Text);
+
+                // Gets enclosure info:
+                var enclosure = item.Links.Where(
+                    l => l.RelationshipType == "enclosure")
+                    .SingleOrDefault();
+                if (enclosure != null)
                 {
-                    // Gets episode info:
-                    Episode episode = Episode.ConstructEpisode(
-                        item.Id,
-                        item.PublishDate.Date,
-                        item.Title.Text,
-                        item.Summary.Text);
-
-                    // Gets enclosure info:
-                    var enclosure = item.Links.Where(
-                        l => l.RelationshipType == "enclosure")
-                        .SingleOrDefault();
-                    if (enclosure != null)
-                    {
-                        episode.MediaUrl = enclosure.Uri;
-                        episode.MediaInfo =
-                            new EpisodeMediaInfo
-                            {
-                                FileSizeInBytes = enclosure.Length
-                            };
-                    }
-
-                    result.Add(episode);
+                    episode.MediaUrl = enclosure.Uri;
+                    episode.MediaInfo =
+                        new EpisodeMediaInfo
+                        {
+                            FileSizeInBytes = enclosure.Length
+                        };
                 }
+
+                result.Add(episode);
             }
 
             return result;

@@ -10,7 +10,6 @@ namespace Uncas.PodCastPlayer.Fakes
     using System.Collections.Generic;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Utility;
-    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Fakes download of pod casts.
@@ -82,10 +81,10 @@ namespace Uncas.PodCastPlayer.Fakes
         /// </summary>
         /// <param name="podCastUrl">The pod cast URL.</param>
         /// <returns>Details about the pod cast.</returns>
-        public PodCastDetailsViewModel DownloadPodCastInfo(
+        public PodCast DownloadPodCastInfo(
             Uri podCastUrl)
         {
-            return new PodCastDetailsViewModel(null, podCastUrl);
+            return new PodCast(null, "X", podCastUrl, 3);
         }
 
         #endregion

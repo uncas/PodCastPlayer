@@ -159,7 +159,7 @@ namespace Uncas.PodCastPlayer.Fakes
         /// Saves the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
-        public void SavePodCast(PodCastIndexViewModel podCast)
+        public void SavePodCast(PodCast podCast)
         {
             if (podCast.Id.HasValue)
             {
@@ -179,13 +179,8 @@ namespace Uncas.PodCastPlayer.Fakes
                 (PodCasts.Max(pc => pc.Id) ?? 0)
                 + 1;
 
-            var newPodCast =
-                new PodCast(
-                    newId,
-                    podCast.Name,
-                    podCast.Url,
-                    null);
-            PodCasts.Add(newPodCast);
+            podCast.Id = newId;
+            PodCasts.Add(podCast);
         }
 
         /// <summary>
@@ -216,6 +211,23 @@ namespace Uncas.PodCastPlayer.Fakes
             return PodCasts.Where(
                 pc => pc.Id == podCastId)
                 .SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <returns>The pod cast.</returns>
+        public PodCastDetailsViewModel GetPodCastDetails(
+            int podCastId)
+        {
+            var podCast = this.GetPodCast(podCastId);
+            return new PodCastDetailsViewModel(
+                podCast.Id,
+                podCast.Name,
+                podCast.Url,
+                podCast.Author,
+                podCast.Description);
         }
 
         #endregion
