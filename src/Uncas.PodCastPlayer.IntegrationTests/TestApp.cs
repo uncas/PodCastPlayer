@@ -6,7 +6,9 @@
 
 namespace Uncas.PodCastPlayer.IntegrationTests
 {
+    using Uncas.PodCastPlayer.Fakes;
     using Uncas.PodCastPlayer.Repository;
+    using Uncas.PodCastPlayer.SQLiteRepository;
     using Uncas.PodCastPlayer.Utility;
 
     /// <summary>
@@ -14,10 +16,44 @@ namespace Uncas.PodCastPlayer.IntegrationTests
     /// </summary>
     internal static class TestApp
     {
+        #region Private fields
+
         /// <summary>
         /// The pod cast downloader.
         /// </summary>
         private static IPodCastDownloader podCastDownloader;
+
+        /// <summary>
+        /// The fake repositories.
+        /// </summary>
+        private static IRepositoryFactory fakeRepositories;
+
+        /// <summary>
+        /// The reeal repositories.
+        /// </summary>
+        private static IRepositoryFactory realRepositories;
+
+        #endregion
+
+        #region Internal properties
+
+        /// <summary>
+        /// Gets the fake repositories.
+        /// </summary>
+        /// <value>The fake repositories.</value>
+        internal static IRepositoryFactory FakeRepositories
+        {
+            get
+            {
+                if (fakeRepositories == null)
+                {
+                    fakeRepositories =
+                        new FakeRepositoryFactory();
+                }
+
+                return fakeRepositories;
+            }
+        }
 
         /// <summary>
         /// Gets the pod cast downloader.
@@ -35,5 +71,25 @@ namespace Uncas.PodCastPlayer.IntegrationTests
                 return podCastDownloader;
             }
         }
+
+        /// <summary>
+        /// Gets the real repositories.
+        /// </summary>
+        /// <value>The real repositories.</value>
+        internal static IRepositoryFactory RealRepositories
+        {
+            get
+            {
+                if (realRepositories == null)
+                {
+                    realRepositories =
+                        new SQLiteRepositoryFactory();
+                }
+
+                return realRepositories;
+            }
+        }
+
+        #endregion
     }
 }

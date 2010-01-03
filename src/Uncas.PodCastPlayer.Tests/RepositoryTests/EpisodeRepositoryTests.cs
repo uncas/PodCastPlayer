@@ -55,7 +55,7 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
         public void UpdateEpisodeList_1New_OK()
         {
             // Arrange:
-            var podCast = new PodCast(1, "x", new Uri("http://xx.dk"), 3);
+            var podCast = new PodCast(1, "x", new Uri("http://xx.dk"));
             var newEpisodes = new List<Episode>();
             newEpisodes.Add(Episode.ConstructEpisode(
                 Guid.NewGuid().ToString(),

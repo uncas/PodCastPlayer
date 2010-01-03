@@ -85,7 +85,7 @@ namespace Uncas.PodCastPlayer.Fakes
         public PodCast DownloadPodCastInfo(
             Uri podCastUrl)
         {
-            return new PodCast(null, "X", podCastUrl, 3);
+            return new PodCast(null, "X", podCastUrl);
         }
 
         #endregion

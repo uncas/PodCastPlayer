@@ -67,8 +67,7 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
                 new PodCast(
                     1,
                     "hanselminutes",
-                    GetUri(),
-                    1);
+                    GetUri());
 
             // Act:
             var episodes =

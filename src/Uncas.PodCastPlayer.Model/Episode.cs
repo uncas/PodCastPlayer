@@ -14,7 +14,7 @@ namespace Uncas.PodCastPlayer.Model
     /// </summary>
     public class Episode
     {
-        #region Constructor
+        #region Private constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Episode"/> class.
@@ -33,6 +33,7 @@ namespace Uncas.PodCastPlayer.Model
             this.Date = date;
             this.Title = title;
             this.Description = description;
+            this.MediaInfo = new EpisodeMediaInfo();
         }
 
         #endregion

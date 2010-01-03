@@ -58,8 +58,7 @@ namespace Uncas.PodCastPlayer.Fakes
                         = new PodCast(
                             1,
                             "Hanselminutes",
-                            uri,
-                            3);
+                            uri);
 
                     podCast.Episodes.Add(
                         GetEpisode(
@@ -79,8 +78,7 @@ namespace Uncas.PodCastPlayer.Fakes
                         = new PodCast(
                             2,
                             "StackOverflow",
-                            uri2,
-                            4);
+                            uri2);
 
                     podCast2.Episodes.Add(
                         GetEpisode(
@@ -150,8 +148,7 @@ namespace Uncas.PodCastPlayer.Fakes
                 new PodCast(
                     newId,
                     podCast.Name,
-                    podCast.Url,
-                    null);
+                    podCast.Url);
             PodCasts.Add(newPodCast);
         }
 
@@ -239,7 +236,8 @@ namespace Uncas.PodCastPlayer.Fakes
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>An index of episodes.</returns>
-        internal static EpisodeIndexViewModel GetEpisodesByPodCast(
+        internal static EpisodeIndexViewModel 
+            GetEpisodesByPodCast(
             int podCastId)
         {
             var podCast =
@@ -256,7 +254,8 @@ namespace Uncas.PodCastPlayer.Fakes
                     e.Date,
                     e.Id,
                     e.Title,
-                    e.PendingDownload));
+                    e.PendingDownload,
+                    e.MediaInfo.DownloadCompleted));
             return new EpisodeIndexViewModel
             {
                 PodCastName = podCast.Name,

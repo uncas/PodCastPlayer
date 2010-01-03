@@ -38,14 +38,30 @@ X When creating a new pod cast:
 X Display more episode info: date, title, size
 X Select episodes to download
   X EpisodeService.DownloadEpisode
+X Resolve inconsistencies with fileName/path...
+
+- Implement SqLite repository:
+
+CREATE TABLE Episode
+(
+    EpisodeId,
+    Date,
+    Description,
+    Title,
+    FileName
+    MediaUrl,
+    PendingDownload,
+    FileSizeInBytes,
+    DownloadedBytes,
+    RefPodCastId
+)
+
+- Store info that an episode has already been downloaded
 
 - Split Downloader in two responsibilities:
   - 1) download stream
   - 2) local save
-  - evt. vha. repository for fildata
-  - resolve inconsistencies with fileName/path...
-
-- Implement SqLite repository
+  - maybe via repository for file data
 
 - Play selected episode
 

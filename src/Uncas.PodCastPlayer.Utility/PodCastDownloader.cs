@@ -108,8 +108,7 @@ namespace Uncas.PodCastPlayer.Utility
                 feed.Title.Text,
                 podCastUrl,
                 feed.Description.Text,
-                author,
-                null);
+                author);
         }
 
         #endregion
@@ -330,13 +329,13 @@ namespace Uncas.PodCastPlayer.Utility
         /// <summary>
         /// Downloads the stream.
         /// </summary>
-        /// <param name="fileName">Name of the file.</param>
+        /// <param name="filePath">The file path.</param>
         /// <param name="fileSize">Size of the file.</param>
         /// <param name="responseStream">The response stream.</param>
         /// <param name="appendData">if set to <c>true</c> [append data].</param>
         /// <returns>The number of bytes downloaded.</returns>
         private int DownloadStream(
-            string fileName,
+            string filePath,
             long fileSize,
             Stream responseStream,
             bool appendData)
@@ -344,13 +343,21 @@ namespace Uncas.PodCastPlayer.Utility
             // A buffer for storing retrieved data:
             byte[] downBuffer = new byte[2048];
 
+            // Creates the directory if it does not exist:
+            DirectoryInfo directory =
+                new FileInfo(filePath).Directory;
+            if (!directory.Exists)
+            {
+                directory.Create();
+            }
+
             int bytesTotal = 0;
             FileMode fileMode =
                 appendData ?
                 FileMode.Append :
                 FileMode.Create;
             using (var fileStream = new FileStream(
-                 fileName,
+                 filePath,
                  fileMode,
                  FileAccess.Write,
                  FileShare.None))

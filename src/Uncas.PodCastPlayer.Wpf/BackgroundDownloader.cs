@@ -8,8 +8,7 @@ namespace Uncas.PodCastPlayer.Wpf
 {
     using System;
     using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Globalization;
+    using System.Timers;
     using Uncas.PodCastPlayer.AppServices;
 
     /// <summary>
@@ -23,6 +22,11 @@ namespace Uncas.PodCastPlayer.Wpf
         /// The service.
         /// </summary>
         private readonly EpisodeService service;
+
+        /// <summary>
+        /// The timer.
+        /// </summary>
+        private readonly Timer timer;
 
         /// <summary>
         /// The background worker.
@@ -50,6 +54,11 @@ namespace Uncas.PodCastPlayer.Wpf
             this.worker.RunWorkerCompleted +=
                 new RunWorkerCompletedEventHandler(
                     this.Worker_RunWorkerCompleted);
+
+            this.timer = new Timer(1000d);
+            this.timer.Elapsed +=
+                new ElapsedEventHandler(
+                    this.Timer_Elapsed);
         }
 
         #endregion
@@ -61,9 +70,7 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         public void Start()
         {
-            WriteTrace("Start Begin");
             this.worker.RunWorkerAsync();
-            WriteTrace("Start End");
         }
 
         /// <summary>
@@ -71,9 +78,7 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         public void Stop()
         {
-            WriteTrace("Stop Begin");
             this.worker.CancelAsync();
-            WriteTrace("Stop End");
         }
 
         #endregion
@@ -98,26 +103,13 @@ namespace Uncas.PodCastPlayer.Wpf
             if (disposing)
             {
                 this.worker.Dispose();
+                this.timer.Dispose();
             }
         }
 
         #endregion
 
         #region Private methods
-
-        /// <summary>
-        /// Writes the trace.
-        /// </summary>
-        /// <param name="info">The info to write.</param>
-        private static void WriteTrace(string info)
-        {
-            Trace.WriteLine(
-                string.Format(
-                    CultureInfo.CurrentCulture,
-                    "{0}: {1}",
-                    DateTime.Now.Millisecond,
-                    info));
-        }
 
         /// <summary>
         /// Handles the DoWork event of the Worker control.
@@ -128,9 +120,7 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             DoWorkEventArgs e)
         {
-            WriteTrace("Worker_DoWork Begin");
             this.service.DownloadPendingEpisodes();
-            WriteTrace("Worker_DoWork End");
         }
 
         /// <summary>
@@ -142,14 +132,23 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RunWorkerCompletedEventArgs e)
         {
-            WriteTrace("Worker_RunWorkerCompleted Begin");
             if (!e.Cancelled)
             {
-                WriteTrace("Cancelled");
-                this.worker.RunWorkerAsync();
+                this.timer.Start();
             }
+        }
 
-            WriteTrace("Worker_RunWorkerCompleted End");
+        /// <summary>
+        /// Handles the Elapsed event of the Timer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
+        private void Timer_Elapsed(
+            object sender,
+            ElapsedEventArgs e)
+        {
+            this.timer.Stop();
+            this.worker.RunWorkerAsync();
         }
 
         #endregion

@@ -15,7 +15,7 @@ namespace Uncas.PodCastPlayer.Model
     /// </summary>
     public class PodCast : Entity
     {
-        #region Constructor
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCast"/> class.
@@ -23,17 +23,14 @@ namespace Uncas.PodCastPlayer.Model
         /// <param name="id">The id of the pod cast.</param>
         /// <param name="name">The name of the pod cast.</param>
         /// <param name="url">The URL of the pod cast.</param>
-        /// <param name="numberToDownload">The number of episodes to download.</param>
         public PodCast(
             int? id,
             string name,
-            Uri url,
-            int? numberToDownload)
+            Uri url)
             : base(id)
         {
             this.Episodes = new List<Episode>();
             this.Name = name;
-            this.NumberToDownload = numberToDownload;
             this.Url = url;
         }
 
@@ -45,21 +42,18 @@ namespace Uncas.PodCastPlayer.Model
         /// <param name="url">The URL of the pod cast.</param>
         /// <param name="description">The description.</param>
         /// <param name="author">The author.</param>
-        /// <param name="numberToDownload">The number of episodes to download.</param>
         public PodCast(
             int? id,
             string name,
             Uri url,
             string description,
-            string author,
-            int? numberToDownload)
+            string author)
             : base(id)
         {
             this.Author = author;
             this.Description = description;
             this.Episodes = new List<Episode>();
             this.Name = name;
-            this.NumberToDownload = numberToDownload;
             this.Url = url;
         }
 
@@ -90,12 +84,6 @@ namespace Uncas.PodCastPlayer.Model
         /// </summary>
         /// <value>The name of the pod cast.</value>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number of episodes to download.
-        /// </summary>
-        /// <value>The number of episodes to download.</value>
-        public int? NumberToDownload { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the pod cast.

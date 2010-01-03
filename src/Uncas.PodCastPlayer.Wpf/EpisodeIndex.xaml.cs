@@ -72,6 +72,7 @@ namespace Uncas.PodCastPlayer.Wpf
             this.service.AddEpisodeToDownloadList(
                 this.podCastId,
                 episodeId);
+            this.LoadEpisodes();
         }
 
         /// <summary>

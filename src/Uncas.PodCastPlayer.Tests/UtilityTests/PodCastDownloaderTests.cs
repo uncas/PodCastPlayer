@@ -33,8 +33,7 @@ namespace Uncas.PodCastPlayer.Tests.UtilityTests
                 new PodCast(
                 1,
                 "test",
-                new System.Uri("http://fake.uncas.dk"),
-                1);
+                new System.Uri("http://fake.uncas.dk"));
 
             // Act:
             var episodes =
