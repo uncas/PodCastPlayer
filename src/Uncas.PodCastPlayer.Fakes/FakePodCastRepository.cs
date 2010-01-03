@@ -85,15 +85,15 @@ namespace Uncas.PodCastPlayer.Fakes
                     podCast2.Episodes.Add(
                         GetEpisode(
                             "11",
-                            podCast));
+                            podCast2));
                     podCast2.Episodes.Add(
                         GetEpisode(
                             "12",
-                            podCast));
+                            podCast2));
                     podCast2.Episodes.Add(
                         GetEpisode(
                             "13",
-                            podCast));
+                            podCast2));
 
                     podCasts.Add(podCast2);
                 }
@@ -252,10 +252,10 @@ namespace Uncas.PodCastPlayer.Fakes
             }
 
             var episodes = podCast.Episodes
-                .Select(e => new EpisodeIndexItemViewModel
-                {
-                    Date = e.Date
-                });
+                .Select(e => new EpisodeIndexItemViewModel(
+                    e.Date,
+                    e.Id,
+                    e.Title));
             return new EpisodeIndexViewModel
             {
                 PodCastName = podCast.Name,

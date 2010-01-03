@@ -20,6 +20,34 @@ namespace Uncas.PodCastPlayer.Fakes
         #region IEpisodeRepository Members
 
         /// <summary>
+        /// Adds the episode to the download list.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <param name="episodeId">The episode id.</param>
+        public void AddEpisodeToDownloadList(
+            int podCastId,
+            string episodeId)
+        {
+            var podCast =
+                FakePodCastRepository.PodCasts
+                .Where(pc => pc.Id == podCastId)
+                .SingleOrDefault();
+            if (podCast == null)
+            {
+                return;
+            }
+
+            var episode =
+                podCast.Episodes
+                .Where(e => e.Id == episodeId)
+                .SingleOrDefault();
+            if (episode != null)
+            {
+                episode.PendingDownload = true;
+            }
+        }
+
+        /// <summary>
         /// Gets the episodes.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
@@ -75,7 +103,8 @@ namespace Uncas.PodCastPlayer.Fakes
         public IList<Episode> GetEpisodesToDownload()
         {
             var result = new List<Episode>();
-            foreach (var podCast in FakePodCastRepository.PodCasts)
+            foreach (var podCast in
+                FakePodCastRepository.PodCasts)
             {
                 result.AddRange(
                     podCast.Episodes.Where(
@@ -97,13 +126,16 @@ namespace Uncas.PodCastPlayer.Fakes
         /// Gets the view of episodes to download.
         /// </summary>
         /// <returns>An index of the episodes to download.</returns>
-        public IEnumerable<DownloadIndexViewModel> GetDownloadIndex()
+        public IEnumerable<DownloadIndexViewModel>
+            GetDownloadIndex()
         {
             return this.GetEpisodesToDownload()
                 .Select(e => new DownloadIndexViewModel
                 {
-                    EpisodeDate = e.Date,
+                    EpisodeDate = e.Date.Date,
                     EpisodeId = e.Id,
+                    EpisodeTitle = e.Title,
+                    PodCastId = e.PodCast.Id.Value,
                     PodCastName = e.PodCast.Name
                 });
         }

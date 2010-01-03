@@ -41,6 +41,20 @@ namespace Uncas.PodCastPlayer.AppServices
         #region Public methods
 
         /// <summary>
+        /// Adds the episode to the download list.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <param name="episodeId">The episode id.</param>
+        public void AddEpisodeToDownloadList(
+            int podCastId,
+            string episodeId)
+        {
+            this.EpisodeRepository.AddEpisodeToDownloadList(
+                podCastId,
+                episodeId);
+        }
+
+        /// <summary>
         /// Downloads the pending episodes.
         /// </summary>
         public void DownloadPendingEpisodes()

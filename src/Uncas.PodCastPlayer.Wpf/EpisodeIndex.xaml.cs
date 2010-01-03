@@ -9,21 +9,28 @@ namespace Uncas.PodCastPlayer.Wpf
     using System.Windows;
     using System.Windows.Controls;
     using Uncas.PodCastPlayer.AppServices;
+    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Interaction logic for EpisodeIndex.xaml
     /// </summary>
     public partial class EpisodeIndex : UserControl
     {
+        #region Private fields
+
         /// <summary>
-        /// The pod cast.
+        /// The pod cast id.
         /// </summary>
         private readonly int podCastId;
 
         /// <summary>
-        /// The service.
+        /// The episode service.
         /// </summary>
         private readonly EpisodeService service;
+
+        #endregion
+
+        #region Construtor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EpisodeIndex"/> class.
@@ -41,6 +48,30 @@ namespace Uncas.PodCastPlayer.Wpf
             this.Loaded +=
                 new RoutedEventHandler(
                     this.EpisodeIndex_Loaded);
+        }
+
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        /// Handles the Click event of the DownloadButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        private void DownloadButton_Click(
+            object sender,
+            RoutedEventArgs e)
+        {
+            var downloadButton =
+                (Button)sender;
+            var episode =
+                (EpisodeIndexItemViewModel)
+                downloadButton.DataContext;
+            string episodeId = episode.Id;
+            this.service.AddEpisodeToDownloadList(
+                this.podCastId,
+                episodeId);
         }
 
         /// <summary>
@@ -85,5 +116,7 @@ namespace Uncas.PodCastPlayer.Wpf
             // Updates the list of episodes:
             this.LoadEpisodes();
         }
+
+        #endregion
     }
 }

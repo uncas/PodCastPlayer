@@ -17,6 +17,15 @@ namespace Uncas.PodCastPlayer.Repository
     public interface IEpisodeRepository
     {
         /// <summary>
+        /// Adds the episode to the download list.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <param name="episodeId">The episode id.</param>
+        void AddEpisodeToDownloadList(
+            int podCastId, 
+            string episodeId);
+
+        /// <summary>
         /// Gets the episodes.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>

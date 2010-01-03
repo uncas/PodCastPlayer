@@ -40,16 +40,16 @@ namespace Uncas.PodCastPlayer.Model
         #region Public properties
 
         /// <summary>
-        /// Gets or sets the date of the episode.
+        /// Gets the date of the episode.
         /// </summary>
         /// <value>The date of the episode.</value>
-        public DateTime Date { get; set; }
+        public DateTime Date { get; private set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        /// Gets the description.
         /// </summary>
         /// <value>The description.</value>
-        public string Description { get; set; }
+        public string Description { get; private set; }
 
         /// <summary>
         /// Gets or sets the name of the file.
@@ -58,10 +58,10 @@ namespace Uncas.PodCastPlayer.Model
         public string FileName { get; set; }
 
         /// <summary>
-        /// Gets or sets the id.
+        /// Gets the id of the episode.
         /// </summary>
         /// <value>The id of the episode.</value>
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         /// <summary>
         /// Gets or sets the media info.
@@ -82,16 +82,16 @@ namespace Uncas.PodCastPlayer.Model
         public bool PendingDownload { get; set; }
 
         /// <summary>
-        /// Gets or sets the pod cast.
+        /// Gets or sets the associated pod cast.
         /// </summary>
         /// <value>The pod cast.</value>
         public PodCast PodCast { get; set; }
 
         /// <summary>
-        /// Gets or sets the title.
+        /// Gets the title of the episode.
         /// </summary>
         /// <value>The title.</value>
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
         #endregion
 
@@ -104,18 +104,23 @@ namespace Uncas.PodCastPlayer.Model
         /// <param name="date">The date of the episode.</param>
         /// <param name="title">The title of the episode.</param>
         /// <param name="description">The description.</param>
+        /// <param name="podCast">The pod cast.</param>
         /// <returns>The episode.</returns>
         public static Episode ConstructEpisode(
             string id,
             DateTime date,
             string title,
-            string description)
+            string description,
+            PodCast podCast)
         {
-            return new Episode(
+            var episode =
+                new Episode(
                 id,
                 date,
                 title,
                 description);
+            episode.PodCast = podCast;
+            return episode;
         }
 
         /// <summary>

@@ -82,8 +82,8 @@ namespace Uncas.PodCastPlayer.Utility
         public IList<Episode> DownloadEpisodeList(
             PodCast podCast)
         {
-            return DownloadEpisodeList(
-                podCast.Url);
+            return FetchEpisodeList(
+                podCast);
         }
 
         /// <summary>
@@ -226,11 +226,13 @@ namespace Uncas.PodCastPlayer.Utility
         /// <summary>
         /// Reads the pod cast.
         /// </summary>
-        /// <param name="podCastUrl">The pod cast URL.</param>
+        /// <param name="podCast">The pod cast.</param>
         /// <returns>A list of episodes.</returns>
-        private static IList<Episode> DownloadEpisodeList(
-            Uri podCastUrl)
+        private static IList<Episode> FetchEpisodeList(
+            PodCast podCast)
         {
+            Uri podCastUrl = podCast.Url;
+
             var result = new List<Episode>();
 
             // Loads the pod cast:
@@ -243,7 +245,8 @@ namespace Uncas.PodCastPlayer.Utility
                     item.Id,
                     item.PublishDate.Date,
                     item.Title.Text,
-                    item.Summary.Text);
+                    item.Summary.Text,
+                    podCast);
 
                 // Gets enclosure info:
                 var enclosure = item.Links.Where(

@@ -13,18 +13,46 @@ namespace Uncas.PodCastPlayer.ViewModel
     /// </summary>
     public class EpisodeIndexItemViewModel
     {
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EpisodeIndexItemViewModel"/> class.
         /// </summary>
-        public EpisodeIndexItemViewModel()
+        /// <param name="date">The publish date.</param>
+        /// <param name="id">The id of the episode.</param>
+        /// <param name="title">The title of the episode.</param>
+        public EpisodeIndexItemViewModel(
+            DateTime date,
+            string id,
+            string title)
         {
-            this.Date = DateTime.Now;
+            this.Date = date.Date;
+            this.Id = id;
+            this.Title = title;
         }
+
+        #endregion
+
+        #region Public properties
 
         /// <summary>
         /// Gets or sets the date.
         /// </summary>
-        /// <value>The date of the episode.</value>
+        /// <value>The publish date.</value>
         public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        /// <value>The id of the episode.</value>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        /// <value>The title of the episode.</value>
+        public string Title { get; set; }
+
+        #endregion
     }
 }

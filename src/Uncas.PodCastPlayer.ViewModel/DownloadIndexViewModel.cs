@@ -13,6 +13,8 @@ namespace Uncas.PodCastPlayer.ViewModel
     /// </summary>
     public class DownloadIndexViewModel
     {
+        #region Public properties
+
         /// <summary>
         /// Gets or sets the episode date.
         /// </summary>
@@ -26,9 +28,23 @@ namespace Uncas.PodCastPlayer.ViewModel
         public string EpisodeId { get; set; }
 
         /// <summary>
+        /// Gets or sets the episode title.
+        /// </summary>
+        /// <value>The episode title.</value>
+        public string EpisodeTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pod cast id.
+        /// </summary>
+        /// <value>The pod cast id.</value>
+        public int PodCastId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the pod cast.
         /// </summary>
         /// <value>The name of the pod cast.</value>
         public string PodCastName { get; set; }
+
+        #endregion
     }
 }

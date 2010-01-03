@@ -38,7 +38,8 @@ namespace Uncas.PodCastPlayer.Fakes
                 Guid.NewGuid().ToString(),
                 DateTime.Now,
                 "x",
-                "y"));
+                "y",
+                podCast));
             return result;
         }
 

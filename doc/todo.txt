@@ -27,20 +27,31 @@ X Downloader:
 X Read list of episodes for real
 X Update list of episodes for real
 X Save location: [My music]\PodCasts\[PodCastName]\[EpisodeName].mp3
-
-- When creating a new pod cast:
+X When creating a new pod cast:
   Separate form:
-  - Input the url
-  - Press create button
-  - PodCastNewViewModel AppService.Create(Uri url)
-  - Get pod cast info from utility
-    - If OK: save and show Details user control
-    - If not OK: stay on same control and show error message
-- Display more episode info: date, title, size
-- Select episodes to download
-- Show which episode is downloading
+  X Input the url
+  X Press create button
+  X PodCastNewViewModel AppService.Create(Uri url)
+  X Get pod cast info from utility
+    X If OK: save and show Details user control
+    X If not OK: stay on same control and show error message
+X Display more episode info: date, title, size
+X Select episodes to download
+  X EpisodeService.DownloadEpisode
+
+- Split Downloader in two responsibilities:
+  - 1) download stream
+  - 2) local save
+  - evt. vha. repository for fildata
+  - resolve inconsistencies with fileName/path...
 
 - Implement SqLite repository
 
 - Play selected episode
+
+- Show which episode is downloading
+- Select priority of episodes to download
 - Cancel download
+
+- PodCastId: int -> string
+- get, private set!  constructors -> factory methods

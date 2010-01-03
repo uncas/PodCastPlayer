@@ -13,9 +13,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Label Content="{Binding Date}" />
-                        <Button Content="Download" Grid.Column="1" />
+                        <Label Content="{Binding Date}" Grid.Column="0" />
+                        <Label Content="{Binding Title}" Grid.Column="1" />
+                        <Button Content="Download" Grid.Column="2" Click="DownloadButton_Click" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

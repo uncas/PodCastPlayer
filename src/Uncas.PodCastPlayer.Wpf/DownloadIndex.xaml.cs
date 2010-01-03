@@ -15,6 +15,8 @@ namespace Uncas.PodCastPlayer.Wpf
     /// </summary>
     public partial class DownloadIndex : UserControl
     {
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DownloadIndex"/> class.
         /// </summary>
@@ -25,6 +27,10 @@ namespace Uncas.PodCastPlayer.Wpf
                 new RoutedEventHandler(
                     this.DownloadIndex_Loaded);
         }
+
+        #endregion
+
+        #region Private methods
 
         /// <summary>
         /// Handles the Loaded event of the DownloadIndex control.
@@ -42,5 +48,7 @@ namespace Uncas.PodCastPlayer.Wpf
             this.episodesListBox.ItemsSource =
                 service.GetDownloadIndex();
         }
+
+        #endregion
     }
 }

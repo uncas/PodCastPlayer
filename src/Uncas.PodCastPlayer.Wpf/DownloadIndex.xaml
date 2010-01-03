@@ -13,7 +13,7 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="{Binding PodCastName}" Grid.Column="0" />
                         <Label Content="{Binding EpisodeDate}" Grid.Column="1" />
-                        <Label Content="{Binding EpisodeId}" Grid.Column="2" />
+                        <Label Content="{Binding EpisodeTitle}" Grid.Column="2" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
