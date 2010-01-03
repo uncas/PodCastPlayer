@@ -255,7 +255,8 @@ namespace Uncas.PodCastPlayer.Fakes
                 .Select(e => new EpisodeIndexItemViewModel(
                     e.Date,
                     e.Id,
-                    e.Title));
+                    e.Title,
+                    e.PendingDownload));
             return new EpisodeIndexViewModel
             {
                 PodCastName = podCast.Name,

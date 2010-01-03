@@ -12,12 +12,10 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="30" />
                         </Grid.ColumnDefinitions>
-                        <Label Content="{Binding Name}" />
-                        <Label Content="{Binding Url}" Grid.Column="1" />
-                        <Button Content="Episodes" Grid.Column="2" Click="Episodes_Click" />
+                        <Label Content="{Binding Name}" Grid.Column="0" />
+                        <Button Content="Episodes" Grid.Column="1" Click="Episodes_Click" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

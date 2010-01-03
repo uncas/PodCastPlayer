@@ -97,7 +97,9 @@ namespace Uncas.PodCastPlayer.Wpf
             var episodeIndex =
                 this.service.GetEpisodes(
                 this.podCastId);
-            episodesListBox.ItemsSource =
+            this.podCastNameTextBlock.Text =
+                episodeIndex.PodCastName;
+            this.episodesListBox.ItemsSource =
                 episodeIndex.Episodes;
         }
 
