@@ -6,19 +6,28 @@
 
 namespace Uncas.PodCastPlayer.SQLiteRepository
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using SubSonic.DataProviders;
-    using SubSonic.Repository;
-    using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.ViewModel;
+    using Model = Uncas.PodCastPlayer.Model;
 
     /// <summary>
     /// Pod cast repository implemented with SQLite.
     /// </summary>
-    internal class PodCastRepository : IPodCastRepository
+    internal class PodCastRepository : BaseRepository,
+        IPodCastRepository
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PodCastRepository"/> class.
+        /// </summary>
+        /// <param name="databasePath">The database path.</param>
+        public PodCastRepository(string databasePath)
+            : base(databasePath)
+        {
+        }
+
         #region IPodCastRepository Members
 
         /// <summary>
@@ -36,20 +45,12 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// <returns>The pod casts.</returns>
         public IList<PodCastIndexViewModel> GetPodCasts()
         {
-            var provider =
-                ProviderFactory.GetProvider(
-                @"Data Source=C:\PodCastPlayer.db",
-                "System.Data.SQLite");
-            var repo =
-                new SimpleRepository(
-                    provider,
-                    SimpleRepositoryOptions.RunMigrations);
-
-            var podCasts = repo.All<DBPodCast>()
+            var podCasts =
+                this.SimpleRepository.All<PodCast>()
                 .Select(pc => new PodCastIndexViewModel(
                     pc.PodCastId,
                     pc.Name,
-                    pc.Url));
+                    new Uri(pc.Url)));
 
             return podCasts.ToList();
         }
@@ -59,7 +60,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>The pod cast.</returns>
-        public PodCast GetPodCast(int podCastId)
+        public Model.PodCast GetPodCast(int podCastId)
         {
             throw new System.NotImplementedException();
         }
@@ -69,7 +70,8 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>The pod cast.</returns>
-        public PodCastDetailsViewModel GetPodCastDetails(int podCastId)
+        public PodCastDetailsViewModel GetPodCastDetails(
+            int podCastId)
         {
             throw new System.NotImplementedException();
         }
@@ -78,7 +80,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Saves the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
-        public void SavePodCast(PodCast podCast)
+        public void SavePodCast(Model.PodCast podCast)
         {
             throw new System.NotImplementedException();
         }

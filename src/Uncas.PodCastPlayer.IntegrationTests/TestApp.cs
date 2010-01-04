@@ -83,7 +83,8 @@ namespace Uncas.PodCastPlayer.IntegrationTests
                 if (realRepositories == null)
                 {
                     realRepositories =
-                        new SQLiteRepositoryFactory();
+                        new SQLiteRepositoryFactory(
+                            @"c:\test.db");
                 }
 
                 return realRepositories;

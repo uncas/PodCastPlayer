@@ -6,7 +6,6 @@
 
 namespace Uncas.PodCastPlayer.SQLiteRepository
 {
-    using System;
     using Uncas.PodCastPlayer.Repository;
 
     /// <summary>
@@ -14,6 +13,21 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     /// </summary>
     public class SQLiteRepositoryFactory : IRepositoryFactory
     {
+        /// <summary>
+        /// The database path.
+        /// </summary>
+        private readonly string databasePath;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteRepositoryFactory"/> class.
+        /// </summary>
+        /// <param name="databasePath">The database path.</param>
+        public SQLiteRepositoryFactory(
+            string databasePath)
+        {
+            this.databasePath = databasePath;
+        }
+
         #region IRepositoryFactory Members
 
         /// <summary>
@@ -31,7 +45,11 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// <value>The pod cast repository.</value>
         public IPodCastRepository PodCastRepository
         {
-            get { return new PodCastRepository(); }
+            get
+            {
+                return new PodCastRepository(
+                    this.databasePath);
+            }
         }
 
         #endregion

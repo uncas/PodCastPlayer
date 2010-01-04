@@ -179,7 +179,6 @@ namespace Uncas.PodCastPlayer.Utility
             Uri podCastUrl)
         {
             SyndicationFeed feed = null;
-
             // Loads the pod cast:
             try
             {
