@@ -52,7 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
-    <Compile Include="DBEpisode.cs" />
+    <Compile Include="EpisodeRepository.cs" />
+    <Compile Include="Episode.cs" />
     <Compile Include="PodCast.cs" />
     <Compile Include="PodCastRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

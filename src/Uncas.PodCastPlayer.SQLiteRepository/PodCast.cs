@@ -21,7 +21,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <value>The pod cast id.</value>
         [SubSonicPrimaryKey]
-        public int? PodCastId { get; set; }
+        public long? PodCastId { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the pod cast.

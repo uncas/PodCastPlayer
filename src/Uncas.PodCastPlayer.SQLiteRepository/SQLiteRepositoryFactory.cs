@@ -36,7 +36,11 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// <value>The episode repository.</value>
         public IEpisodeRepository EpisodeRepository
         {
-            get { return null; }
+            get
+            {
+                return new EpisodeRepository(
+                    this.databasePath);
+            }
         }
 
         /// <summary>

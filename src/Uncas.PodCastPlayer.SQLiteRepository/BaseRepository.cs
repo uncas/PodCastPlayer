@@ -6,9 +6,9 @@
 
 namespace Uncas.PodCastPlayer.SQLiteRepository
 {
+    using System.Globalization;
     using SubSonic.DataProviders;
     using SubSonic.Repository;
-    using System.Globalization;
 
     /// <summary>
     /// Base repository class for SQLite.
