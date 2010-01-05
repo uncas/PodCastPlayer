@@ -42,20 +42,6 @@ X Resolve inconsistencies with fileName/path...
 
 - Implement SqLite repository:
 
-CREATE TABLE Episode
-(
-    EpisodeId,
-    Date,
-    Description,
-    Title,
-    FileName
-    MediaUrl,
-    PendingDownload,
-    FileSizeInBytes,
-    DownloadedBytes,
-    RefPodCastId
-)
-
 - Store info that an episode has already been downloaded
 
 - Split Downloader in two responsibilities:

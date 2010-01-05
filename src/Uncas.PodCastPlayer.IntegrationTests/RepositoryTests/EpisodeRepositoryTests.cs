@@ -28,6 +28,22 @@ namespace Uncas.PodCastPlayer.IntegrationTests.RepositoryTests
         }
 
         /// <summary>
+        /// Adds the episode to download list_1_ OK.
+        /// </summary>
+        [Test]
+        public void AddEpisodeToDownloadList_1_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.EpisodeRepository.AddEpisodeToDownloadList(
+                1,
+                "X");
+
+            // Assert:
+        }
+
+        /// <summary>
         /// Gets the episodes_1_ OK.
         /// </summary>
         [Test]
@@ -38,6 +54,20 @@ namespace Uncas.PodCastPlayer.IntegrationTests.RepositoryTests
             // Act:
             var result =
                 this.EpisodeRepository.GetEpisodes(1);
+
+            // Assert:
+        }
+
+        /// <summary>
+        /// Gets the episodes to download_ all_ OK.
+        /// </summary>
+        [Test]
+        public void GetEpisodesToDownload_All_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.EpisodeRepository.GetEpisodesToDownload();
 
             // Assert:
         }

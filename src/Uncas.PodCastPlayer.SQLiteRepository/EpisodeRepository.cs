@@ -9,9 +9,9 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.ViewModel;
-    using Model = Uncas.PodCastPlayer.Model;
 
     /// <summary>
     /// Pod cast repository implemented with SQLite.
@@ -43,7 +43,16 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             int podCastId,
             string episodeId)
         {
-            throw new NotImplementedException();
+            var episode =
+                this.SimpleRepository.Single<DBEpisode>(
+                episodeId);
+            if (episode == null)
+            {
+                return;
+            }
+
+            episode.PendingDownload = true;
+            this.SimpleRepository.Update<DBEpisode>(episode);
         }
 
         /// <summary>
@@ -82,7 +91,21 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// <returns>A list of episodes.</returns>
         public IList<Model.Episode> GetEpisodesToDownload()
         {
-            throw new NotImplementedException();
+            // TODO: Make this work
+            var query = from episode in
+                            this.SimpleRepository.
+                            Find<DBEpisode>(
+                            e => e.PendingDownload)
+                        join podCast in this.SimpleRepository.All<DBPodCast>()
+                        on episode.RefPodCastId equals podCast.PodCastId
+                        select new
+                        {
+                            Episode = episode,
+                            PodCast = podCast
+                        };
+            return query.Select(
+                e => GetModelFromDB(e.Episode, e.PodCast))
+                .ToList();
         }
 
         /// <summary>
@@ -118,6 +141,30 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets the model from DB.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        /// <param name="databasePodCast">The database pod cast.</param>
+        /// <returns>The model episode.</returns>
+        private static Episode GetModelFromDB(
+            DBEpisode episode,
+            DBPodCast databasePodCast)
+        {
+            var podCast = new PodCast(
+                (int)databasePodCast.PodCastId,
+                databasePodCast.Name,
+                new Uri(databasePodCast.Url),
+                databasePodCast.Description,
+                databasePodCast.Author);
+            return Episode.ConstructEpisode(
+                episode.EpisodeId,
+                episode.Date,
+                episode.Title,
+                episode.Description,
+                podCast);
+        }
 
         /// <summary>
         /// Gets the view model from db.
