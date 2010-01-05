@@ -19,6 +19,8 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     internal class PodCastRepository : BaseRepository,
         IPodCastRepository
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastRepository"/> class.
         /// </summary>
@@ -28,6 +30,8 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         {
         }
 
+        #endregion
+
         #region IPodCastRepository Members
 
         /// <summary>
@@ -36,7 +40,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// <param name="podCastId">The pod cast id.</param>
         public void DeletePodCast(int podCastId)
         {
-            this.SimpleRepository.Delete<PodCast>(podCastId);
+            this.SimpleRepository.Delete<DBPodCast>(podCastId);
         }
 
         /// <summary>
@@ -46,13 +50,13 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public IList<PodCastIndexViewModel> GetPodCasts()
         {
             var podCasts =
-                this.SimpleRepository.All<PodCast>()
+                this.SimpleRepository.All<DBPodCast>();
+            var result = podCasts.ToList()
                 .Select(pc => new PodCastIndexViewModel(
                     (int)pc.PodCastId,
                     pc.Name,
                     new Uri(pc.Url)));
-
-            return podCasts.ToList();
+            return result.ToList();
         }
 
         /// <summary>
@@ -63,7 +67,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public Model.PodCast GetPodCast(int podCastId)
         {
             var podCast =
-                this.SimpleRepository.Single<PodCast>(podCastId);
+                this.SimpleRepository.Single<DBPodCast>(podCastId);
             if (podCast == null)
             {
                 return null;
@@ -86,7 +90,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             int podCastId)
         {
             var podCast =
-                this.SimpleRepository.Single<PodCast>(
+                this.SimpleRepository.Single<DBPodCast>(
                 podCastId);
             if (podCast == null)
             {
@@ -108,15 +112,15 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public void SavePodCast(
             Model.PodCast podCast)
         {
-            PodCast pc = new PodCast
+            DBPodCast pc = new DBPodCast
             {
                 Author = podCast.Author,
                 Description = podCast.Description,
                 Name = podCast.Name,
                 Url = podCast.Url.ToString()
             };
-            this.SimpleRepository.Add<PodCast>(pc);
-            podCast.Id = (int)pc.PodCastId.Value;
+            this.SimpleRepository.Add<DBPodCast>(pc);
+            podCast.Id = (int)pc.PodCastId;
         }
 
         /// <summary>
@@ -126,9 +130,9 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public void SavePodCast(
             PodCastDetailsViewModel podCast)
         {
-            PodCast pc =
-                this.SimpleRepository.Single<PodCast>(
-                (long)podCast.Id.Value);
+            DBPodCast pc =
+                this.SimpleRepository.Single<DBPodCast>(
+                podCast.Id);
             if (pc == null)
             {
                 return;
@@ -139,10 +143,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             pc.Name = podCast.Name;
             pc.Url = podCast.Url.ToString();
 
-            // TODO: BUGFIX: Download and use this:
-            // http://stackoverflow.com/questions/1191549/subsonic-3-simplerepository-update-object-reference-not-set-to-an-instance-of
-            // http://github.com/subsonic/SubSonic-3.0/tree/master
-            this.SimpleRepository.Update<PodCast>(pc);
+            this.SimpleRepository.Update<DBPodCast>(pc);
         }
 
         #endregion

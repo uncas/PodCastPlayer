@@ -21,3 +21,11 @@ X  DownloadEpisode(episode)
 Repository.IEpisodeRepository:
 X  GetEpisodesToDownload()
 X  UpdateEpisode(episode)
+
+
+
+SubSonic: Use the version downloadable from here:
+http://github.com/subsonic/SubSonic-3.0/tree/master
+
+Since there are som bugs in other versions of SubSonic:
+http://stackoverflow.com/questions/1191549/subsonic-3-simplerepository-update-object-reference-not-set-to-an-instance-of

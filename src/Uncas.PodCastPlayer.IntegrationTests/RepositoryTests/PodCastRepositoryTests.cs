@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.IntegrationTests.RepositoryTests
 {
     using System;
+    using System.Diagnostics;
     using NUnit.Framework;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
@@ -67,9 +68,14 @@ namespace Uncas.PodCastPlayer.IntegrationTests.RepositoryTests
             // Arrange:
 
             // Act:
-            this.PodCastRepository.GetPodCasts();
+            var result =
+                this.PodCastRepository.GetPodCasts();
 
             // Assert:
+            foreach (var podCast in result)
+            {
+                Trace.WriteLine(podCast.Id);
+            }
         }
 
         /// <summary>

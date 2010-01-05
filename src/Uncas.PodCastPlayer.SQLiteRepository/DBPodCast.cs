@@ -1,18 +1,18 @@
 ﻿//-------------
-// <copyright file="PodCast.cs" company="Uncas">
+// <copyright file="DBPodCast.cs" company="Uncas">
 //     Copyright (c) Ole Lynge Sørensen. All rights reserved.
 // </copyright>
 //-------------
 
 namespace Uncas.PodCastPlayer.SQLiteRepository
 {
-    using System;
     using SubSonic.SqlGeneration.Schema;
 
     /// <summary>
     /// Represents a pod cast in the database.
     /// </summary>
-    public class PodCast
+    [SubSonicTableNameOverride("PodCasts")]
+    public class DBPodCast
     {
         #region Public properties
 
@@ -21,7 +21,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <value>The pod cast id.</value>
         [SubSonicPrimaryKey]
-        public long? PodCastId { get; set; }
+        public long PodCastId { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the pod cast.

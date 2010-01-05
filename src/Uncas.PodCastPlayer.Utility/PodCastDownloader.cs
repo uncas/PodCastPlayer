@@ -69,7 +69,7 @@ namespace Uncas.PodCastPlayer.Utility
 
             return new EpisodeMediaInfo
             {
-                FileSizeInBytes = (int)fileSize,
+                FileSizeInBytes = fileSize,
                 DownloadedBytes = downloadedBytes
             };
         }

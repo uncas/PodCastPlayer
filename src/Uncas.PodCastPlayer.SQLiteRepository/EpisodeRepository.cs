@@ -8,6 +8,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.ViewModel;
     using Model = Uncas.PodCastPlayer.Model;
@@ -18,6 +19,8 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     internal class EpisodeRepository : BaseRepository,
         IEpisodeRepository
     {
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EpisodeRepository"/> class.
         /// </summary>
@@ -27,6 +30,8 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         {
         }
 
+        #endregion
+
         #region IEpisodeRepository Members
 
         /// <summary>
@@ -34,7 +39,9 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <param name="episodeId">The episode id.</param>
-        public void AddEpisodeToDownloadList(int podCastId, string episodeId)
+        public void AddEpisodeToDownloadList(
+            int podCastId,
+            string episodeId)
         {
             throw new NotImplementedException();
         }
@@ -44,9 +51,29 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>An index of episodes.</returns>
-        public EpisodeIndexViewModel GetEpisodes(int podCastId)
+        public EpisodeIndexViewModel GetEpisodes(
+            int podCastId)
         {
-            throw new NotImplementedException();
+            var podCast =
+                this.SimpleRepository.Single<DBPodCast>(
+                podCastId);
+            if (podCast == null)
+            {
+                return null;
+            }
+
+            var episodes =
+                this.SimpleRepository.Find<DBEpisode>(
+                e => e.RefPodCastId == podCastId)
+                .ToList();
+            var episodeIndexItems =
+                episodes.Select(
+                e => GetViewModelFromDb(e));
+            return new EpisodeIndexViewModel
+            {
+                Episodes = episodeIndexItems,
+                PodCastName = podCast.Name
+            };
         }
 
         /// <summary>
@@ -62,7 +89,8 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets the view of episodes to download.
         /// </summary>
         /// <returns>An index of the episodes to download.</returns>
-        public IEnumerable<DownloadIndexViewModel> GetDownloadIndex()
+        public IEnumerable<DownloadIndexViewModel>
+            GetDownloadIndex()
         {
             throw new NotImplementedException();
         }
@@ -71,7 +99,8 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Updates the episode.
         /// </summary>
         /// <param name="episode">The episode.</param>
-        public void UpdateEpisode(Model.Episode episode)
+        public void UpdateEpisode(
+            Model.Episode episode)
         {
             throw new NotImplementedException();
         }
@@ -81,11 +110,34 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <param name="episodes">The updated list of episodes.</param>
-        public void UpdateEpisodeList(int podCastId, IList<Model.Episode> episodes)
+        public void UpdateEpisodeList(
+            int podCastId,
+            IList<Model.Episode> episodes)
         {
             throw new NotImplementedException();
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets the view model from db.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        /// <returns>The episode index item view model.</returns>
+        private static EpisodeIndexItemViewModel
+            GetViewModelFromDb(
+            DBEpisode episode)
+        {
+            bool downloadCompleted =
+                Model.EpisodeMediaInfo.IsDownloadCompleted(
+                episode.FileSizeInBytes,
+                episode.DownloadedBytes);
+            return new EpisodeIndexItemViewModel(
+                episode.Date,
+                episode.EpisodeId,
+                episode.Title,
+                episode.PendingDownload,
+                downloadCompleted);
+        }
     }
 }

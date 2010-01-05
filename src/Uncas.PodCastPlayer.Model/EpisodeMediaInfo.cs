@@ -21,7 +21,7 @@ namespace Uncas.PodCastPlayer.Model
         /// Gets or sets the downloaded bytes.
         /// </summary>
         /// <value>The downloaded bytes.</value>
-        public int DownloadedBytes { get; set; }
+        public long DownloadedBytes { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the download is completed.
@@ -31,9 +31,26 @@ namespace Uncas.PodCastPlayer.Model
         {
             get
             {
-                return this.FileSizeInBytes == 
-                    this.DownloadedBytes;
+                return IsDownloadCompleted(
+                    this.FileSizeInBytes,
+                    this.DownloadedBytes);
             }
+        }
+
+        /// <summary>
+        /// Determines whether [is download completed] [the specified file size in bytes].
+        /// </summary>
+        /// <param name="fileSizeInBytes">The file size in bytes.</param>
+        /// <param name="downloadedBytes">The downloaded bytes.</param>
+        /// <returns>
+        /// <c>true</c> if [is download completed] [the specified file size in bytes]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsDownloadCompleted(
+            long fileSizeInBytes,
+            long downloadedBytes)
+        {
+            return fileSizeInBytes ==
+                downloadedBytes;
         }
     }
 }
