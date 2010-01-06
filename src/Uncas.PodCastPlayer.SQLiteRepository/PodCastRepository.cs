@@ -40,7 +40,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// <param name="podCastId">The pod cast id.</param>
         public void DeletePodCast(int podCastId)
         {
-            this.SimpleRepository.Delete<DBPodCast>(podCastId);
+            this.DB.Delete<DBPodCast>(podCastId);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public IList<PodCastIndexViewModel> GetPodCasts()
         {
             var podCasts =
-                this.SimpleRepository.All<DBPodCast>();
+                this.DB.All<DBPodCast>();
             var result = podCasts.ToList()
                 .Select(pc => new PodCastIndexViewModel(
                     (int)pc.PodCastId,
@@ -67,7 +67,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public Model.PodCast GetPodCast(int podCastId)
         {
             var podCast =
-                this.SimpleRepository.Single<DBPodCast>(podCastId);
+                this.DB.Single<DBPodCast>(podCastId);
             if (podCast == null)
             {
                 return null;
@@ -90,7 +90,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             int podCastId)
         {
             var podCast =
-                this.SimpleRepository.Single<DBPodCast>(
+                this.DB.Single<DBPodCast>(
                 podCastId);
             if (podCast == null)
             {
@@ -119,7 +119,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
                 Name = podCast.Name,
                 Url = podCast.Url.ToString()
             };
-            this.SimpleRepository.Add<DBPodCast>(pc);
+            this.DB.Add<DBPodCast>(pc);
             podCast.Id = (int)pc.PodCastId;
         }
 
@@ -131,7 +131,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             PodCastDetailsViewModel podCast)
         {
             DBPodCast pc =
-                this.SimpleRepository.Single<DBPodCast>(
+                this.DB.Single<DBPodCast>(
                 podCast.Id);
             if (pc == null)
             {
@@ -143,7 +143,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             pc.Name = podCast.Name;
             pc.Url = podCast.Url.ToString();
 
-            this.SimpleRepository.Update<DBPodCast>(pc);
+            this.DB.Update<DBPodCast>(pc);
         }
 
         #endregion

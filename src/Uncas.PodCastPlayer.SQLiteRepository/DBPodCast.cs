@@ -6,7 +6,9 @@
 
 namespace Uncas.PodCastPlayer.SQLiteRepository
 {
+    using System;
     using SubSonic.SqlGeneration.Schema;
+    using Uncas.PodCastPlayer.Model;
 
     /// <summary>
     /// Represents a pod cast in the database.
@@ -51,5 +53,19 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public string Description { get; set; }
 
         #endregion
+
+        /// <summary>
+        /// Gets as a model pod cast.
+        /// </summary>
+        /// <returns>The model pod cast.</returns>
+        public PodCast AsModelPodCast()
+        {
+            return new PodCast(
+                (int)this.PodCastId,
+                this.Name,
+                new Uri(this.Url),
+                this.Description,
+                this.Author);
+        }
     }
 }

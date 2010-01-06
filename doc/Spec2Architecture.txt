@@ -24,8 +24,32 @@ X  UpdateEpisode(episode)
 
 
 
-SubSonic: Use the version downloadable from here:
+SubSonic:
+
+Use the version downloadable from here:
 http://github.com/subsonic/SubSonic-3.0/tree/master
 
 Since there are som bugs in other versions of SubSonic:
 http://stackoverflow.com/questions/1191549/subsonic-3-simplerepository-update-object-reference-not-set-to-an-instance-of
+
+Fix:
+http://stackoverflow.com/questions/1137649/simplerepository-boolean-mapping-problem
+SubSonic-3.0\SubSonic.Core\SQLGeneration\Schema\SQLiteSchema.cs:
+   public override string GetNativeType(DbType dbType)
+    {
+        switch(dbType)
+        {
+            case DbType.Object:
+            case DbType.AnsiString:
+            case DbType.AnsiStringFixedLength:
+            case DbType.String:
+            case DbType.StringFixedLength:
+                return "nvarchar";
+            case DbType.Boolean:
+                return "boolean"; // <-- This was set to "tinyint"
+            case DbType.SByte:
+            case DbType.Binary:
+            case DbType.Byte:
+                return "longblob";
+            case DbType.Currency:
+                return "money";

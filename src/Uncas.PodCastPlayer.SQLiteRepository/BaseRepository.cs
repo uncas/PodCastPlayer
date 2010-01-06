@@ -35,7 +35,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets the simple SubSonic repository.
         /// </summary>
         /// <value>The simple repository.</value>
-        public SimpleRepository SimpleRepository
+        public SimpleRepository DB
         {
             get
             {

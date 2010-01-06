@@ -12,6 +12,7 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
     using System.Linq;
     using NUnit.Framework;
     using Uncas.PodCastPlayer.Model;
+    using Uncas.PodCastPlayer.Repository;
 
     /// <summary>
     /// Tests for episode repository.
@@ -19,6 +20,39 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
     [TestFixture]
     public class EpisodeRepositoryTests : BaseTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EpisodeRepositoryTests"/> class.
+        /// </summary>
+        public EpisodeRepositoryTests()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EpisodeRepositoryTests"/> class.
+        /// </summary>
+        /// <param name="repositories">The repositories.</param>
+        public EpisodeRepositoryTests(
+            IRepositoryFactory repositories)
+            : base(repositories)
+        {
+        }
+
+        /// <summary>
+        /// Adds the episode to download list_1_ OK.
+        /// </summary>
+        [Test]
+        public void AddEpisodeToDownloadList_1_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.EpisodeRepository.AddEpisodeToDownloadList(
+                1,
+                "X");
+
+            // Assert:
+        }
+
         /// <summary>
         /// Gets the episodes_1_ OK.
         /// </summary>
@@ -32,7 +66,61 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 this.EpisodeRepository.GetEpisodes(1);
 
             // Assert:
-            Assert.IsNotNull(episodeIndex);
+        }
+
+        /// <summary>
+        /// Gets the episodes to download_ all_ OK.
+        /// </summary>
+        [Test]
+        public void GetEpisodesToDownload_All_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.EpisodeRepository.GetEpisodesToDownload();
+
+            // Assert:
+        }
+
+        /// <summary>
+        /// Gets the download index_ all_ OK.
+        /// </summary>
+        [Test]
+        public void GetDownloadIndex_All_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.EpisodeRepository.GetDownloadIndex();
+
+            // Assert:
+        }
+
+        /// <summary>
+        /// Updates the episode_1_ OK.
+        /// </summary>
+        [Test]
+        public void UpdateEpisode_1_OK()
+        {
+            // Arrange:
+            var podCast = new PodCast(
+                1,
+                "x",
+                new Uri("http://xx.ss"),
+                "x",
+                "x");
+            var episode =
+                Episode.ConstructEpisode(
+                "x",
+                DateTime.Now,
+                "x",
+                "x",
+                podCast);
+
+            // Act:
+            this.EpisodeRepository.UpdateEpisode(episode);
+
+            // Assert:
         }
 
         /// <summary>
@@ -62,7 +150,9 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 DateTime.Now,
                 "x",
                 "x",
-                podCast));
+                new Uri("http://sss.ddd"),
+                podCast,
+                false));
 
             // Arrange, act and assert:
             this.UpdateEpisodeList(newEpisodes);
@@ -78,6 +168,11 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
             var podCast =
                 this.PodCastRepository.GetPodCasts()
                 .FirstOrDefault();
+            if (podCast == null)
+            {
+                return;
+            }
+
             int podCastId = podCast.Id.Value;
             var originalEpisodes =
                 this.EpisodeRepository.GetEpisodes(
@@ -109,6 +204,9 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 updatedEpisodesCount);
             Assert.IsTrue(
                 originalEpisodesCount <=
+                updatedEpisodesCount);
+            Assert.IsTrue(
+                newEpisodesCount <=
                 updatedEpisodesCount);
         }
     }

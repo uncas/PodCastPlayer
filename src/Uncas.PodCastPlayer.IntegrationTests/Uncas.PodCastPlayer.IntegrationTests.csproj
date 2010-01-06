@@ -84,6 +84,10 @@
       <Project>{DAC1C1DD-7058-474E-87F2-1C607158510C}</Project>
       <Name>Uncas.PodCastPlayer.SQLiteRepository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.Tests\Uncas.PodCastPlayer.Tests.csproj">
+      <Project>{3C6DDE9F-A35E-403A-98B5-4D3A9BA4CAA9}</Project>
+      <Name>Uncas.PodCastPlayer.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Uncas.PodCastPlayer.Utility\Uncas.PodCastPlayer.Utility.csproj">
       <Project>{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}</Project>
       <Name>Uncas.PodCastPlayer.Utility</Name>

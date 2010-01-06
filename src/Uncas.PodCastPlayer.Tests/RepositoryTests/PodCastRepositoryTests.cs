@@ -41,32 +41,5 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 Assert.IsNotNull(podCast.Url);
             }
         }
-
-        /// <summary>
-        /// Saves existing pod cast and checks it is updated.
-        /// </summary>
-        [Test]
-        public void SavePodCast_Existing_Updated()
-        {
-            // Arrange:
-            var podCasts =
-                this.repository.GetPodCasts();
-            var podCast =
-                podCasts.FirstOrDefault();
-            int? id = podCast.Id;
-            string newName = podCast.Name + "x";
-            podCast.Name = newName;
-
-            // Act:
-            // this.repository.SavePodCast(podCast);
-
-            // Assert:
-            podCasts =
-                this.repository.GetPodCasts();
-            var updatedPodCast =
-                podCasts.Where(pc => pc.Id == id)
-                .SingleOrDefault();
-            Assert.AreEqual(newName, updatedPodCast.Name);
-        }
     }
 }

@@ -57,3 +57,4 @@ X Resolve inconsistencies with fileName/path...
 
 - PodCastId: int -> string
 - get, private set!  constructors -> factory methods
+- Konsistent type for PodCastId: int? eller int eller long eller long?

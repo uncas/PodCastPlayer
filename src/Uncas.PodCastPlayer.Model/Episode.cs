@@ -8,6 +8,7 @@ namespace Uncas.PodCastPlayer.Model
 {
     using System;
     using System.Globalization;
+    using System.Linq;
 
     /// <summary>
     /// Represents an episode of a pod cast.
@@ -153,6 +154,7 @@ namespace Uncas.PodCastPlayer.Model
             result.PodCast = podCast;
             result.MediaUrl = mediaUrl;
             result.PendingDownload = pendingDownload;
+            result.FileName = mediaUrl.Segments.Last();
             return result;
         }
 

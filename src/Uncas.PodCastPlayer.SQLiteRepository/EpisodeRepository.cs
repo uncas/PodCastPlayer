@@ -6,7 +6,6 @@
 
 namespace Uncas.PodCastPlayer.SQLiteRepository
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Uncas.PodCastPlayer.Model;
@@ -44,7 +43,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             string episodeId)
         {
             var episode =
-                this.SimpleRepository.Single<DBEpisode>(
+                this.DB.Single<DBEpisode>(
                 episodeId);
             if (episode == null)
             {
@@ -52,7 +51,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             }
 
             episode.PendingDownload = true;
-            this.SimpleRepository.Update<DBEpisode>(episode);
+            this.DB.Update<DBEpisode>(episode);
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             int podCastId)
         {
             var podCast =
-                this.SimpleRepository.Single<DBPodCast>(
+                this.DB.Single<DBPodCast>(
                 podCastId);
             if (podCast == null)
             {
@@ -72,7 +71,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             }
 
             var episodes =
-                this.SimpleRepository.Find<DBEpisode>(
+                this.DB.Find<DBEpisode>(
                 e => e.RefPodCastId == podCastId)
                 .ToList();
             var episodeIndexItems =
@@ -89,22 +88,15 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets the episodes to download.
         /// </summary>
         /// <returns>A list of episodes.</returns>
-        public IList<Model.Episode> GetEpisodesToDownload()
+        public IList<Episode> GetEpisodesToDownload()
         {
-            // TODO: Make this work
-            var query = from episode in
-                            this.SimpleRepository.
-                            Find<DBEpisode>(
-                            e => e.PendingDownload)
-                        join podCast in this.SimpleRepository.All<DBPodCast>()
-                        on episode.RefPodCastId equals podCast.PodCastId
-                        select new
-                        {
-                            Episode = episode,
-                            PodCast = podCast
-                        };
-            return query.Select(
-                e => GetModelFromDB(e.Episode, e.PodCast))
+            var episodes =
+                this.DB.All<DBEpisode>()
+                .Where(e => e.PendingDownload);
+            var podCasts =
+                this.DB.All<DBPodCast>().ToList();
+            return episodes.Select(
+                e => GetModelFromDB(e, podCasts))
                 .ToList();
         }
 
@@ -115,7 +107,15 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public IEnumerable<DownloadIndexViewModel>
             GetDownloadIndex()
         {
-            throw new NotImplementedException();
+            return this.GetEpisodesToDownload()
+                .Select(e => new DownloadIndexViewModel
+                {
+                    EpisodeDate = e.Date,
+                    EpisodeId = e.Id,
+                    EpisodeTitle = e.Title,
+                    PodCastId = e.PodCast.Id.Value,
+                    PodCastName = e.PodCast.Name
+                });
         }
 
         /// <summary>
@@ -123,9 +123,17 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <param name="episode">The episode.</param>
         public void UpdateEpisode(
-            Model.Episode episode)
+            Episode episode)
         {
-            throw new NotImplementedException();
+            DBEpisode e =
+                this.DB.Single<DBEpisode>(
+                episode.Id);
+            if (e == null)
+            {
+                return;
+            }
+
+            this.UpdateDBEpisode(episode, e);
         }
 
         /// <summary>
@@ -135,9 +143,29 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// <param name="episodes">The updated list of episodes.</param>
         public void UpdateEpisodeList(
             int podCastId,
-            IList<Model.Episode> episodes)
+            IList<Episode> episodes)
         {
-            throw new NotImplementedException();
+            var oldEpisodes = this.DB.All<DBEpisode>()
+                .Where(e => e.RefPodCastId == podCastId);
+
+            foreach (var episode in episodes)
+            {
+                var oldEpisode =
+                    oldEpisodes.Where(
+                    e => e.EpisodeId == episode.Id)
+                    .SingleOrDefault();
+                if (oldEpisode == null)
+                {
+                    // Inserts new episode:
+                    this.DB.Add<DBEpisode>(
+                        DBEpisode.FromModelEpisode(episode));
+                }
+                else
+                {
+                    // Updates old episode:
+                    this.UpdateDBEpisode(episode, oldEpisode);
+                }
+            }
         }
 
         #endregion
@@ -146,24 +174,22 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets the model from DB.
         /// </summary>
         /// <param name="episode">The episode.</param>
-        /// <param name="databasePodCast">The database pod cast.</param>
+        /// <param name="podCasts">The pod casts.</param>
         /// <returns>The model episode.</returns>
         private static Episode GetModelFromDB(
             DBEpisode episode,
-            DBPodCast databasePodCast)
+            IList<DBPodCast> podCasts)
         {
-            var podCast = new PodCast(
-                (int)databasePodCast.PodCastId,
-                databasePodCast.Name,
-                new Uri(databasePodCast.Url),
-                databasePodCast.Description,
-                databasePodCast.Author);
+            var podCast =
+                podCasts.Where(
+                pc => pc.PodCastId == episode.RefPodCastId)
+                .SingleOrDefault();
             return Episode.ConstructEpisode(
                 episode.EpisodeId,
                 episode.Date,
                 episode.Title,
                 episode.Description,
-                podCast);
+                podCast.AsModelPodCast());
         }
 
         /// <summary>
@@ -176,7 +202,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             DBEpisode episode)
         {
             bool downloadCompleted =
-                Model.EpisodeMediaInfo.IsDownloadCompleted(
+                EpisodeMediaInfo.IsDownloadCompleted(
                 episode.FileSizeInBytes,
                 episode.DownloadedBytes);
             return new EpisodeIndexItemViewModel(
@@ -185,6 +211,30 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
                 episode.Title,
                 episode.PendingDownload,
                 downloadCompleted);
+        }
+
+        /// <summary>
+        /// Updates the DB episode.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        /// <param name="e">The db episode.</param>
+        private void UpdateDBEpisode(
+            Episode episode,
+            DBEpisode e)
+        {
+            e.Date = episode.Date;
+            e.Description = episode.Description;
+            e.DownloadedBytes =
+                episode.MediaInfo.DownloadedBytes;
+            e.FileName = episode.FileName;
+            e.FileSizeInBytes =
+                episode.MediaInfo.FileSizeInBytes;
+            e.MediaUrl = episode.MediaUrl.ToString();
+            e.PendingDownload =
+                episode.PendingDownload;
+            e.Title = episode.Title;
+
+            this.DB.Update<DBEpisode>(e);
         }
     }
 }

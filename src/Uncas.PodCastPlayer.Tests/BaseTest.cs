@@ -14,6 +14,28 @@ namespace Uncas.PodCastPlayer.Tests
     public abstract class BaseTest
     {
         /// <summary>
+        /// The repositories.
+        /// </summary>
+        private readonly IRepositoryFactory repositories;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseTest"/> class.
+        /// </summary>
+        public BaseTest()
+            : this(TestApp.Repositories)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseTest"/> class.
+        /// </summary>
+        /// <param name="repositories">The repositories.</param>
+        public BaseTest(IRepositoryFactory repositories)
+        {
+            this.repositories = repositories;
+        }
+
+        /// <summary>
         /// Gets the episode repository.
         /// </summary>
         /// <value>The episode repository.</value>
@@ -21,7 +43,7 @@ namespace Uncas.PodCastPlayer.Tests
         {
             get
             {
-                return TestApp.Repositories.EpisodeRepository;
+                return this.repositories.EpisodeRepository;
             }
         }
 
@@ -33,7 +55,7 @@ namespace Uncas.PodCastPlayer.Tests
         {
             get
             {
-                return TestApp.Repositories.PodCastRepository;
+                return this.repositories.PodCastRepository;
             }
         }
     }
