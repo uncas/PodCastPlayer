@@ -22,7 +22,6 @@
         <Label Grid.Row="3" Grid.Column="0">Description</Label>
         <TextBlock x:Name="descriptionTextBlock" Grid.Row="3" Grid.Column="2" TextWrapping="Wrap"></TextBlock>
         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.ColumnSpan="2" >
-            <Button x:Name="saveButton" Content="Save" Visibility="Hidden"></Button>
             <Button x:Name="deleteButton" Content="Delete"></Button>
         </StackPanel>
     </Grid>

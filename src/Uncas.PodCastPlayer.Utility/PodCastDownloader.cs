@@ -179,7 +179,7 @@ namespace Uncas.PodCastPlayer.Utility
             Uri podCastUrl)
         {
             SyndicationFeed feed = null;
-            
+
             // Loads the pod cast:
             try
             {
@@ -239,27 +239,30 @@ namespace Uncas.PodCastPlayer.Utility
             Trace.WriteLine(feed.Title.Text);
             foreach (SyndicationItem item in feed.Items)
             {
+                // Gets enclosure info:
+                var enclosure = item.Links.Where(
+                    l => l.RelationshipType == "enclosure")
+                    .SingleOrDefault();
+                if (enclosure == null)
+                {
+                    continue;
+                }
+
                 // Gets episode info:
                 Episode episode = Episode.ConstructEpisode(
                     item.Id,
                     item.PublishDate.Date,
                     item.Title.Text,
                     item.Summary.Text,
-                    podCast);
+                    enclosure.Uri,
+                    podCast,
+                    false);
 
-                // Gets enclosure info:
-                var enclosure = item.Links.Where(
-                    l => l.RelationshipType == "enclosure")
-                    .SingleOrDefault();
-                if (enclosure != null)
-                {
-                    episode.MediaUrl = enclosure.Uri;
-                    episode.MediaInfo =
-                        new EpisodeMediaInfo
-                        {
-                            FileSizeInBytes = enclosure.Length
-                        };
-                }
+                episode.MediaInfo =
+                    new EpisodeMediaInfo
+                    {
+                        FileSizeInBytes = enclosure.Length
+                    };
 
                 result.Add(episode);
             }

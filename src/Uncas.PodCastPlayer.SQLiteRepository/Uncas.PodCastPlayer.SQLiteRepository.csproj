@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
+    <Compile Include="DBEpisodeExtensions.cs" />
     <Compile Include="EpisodeRepository.cs" />
     <Compile Include="DBEpisode.cs" />
     <Compile Include="DBPodCast.cs" />

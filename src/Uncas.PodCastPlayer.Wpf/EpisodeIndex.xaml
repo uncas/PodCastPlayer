@@ -19,7 +19,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <CheckBox IsChecked="{Binding PendingDownload, Mode=OneWay}" Grid.Column="0" IsEnabled="False" />
-                        <Button Content="Download" Grid.Column="1" Click="DownloadButton_Click" IsEnabled="{Binding DownloadCompleted}" />
+                        <Button Content="Download" Grid.Column="1" Click="DownloadButton_Click" />
                         <Label Content="{Binding Date}" Grid.Column="2" />
                         <Label Content="{Binding Title}" Grid.Column="3" />
                     </Grid>

@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.SQLiteRepository
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using SubSonic.SqlGeneration.Schema;
     using Uncas.PodCastPlayer.Model;
 
@@ -29,6 +30,9 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets or sets the URL to the pod cast.
         /// </summary>
         /// <value>The URL to the pod cast.</value>
+        [SuppressMessage("Microsoft.Design",
+            "CA1056:UriPropertiesShouldNotBeStrings",
+            Justification = "Uri property as string for database.")]
         public string Url { get; set; }
 
         /// <summary>

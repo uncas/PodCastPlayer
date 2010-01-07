@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.SQLiteRepository
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using SubSonic.SqlGeneration.Schema;
     using Uncas.PodCastPlayer.Model;
 
@@ -61,6 +62,9 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets or sets the media URL.
         /// </summary>
         /// <value>The media URL.</value>
+        [SuppressMessage("Microsoft.Design",
+            "CA1056:UriPropertiesShouldNotBeStrings",
+            Justification = "Uri property as string for database.")]
         public string MediaUrl { get; set; }
 
         /// <summary>

@@ -50,6 +50,7 @@
     <Compile Include="AppServiceTests\EpisodeServiceTests.cs" />
     <Compile Include="AppServiceTests\PodCastServiceTests.cs" />
     <Compile Include="BaseTest.cs" />
+    <Compile Include="ModelTests\EpisodeTests.cs" />
     <Compile Include="ModelTests\PodCastTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryTests\EpisodeRepositoryTests.cs" />

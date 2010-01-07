@@ -219,6 +219,11 @@ namespace Uncas.PodCastPlayer.Fakes
             int podCastId)
         {
             var podCast = this.GetPodCast(podCastId);
+            if (podCast == null)
+            {
+                return null;
+            }
+
             return new PodCastDetailsViewModel(
                 podCast.Id,
                 podCast.Name,

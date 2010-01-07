@@ -76,7 +76,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
                 .ToList();
             var episodeIndexItems =
                 episodes.Select(
-                e => GetViewModelFromDb(e));
+                e => e.AsIndexItem());
             return new EpisodeIndexViewModel
             {
                 Episodes = episodeIndexItems,
@@ -92,11 +92,12 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         {
             var episodes =
                 this.DB.All<DBEpisode>()
-                .Where(e => e.PendingDownload);
+                .Where(e => e.PendingDownload)
+                .ToList();
             var podCasts =
                 this.DB.All<DBPodCast>().ToList();
             return episodes.Select(
-                e => GetModelFromDB(e, podCasts))
+                e => e.AsModel(podCasts))
                 .ToList();
         }
 
@@ -169,49 +170,6 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         }
 
         #endregion
-
-        /// <summary>
-        /// Gets the model from DB.
-        /// </summary>
-        /// <param name="episode">The episode.</param>
-        /// <param name="podCasts">The pod casts.</param>
-        /// <returns>The model episode.</returns>
-        private static Episode GetModelFromDB(
-            DBEpisode episode,
-            IList<DBPodCast> podCasts)
-        {
-            var podCast =
-                podCasts.Where(
-                pc => pc.PodCastId == episode.RefPodCastId)
-                .SingleOrDefault();
-            return Episode.ConstructEpisode(
-                episode.EpisodeId,
-                episode.Date,
-                episode.Title,
-                episode.Description,
-                podCast.AsModelPodCast());
-        }
-
-        /// <summary>
-        /// Gets the view model from db.
-        /// </summary>
-        /// <param name="episode">The episode.</param>
-        /// <returns>The episode index item view model.</returns>
-        private static EpisodeIndexItemViewModel
-            GetViewModelFromDb(
-            DBEpisode episode)
-        {
-            bool downloadCompleted =
-                EpisodeMediaInfo.IsDownloadCompleted(
-                episode.FileSizeInBytes,
-                episode.DownloadedBytes);
-            return new EpisodeIndexItemViewModel(
-                episode.Date,
-                episode.EpisodeId,
-                episode.Title,
-                episode.PendingDownload,
-                downloadCompleted);
-        }
 
         /// <summary>
         /// Updates the DB episode.

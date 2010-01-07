@@ -39,7 +39,9 @@ namespace Uncas.PodCastPlayer.Fakes
                 DateTime.Now,
                 "x",
                 "y",
-                podCast));
+                new Uri("http://www.xxx.ddd/asdasd.mp3"),
+                podCast,
+                false));
             return result;
         }
 

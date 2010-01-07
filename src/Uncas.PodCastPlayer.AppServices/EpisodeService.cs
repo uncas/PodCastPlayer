@@ -9,7 +9,6 @@ namespace Uncas.PodCastPlayer.AppServices
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using Uncas.PodCastPlayer.Model;

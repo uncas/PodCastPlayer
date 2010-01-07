@@ -6,6 +6,7 @@
 
 namespace Uncas.PodCastPlayer.IntegrationTests
 {
+    using System.IO;
     using Uncas.PodCastPlayer.Fakes;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.SQLiteRepository;
@@ -82,9 +83,15 @@ namespace Uncas.PodCastPlayer.IntegrationTests
             {
                 if (realRepositories == null)
                 {
+                    string currentDir =
+                        Directory.GetCurrentDirectory();
+                    string repositoryPath =
+                        Path.Combine(
+                        currentDir,
+                        "PodCastPlayerTests.db");
                     realRepositories =
                         new SQLiteRepositoryFactory(
-                            @"c:\test.db");
+                            repositoryPath);
                 }
 
                 return realRepositories;

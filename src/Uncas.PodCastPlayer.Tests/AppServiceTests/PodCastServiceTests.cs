@@ -40,6 +40,20 @@ namespace Uncas.PodCastPlayer.Tests.AppServiceTests
         }
 
         /// <summary>
+        /// Gets the pod cast_1_ OK.
+        /// </summary>
+        [Test]
+        public void GetPodCast_1_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.service.GetPodCast(1);
+
+            // Assert:
+        }
+
+        /// <summary>
         /// Gets the pod casts_ all_ OK.
         /// </summary>
         [Test]
@@ -79,7 +93,10 @@ namespace Uncas.PodCastPlayer.Tests.AppServiceTests
             var podCast =
                 new PodCastDetailsViewModel(
                     1,
-                    null);
+                    "x",
+                    new Uri("http://xxx.dddd.wwww"),
+                    "x",
+                    "x");
 
             // Act:
             this.service.SavePodCast(podCast);
@@ -98,7 +115,10 @@ namespace Uncas.PodCastPlayer.Tests.AppServiceTests
             var podCast =
                 new PodCastDetailsViewModel(
                     null,
-                    url);
+                    "x",
+                    url,
+                    "x",
+                    "x");
 
             // Act:
             this.service.SavePodCast(podCast);

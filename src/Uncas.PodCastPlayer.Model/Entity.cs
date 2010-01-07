@@ -21,13 +21,6 @@ namespace Uncas.PodCastPlayer.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.
         /// </summary>
-        protected Entity()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Entity"/> class.
-        /// </summary>
         /// <param name="id">The id of the entity.</param>
         protected Entity(int? id)
         {

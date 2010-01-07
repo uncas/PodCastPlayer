@@ -15,6 +15,15 @@ namespace Uncas.PodCastPlayer.Model
     /// </summary>
     public class Episode
     {
+        #region Private fields
+
+        /// <summary>
+        /// The media url.
+        /// </summary>
+        private Uri mediaUrl;
+
+        #endregion
+
         #region Private constructor
 
         /// <summary>
@@ -75,7 +84,19 @@ namespace Uncas.PodCastPlayer.Model
         /// Gets or sets the media URL.
         /// </summary>
         /// <value>The media URL.</value>
-        public Uri MediaUrl { get; set; }
+        public Uri MediaUrl
+        {
+            get
+            {
+                return this.mediaUrl;
+            }
+
+            set
+            {
+                this.mediaUrl = value;
+                this.FileName = value.Segments.Last();
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the episode is pending download.
@@ -106,32 +127,6 @@ namespace Uncas.PodCastPlayer.Model
         /// <param name="date">The date of the episode.</param>
         /// <param name="title">The title of the episode.</param>
         /// <param name="description">The description.</param>
-        /// <param name="podCast">The pod cast.</param>
-        /// <returns>The episode.</returns>
-        public static Episode ConstructEpisode(
-            string id,
-            DateTime date,
-            string title,
-            string description,
-            PodCast podCast)
-        {
-            var episode =
-                new Episode(
-                id,
-                date,
-                title,
-                description);
-            episode.PodCast = podCast;
-            return episode;
-        }
-
-        /// <summary>
-        /// Constructs the episode.
-        /// </summary>
-        /// <param name="id">The id of the episode.</param>
-        /// <param name="date">The date of the episode.</param>
-        /// <param name="title">The title of the episode.</param>
-        /// <param name="description">The description.</param>
         /// <param name="mediaUrl">The media URL.</param>
         /// <param name="podCast">The pod cast.</param>
         /// <param name="pendingDownload">if set to <c>true</c> [pending download].</param>
@@ -154,27 +149,7 @@ namespace Uncas.PodCastPlayer.Model
             result.PodCast = podCast;
             result.MediaUrl = mediaUrl;
             result.PendingDownload = pendingDownload;
-            result.FileName = mediaUrl.Segments.Last();
             return result;
-        }
-
-        /// <summary>
-        /// Returns a <see cref="System.String"/> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="System.String"/> that represents this instance.
-        /// </returns>
-        public override string ToString()
-        {
-            return string.Format(
-                CultureInfo.CurrentCulture,
-                "Title: {0}\nDate: {1}\nId: {2}\nMediaUrl: {3}\nMediaLength: {4}\nDescription: {5}",
-                /*0*/ this.Title,
-                /*1*/ this.Date,
-                /*2*/ this.Id,
-                /*3*/ this.MediaUrl,
-                /*4*/ this.MediaInfo.FileSizeInBytes,
-                /*5*/ this.Description);
         }
 
         /// <summary>

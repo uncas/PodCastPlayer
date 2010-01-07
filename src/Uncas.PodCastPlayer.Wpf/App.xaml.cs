@@ -7,9 +7,10 @@
 namespace Uncas.PodCastPlayer.Wpf
 {
     using System;
+    using System.IO;
     using System.Windows;
-    using Uncas.PodCastPlayer.Fakes;
     using Uncas.PodCastPlayer.Repository;
+    using Uncas.PodCastPlayer.SQLiteRepository;
     using Uncas.PodCastPlayer.Utility;
 
     /// <summary>
@@ -82,8 +83,20 @@ namespace Uncas.PodCastPlayer.Wpf
             {
                 if (repositories == null)
                 {
+                    string myMusicPath =
+                        Environment.GetFolderPath(
+                        Environment.SpecialFolder.MyMusic);
+                    string podCastsPath =
+                        Path.Combine(
+                        myMusicPath,
+                        "PodCasts");
+                    string repositorypath =
+                        Path.Combine(
+                        podCastsPath,
+                        "PodCastPlayer.db");
                     repositories =
-                        new FakeRepositoryFactory();
+                        new SQLiteRepositoryFactory(
+                            repositorypath);
                 }
 
                 return repositories;

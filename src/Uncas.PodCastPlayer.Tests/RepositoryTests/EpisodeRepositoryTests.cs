@@ -115,7 +115,9 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 DateTime.Now,
                 "x",
                 "x",
-                podCast);
+                new Uri("http://xx.ss/sss.mp3"),
+                podCast,
+                false);
 
             // Act:
             this.EpisodeRepository.UpdateEpisode(episode);

@@ -10,7 +10,6 @@ namespace Uncas.PodCastPlayer.Wpf
     using System.Windows;
     using System.Windows.Controls;
     using Uncas.PodCastPlayer.AppServices;
-    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Interaction logic for PodCastDetails.xaml
@@ -85,29 +84,9 @@ namespace Uncas.PodCastPlayer.Wpf
                 this.authorTextBlock.Text = podCast.Author;
             }
 
-            this.saveButton.Click +=
-                new RoutedEventHandler(
-                    this.SaveButton_Click);
             this.deleteButton.Click +=
                 new RoutedEventHandler(
                     this.DeleteButton_Click);
-        }
-
-        /// <summary>
-        /// Handles the Click event of the SaveButton control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void SaveButton_Click(
-            object sender,
-            RoutedEventArgs e)
-        {
-            var podCast =
-                new PodCastDetailsViewModel(
-                    this.podCastId,
-                    new Uri(urlTextBox.Text));
-            this.service.SavePodCast(podCast);
-            this.BackToIndex();
         }
 
         /// <summary>

@@ -7,9 +7,6 @@
 namespace Uncas.PodCastPlayer.ViewModel
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Uncas.PodCastPlayer.Model;
 
     /// <summary>
@@ -17,21 +14,6 @@ namespace Uncas.PodCastPlayer.ViewModel
     /// </summary>
     public class PodCastDetailsViewModel : Entity
     {
-        // TODO: REFACTOR: Use static constructors...
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PodCastDetailsViewModel"/> class.
-        /// </summary>
-        /// <param name="id">The id of the pod cast.</param>
-        /// <param name="url">The URL of the pod cast.</param>
-        public PodCastDetailsViewModel(
-            int? id,
-            Uri url)
-            : base(id)
-        {
-            this.Url = url;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastDetailsViewModel"/> class.
         /// </summary>
