@@ -40,8 +40,7 @@ X Select episodes to download
   X EpisodeService.DownloadEpisode
 X Resolve inconsistencies with fileName/path...
 X Implement SqLite repository
-
-- Installer
+X Installer
 
 - Repository documentation in header of methods:
   X Model (none!)
