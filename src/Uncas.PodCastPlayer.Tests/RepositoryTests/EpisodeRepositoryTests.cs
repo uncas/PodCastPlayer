@@ -20,6 +20,8 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
     [TestFixture]
     public class EpisodeRepositoryTests : BaseTest
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EpisodeRepositoryTests"/> class.
         /// </summary>
@@ -37,6 +39,10 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
         {
         }
 
+        #endregion
+
+        #region Public methods (tests)
+
         /// <summary>
         /// Adds the episode to download list_1_ OK.
         /// </summary>
@@ -44,11 +50,31 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
         public void AddEpisodeToDownloadList_1_OK()
         {
             // Arrange:
+            var podCast = new PodCast(
+                null,
+                "x",
+                new Uri("http://ww.ee"),
+                "x",
+                "x");
+            this.PodCastRepository.SavePodCast(podCast);
+            var episode = Episode.ConstructEpisode(
+                Guid.NewGuid().ToString(),
+                DateTime.Now,
+                "x",
+                "x",
+                new Uri("http://uu.qq"),
+                podCast,
+                false);
+            var episodes = new List<Episode>();
+            episodes.Add(episode);
+            this.EpisodeRepository.UpdateEpisodeList(
+                podCast.Id.Value,
+                episodes);
 
             // Act:
             this.EpisodeRepository.AddEpisodeToDownloadList(
-                1,
-                "X");
+                podCast.Id.Value,
+                episode.Id);
 
             // Assert:
         }
@@ -69,12 +95,120 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
         }
 
         /// <summary>
+        /// Gets the episodes from an unsorted source 
+        /// and checks that the result is properly sorted.
+        /// </summary>
+        [Test]
+        public void GetEpisodes_UnsortedSource_CheckSortedResult()
+        {
+            // Arrange:
+            var podCastIndexViewModel =
+                this.PodCastRepository.GetPodCasts()
+                 .FirstOrDefault();
+            int podCastId = 1;
+            PodCast podCast = null;
+            if (podCastIndexViewModel == null)
+            {
+                podCast = new PodCast(
+                    podCastId,
+                    "x",
+                    new Uri("http://www.xxx.ddd"),
+                    "x",
+                    "x");
+                this.PodCastRepository.SavePodCast(podCast);
+            }
+            else
+            {
+                podCastId =
+                    podCastIndexViewModel.Id.Value;
+                podCast =
+                    this.PodCastRepository.GetPodCast(
+                    podCastId);
+            }
+
+            var episodes = new List<Episode>();
+            var episodeToday =
+                Episode.ConstructEpisode(
+                Guid.NewGuid().ToString(),
+                DateTime.Now,
+                "x",
+                "x",
+                new Uri("http://www.xxxx.ddd"),
+                podCast,
+                false);
+            var episodeOneDayAgo =
+                Episode.ConstructEpisode(
+                Guid.NewGuid().ToString(),
+                DateTime.Now.AddDays(-1d),
+                "x",
+                "x",
+                new Uri("http://www.xxxx.ddd"),
+                podCast,
+                false);
+            var episodeOneWeekAgo =
+                Episode.ConstructEpisode(
+                Guid.NewGuid().ToString(),
+                DateTime.Now.AddDays(-7d),
+                "x",
+                "x",
+                new Uri("http://www.xxxx.ddd"),
+                podCast,
+                false);
+            episodes.Add(episodeOneWeekAgo);
+            episodes.Add(episodeToday);
+            episodes.Add(episodeOneDayAgo);
+            this.EpisodeRepository.UpdateEpisodeList(
+                podCastId,
+                episodes);
+
+            // Act:
+            var episodeList =
+                this.EpisodeRepository.GetEpisodes(
+                podCastId).Episodes.ToList();
+
+            // Assert:
+            // Check that the newest episode is first, etc:
+            for (int episodeIndex = 0;
+                episodeIndex <
+                    episodeList.Count() - 1;
+                episodeIndex++)
+            {
+                var thisEpisode =
+                    episodeList[episodeIndex];
+                var nextEpisode =
+                    episodeList[episodeIndex + 1];
+                Assert.IsTrue(
+                    nextEpisode.Date <=
+                    thisEpisode.Date);
+            }
+        }
+
+        /// <summary>
         /// Gets the episodes to download_ all_ OK.
         /// </summary>
         [Test]
         public void GetEpisodesToDownload_All_OK()
         {
             // Arrange:
+            var podCast = new PodCast(
+                null,
+                "x",
+                new Uri("http://xx.dd"),
+                "x",
+                "x");
+            this.PodCastRepository.SavePodCast(podCast);
+            var episodes = new List<Episode>();
+            episodes.Add(Episode.ConstructEpisode(
+                Guid.NewGuid().ToString(),
+                DateTime.Now,
+                "x",
+                "x",
+                new Uri("http://xxx.ddd"),
+                podCast,
+                true));
+            this.EpisodeRepository.UpdateEpisodeList(
+                podCast.Id.Value,
+                episodes);
 
             // Act:
             this.EpisodeRepository.GetEpisodesToDownload();
@@ -111,7 +245,7 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 "x");
             var episode =
                 Episode.ConstructEpisode(
-                "x",
+                Guid.NewGuid().ToString(),
                 DateTime.Now,
                 "x",
                 "x",
@@ -160,11 +294,16 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
             this.UpdateEpisodeList(newEpisodes);
         }
 
+        #endregion
+
+        #region Private methods
+
         /// <summary>
         /// Updates the episode list.
         /// </summary>
         /// <param name="newEpisodes">The new episodes.</param>
-        private void UpdateEpisodeList(List<Episode> newEpisodes)
+        private void UpdateEpisodeList(
+            List<Episode> newEpisodes)
         {
             // Arrange:
             var podCast =
@@ -211,5 +350,7 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
                 newEpisodesCount <=
                 updatedEpisodesCount);
         }
+
+        #endregion
     }
 }

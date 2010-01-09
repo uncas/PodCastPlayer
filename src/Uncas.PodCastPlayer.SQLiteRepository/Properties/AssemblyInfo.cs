@@ -21,14 +21,18 @@ using System.Runtime.InteropServices;
     Target = "Uncas.PodCastPlayer.SQLiteRepository",
     MessageId = "Lite",
     Justification = "Third-party tool spelled that way")]
-
 [module: SuppressMessage(
-    "Microsoft.Naming", 
-    "CA1704:IdentifiersShouldBeSpelledCorrectly", 
-    Scope = "type", 
+    "Microsoft.Naming",
+    "CA1704:IdentifiersShouldBeSpelledCorrectly",
+    Scope = "type",
     Target = "Uncas.PodCastPlayer.SQLiteRepository.SQLiteRepositoryFactory",
     MessageId = "Lite",
     Justification = "Third-party tool spelled that way")]
+[module: SuppressMessage(
+    "Microsoft.Design",
+    "CA1020:AvoidNamespacesWithFewTypes",
+    Scope = "namespace",
+    Target = "Uncas.PodCastPlayer.SQLiteRepository")]
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information

@@ -140,6 +140,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
 
             pc.Author = podCast.Author;
             pc.Description = podCast.Description;
+            pc.PodCastId = (long)podCast.Id;
             pc.Name = podCast.Name;
             pc.Url = podCast.Url.ToString();
 

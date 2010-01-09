@@ -21,8 +21,9 @@ namespace Uncas.PodCastPlayer.Repository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <param name="episodeId">The episode id.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         void AddEpisodeToDownloadList(
-            int podCastId, 
+            int podCastId,
             string episodeId);
 
         /// <summary>
@@ -30,6 +31,7 @@ namespace Uncas.PodCastPlayer.Repository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>An index of episodes.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         EpisodeIndexViewModel GetEpisodes(
             int podCastId);
 
@@ -37,6 +39,7 @@ namespace Uncas.PodCastPlayer.Repository
         /// Gets the episodes to download.
         /// </summary>
         /// <returns>A list of episodes.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         [SuppressMessage(
             "Microsoft.Design",
             "CA1024:UsePropertiesWhereAppropriate",
@@ -47,6 +50,7 @@ namespace Uncas.PodCastPlayer.Repository
         /// Gets the view of episodes to download.
         /// </summary>
         /// <returns>An index of the episodes to download.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         [SuppressMessage(
             "Microsoft.Design",
             "CA1024:UsePropertiesWhereAppropriate",
@@ -57,6 +61,7 @@ namespace Uncas.PodCastPlayer.Repository
         /// Updates the episode.
         /// </summary>
         /// <param name="episode">The episode.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         void UpdateEpisode(Episode episode);
 
         /// <summary>
@@ -64,6 +69,7 @@ namespace Uncas.PodCastPlayer.Repository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <param name="episodes">The updated list of episodes.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         void UpdateEpisodeList(
             int podCastId,
             IList<Episode> episodes);

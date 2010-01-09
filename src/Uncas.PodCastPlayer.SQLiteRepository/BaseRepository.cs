@@ -70,15 +70,20 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         private void InitializeSimpleRepository(
             string databasePath)
         {
-            if (string.IsNullOrEmpty(databasePath))
+            string repositoryPath = databasePath;
+            if (string.IsNullOrEmpty(repositoryPath))
             {
-                // TODO: EXCEPTION: Consider if something else should be done here?
-                return;
+                string currentDir =
+                    Directory.GetCurrentDirectory();
+                repositoryPath =
+                    Path.Combine(
+                    currentDir,
+                    "PodCastPlayer.db");
             }
 
             try
             {
-                FileInfo fi = new FileInfo(databasePath);
+                FileInfo fi = new FileInfo(repositoryPath);
                 if (!fi.Directory.Exists)
                 {
                     fi.Directory.Create();
@@ -105,7 +110,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
                 string.Format(
                 CultureInfo.InvariantCulture,
                 "Data Source={0}",
-                databasePath);
+                repositoryPath);
             try
             {
                 var provider =
@@ -119,7 +124,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             }
             catch (Exception ex)
             {
-                // Unknown exceptions from third-party SubSonic...
+                // TODO: EXCEPTION: Unknown exceptions from third-party SubSonic...
                 throw new RepositoryException(
                     "Error initializing SQLite repository",
                     ex);

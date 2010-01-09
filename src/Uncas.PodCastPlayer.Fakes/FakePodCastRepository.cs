@@ -241,7 +241,7 @@ namespace Uncas.PodCastPlayer.Fakes
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>An index of episodes.</returns>
-        internal static EpisodeIndexViewModel 
+        internal static EpisodeIndexViewModel
             GetEpisodesByPodCast(
             int podCastId)
         {
@@ -255,6 +255,7 @@ namespace Uncas.PodCastPlayer.Fakes
             }
 
             var episodes = podCast.Episodes
+                .OrderByDescending(e => e.Date)
                 .Select(e => new EpisodeIndexItemViewModel(
                     e.Date,
                     e.Id,

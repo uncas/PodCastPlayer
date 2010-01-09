@@ -10,12 +10,13 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     using System.Diagnostics.CodeAnalysis;
     using SubSonic.SqlGeneration.Schema;
     using Uncas.PodCastPlayer.Model;
+    using Uncas.PodCastPlayer.Repository;
 
     /// <summary>
     /// Represents a pod cast in the database.
     /// </summary>
     [SubSonicTableNameOverride("PodCasts")]
-    public class DBPodCast
+    internal class DBPodCast
     {
         #region Public properties
 
@@ -62,14 +63,39 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets as a model pod cast.
         /// </summary>
         /// <returns>The model pod cast.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public PodCast AsModelPodCast()
         {
-            return new PodCast(
-                (int)this.PodCastId,
-                this.Name,
-                new Uri(this.Url),
-                this.Description,
-                this.Author);
+            try
+            {
+                return new PodCast(
+                    (int)this.PodCastId,
+                    this.Name,
+                    new Uri(this.Url),
+                    this.Description,
+                    this.Author);
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw GetInvalidPodCastUrlException(ex);
+            }
+            catch (UriFormatException ex)
+            {
+                throw GetInvalidPodCastUrlException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the invalid pod cast URL exception.
+        /// </summary>
+        /// <param name="ex">The original exception.</param>
+        /// <returns>The repository exception.</returns>
+        private static RepositoryException
+            GetInvalidPodCastUrlException(Exception ex)
+        {
+            return new RepositoryException(
+                "Invalid pod cast url in database",
+                ex);
         }
     }
 }

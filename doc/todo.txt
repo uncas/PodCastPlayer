@@ -49,8 +49,8 @@ X Implement SqLite repository
     X BaseRepository
     X DBEpisode
     X DBEpisodeExtensions
-    - DBPodCast
-    - EpisodeRepository
+    X DBPodCast
+    X EpisodeRepository
     - PodCastRepository
     - SQLiteRepositoryFactory
   - AppServices

@@ -14,7 +14,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     /// Represents the episode in the database.
     /// </summary>
     [SubSonicTableNameOverride("Episodes")]
-    public class DBEpisode
+    internal class DBEpisode
     {
         #region Public properties
 

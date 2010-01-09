@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.ViewModel
 {
     using System;
+    using Uncas.PodCastPlayer.Model;
 
     /// <summary>
     /// View of download index.
@@ -46,5 +47,30 @@ namespace Uncas.PodCastPlayer.ViewModel
         public string PodCastName { get; set; }
 
         #endregion
+
+        /// <summary>
+        /// Gets from an episode.
+        /// </summary>
+        /// <param name="episode">The episode.</param>
+        /// <returns>The download index view model.</returns>
+        public static DownloadIndexViewModel FromEpisode(
+            Episode episode)
+        {
+            if (episode == null
+                || episode.PodCast == null
+                || !episode.PodCast.Id.HasValue)
+            {
+                return null;
+            }
+
+            return new DownloadIndexViewModel
+                {
+                    EpisodeDate = episode.Date,
+                    EpisodeId = episode.Id,
+                    EpisodeTitle = episode.Title,
+                    PodCastId = episode.PodCast.Id.Value,
+                    PodCastName = episode.PodCast.Name
+                };
+        }
     }
 }

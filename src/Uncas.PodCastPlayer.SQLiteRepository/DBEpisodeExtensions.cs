@@ -8,6 +8,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
@@ -16,7 +17,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     /// <summary>
     /// Extensions for the db episode.
     /// </summary>
-    public static class DBEpisodeExtensions
+    internal static class DBEpisodeExtensions
     {
         /// <summary>
         /// The invalid data text.
@@ -35,6 +36,12 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             this DBEpisode episode,
             IList<DBPodCast> podCasts)
         {
+            Debug.Assert(
+                podCasts != null,
+                "Internal code assumes that there are pod casts!");
+            Debug.Assert(
+                podCasts.Count > 0,
+                "Internal code assumes that there are pod casts!");
             if (podCasts == null
                 || episode.MediaUrl == null)
             {
