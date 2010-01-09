@@ -9,7 +9,6 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     using System;
     using System.Diagnostics.CodeAnalysis;
     using SubSonic.SqlGeneration.Schema;
-    using Uncas.PodCastPlayer.Model;
 
     /// <summary>
     /// Represents the episode in the database.
@@ -86,29 +85,5 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public long DownloadedBytes { get; set; }
 
         #endregion
-
-        /// <summary>
-        /// Gets db episode from the model episode.
-        /// </summary>
-        /// <param name="episode">The episode.</param>
-        /// <returns>The db episode.</returns>
-        public static DBEpisode FromModelEpisode(
-            Episode episode)
-        {
-            return new DBEpisode
-            {
-                Date = episode.Date,
-                Description = episode.Description,
-                DownloadedBytes = episode.MediaInfo.DownloadedBytes,
-                EpisodeId = episode.Id,
-                FileName = episode.FileName,
-                FileSizeInBytes = episode.MediaInfo.FileSizeInBytes,
-                MediaUrl = episode.MediaUrl.ToString(),
-                PendingDownload =
-                    episode.PendingDownload,
-                RefPodCastId = (long)episode.PodCast.Id,
-                Title = episode.Title
-            };
-        }
     }
 }

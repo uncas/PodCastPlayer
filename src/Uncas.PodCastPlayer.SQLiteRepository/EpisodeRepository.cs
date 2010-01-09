@@ -159,7 +159,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
                 {
                     // Inserts new episode:
                     this.DB.Add<DBEpisode>(
-                        DBEpisode.FromModelEpisode(episode));
+                        episode.AsDB());
                 }
                 else
                 {

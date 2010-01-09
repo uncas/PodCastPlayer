@@ -62,16 +62,16 @@ namespace Uncas.PodCastPlayer.Model
         #region Public properties
 
         /// <summary>
-        /// Gets or sets the author.
+        /// Gets the author.
         /// </summary>
         /// <value>The author.</value>
-        public string Author { get; set; }
+        public string Author { get; private set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        /// Gets the description.
         /// </summary>
         /// <value>The description.</value>
-        public string Description { get; set; }
+        public string Description { get; private set; }
 
         /// <summary>
         /// Gets the episodes.
@@ -103,13 +103,19 @@ namespace Uncas.PodCastPlayer.Model
         /// </returns>
         public override string ToString()
         {
+            int episodesCount = 0;
+            if (this.Episodes != null)
+            {
+                episodesCount = this.Episodes.Count;
+            }
+
             return string.Format(
                 CultureInfo.CurrentCulture,
                 "Id={0}, Name={1}, Url={2}, Episodes={3}",
                 this.Id,
                 this.Name,
                 this.Url,
-                this.Episodes.Count);
+                episodesCount);
         }
 
         #endregion

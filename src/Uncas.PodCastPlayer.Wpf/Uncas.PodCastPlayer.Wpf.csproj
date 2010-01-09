@@ -147,10 +147,6 @@
       <Project>{DD33AE6A-8372-49A9-9F92-EF7E3259A4F8}</Project>
       <Name>Uncas.PodCastPlayer.AppServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Uncas.PodCastPlayer.Fakes\Uncas.PodCastPlayer.Fakes.csproj">
-      <Project>{7A4207E9-3507-447A-8181-867EAA3F76CF}</Project>
-      <Name>Uncas.PodCastPlayer.Fakes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Uncas.PodCastPlayer.Model\Uncas.PodCastPlayer.Model.csproj">
       <Project>{990A3CDC-71BB-4235-9B19-FE87D3F81266}</Project>
       <Name>Uncas.PodCastPlayer.Model</Name>

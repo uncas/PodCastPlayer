@@ -4,7 +4,7 @@
 // </copyright>
 //-------------
 
-namespace Uncas.PodCastPlayer.Tests.UITests
+namespace Uncas.PodCastPlayer.Tests.WpfTests
 {
     using System.Threading;
     using NUnit.Framework;
@@ -17,6 +17,24 @@ namespace Uncas.PodCastPlayer.Tests.UITests
     public class BackgroundDownloaderTests
     {
         /// <summary>
+        /// Dispose_s the fake_ OK.
+        /// </summary>
+        [Test]
+        public void Dispose_Fake_OK()
+        {
+            // Arrange:
+            BackgroundDownloader downloader =
+                new BackgroundDownloader(
+                    TestApp.Repositories,
+                    TestApp.PodCastDownloader);
+
+            // Act:
+            downloader.Dispose();
+
+            // Assert:
+        }
+
+        /// <summary>
         /// Start_s the normal_ OK.
         /// </summary>
         [Test]
@@ -24,7 +42,9 @@ namespace Uncas.PodCastPlayer.Tests.UITests
         {
             // Arrange
             BackgroundDownloader downloader =
-                new BackgroundDownloader();
+                new BackgroundDownloader(
+                    TestApp.Repositories,
+                    TestApp.PodCastDownloader);
 
             // Act
             downloader.Start();
@@ -41,7 +61,9 @@ namespace Uncas.PodCastPlayer.Tests.UITests
         {
             // Arrange
             BackgroundDownloader downloader =
-                new BackgroundDownloader();
+                new BackgroundDownloader(
+                    TestApp.Repositories,
+                    TestApp.PodCastDownloader);
             downloader.Start();
             Thread.Sleep(100);
 

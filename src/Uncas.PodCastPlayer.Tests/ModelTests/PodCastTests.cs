@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.Tests.ModelTests
 {
     using System;
+    using System.Diagnostics;
     using NUnit.Framework;
     using Uncas.PodCastPlayer.Model;
 
@@ -37,6 +38,7 @@ namespace Uncas.PodCastPlayer.Tests.ModelTests
             // Asserting:
             Assert.AreEqual(name, podcast.Name);
             Assert.AreEqual(url, podcast.Url);
+            Trace.Write(podcast.ToString());
         }
     }
 }

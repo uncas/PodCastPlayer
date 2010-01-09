@@ -30,7 +30,11 @@ namespace Uncas.PodCastPlayer.ViewModel
             bool pendingDownload,
             bool downloadCompleted)
         {
-            this.Date = date.Date;
+            if (date != null)
+            {
+                this.Date = date.Date;
+            }
+
             this.DownloadCompleted = downloadCompleted;
             this.Id = id;
             this.PendingDownload = pendingDownload;

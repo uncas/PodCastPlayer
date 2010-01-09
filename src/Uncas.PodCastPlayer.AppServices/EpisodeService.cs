@@ -132,7 +132,7 @@ namespace Uncas.PodCastPlayer.AppServices
         private void DownloadEpisode(
            Episode episode)
         {
-            string fileName = episode.MediaUrl.Segments.Last();
+            string fileName = episode.FileName;
             string relativeFolderPath =
                 Path.Combine(
                 "PodCasts",
@@ -155,7 +155,6 @@ namespace Uncas.PodCastPlayer.AppServices
             episode.PendingDownload =
                 !mediaInfo.DownloadCompleted;
 
-            episode.FileName = fileName;
             this.EpisodeRepository.UpdateEpisode(episode);
         }
 

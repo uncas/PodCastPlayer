@@ -21,6 +21,11 @@ namespace Uncas.PodCastPlayer.Wpf
         #region Private fields
 
         /// <summary>
+        /// The background downloader.
+        /// </summary>
+        private readonly BackgroundDownloader backgroundDownloader;
+
+        /// <summary>
         /// The downloader.
         /// </summary>
         private static IPodCastDownloader downloader;
@@ -29,11 +34,6 @@ namespace Uncas.PodCastPlayer.Wpf
         /// The repositories.
         /// </summary>
         private static IRepositoryFactory repositories;
-
-        /// <summary>
-        /// The background downloader.
-        /// </summary>
-        private BackgroundDownloader backgroundDownloader;
 
         #endregion
 
@@ -46,7 +46,23 @@ namespace Uncas.PodCastPlayer.Wpf
         /// More than one instance of the <see cref="T:System.Windows.Application"/> class is created per <see cref="T:System.AppDomain"/>.
         /// </exception>
         public App()
+            : this(Repositories, Downloader)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="App"/> class.
+        /// </summary>
+        /// <param name="repositories">The repositories.</param>
+        /// <param name="downloader">The downloader.</param>
+        public App(
+            IRepositoryFactory repositories,
+            IPodCastDownloader downloader)
+        {
+            this.backgroundDownloader =
+                new BackgroundDownloader(
+                    repositories,
+                    downloader);
             this.Startup +=
                 new StartupEventHandler(this.App_Startup);
         }
@@ -141,9 +157,6 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             StartupEventArgs e)
         {
-            this.backgroundDownloader =
-                new BackgroundDownloader();
-
             // Starts background downloader:
             this.backgroundDownloader.Start();
         }

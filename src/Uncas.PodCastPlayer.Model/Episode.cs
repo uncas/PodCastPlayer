@@ -63,10 +63,44 @@ namespace Uncas.PodCastPlayer.Model
         public string Description { get; private set; }
 
         /// <summary>
-        /// Gets or sets the name of the file.
+        /// Gets the downloaded bytes.
+        /// </summary>
+        /// <value>The downloaded bytes.</value>
+        public long DownloadedBytes
+        {
+            get
+            {
+                if (this.MediaInfo == null)
+                {
+                    return 0;
+                }
+
+                return this.MediaInfo.DownloadedBytes;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        public string FileName { get; set; }
+        public string FileName { get; private set; }
+
+        /// <summary>
+        /// Gets the file size in bytes.
+        /// </summary>
+        /// <value>The file size in bytes.</value>
+        public long FileSizeInBytes
+        {
+            get
+            {
+                if (this.MediaInfo == null)
+                {
+                    return 0;
+                }
+
+                return this.MediaInfo.FileSizeInBytes;
+            }
+        }
 
         /// <summary>
         /// Gets the id of the episode.
@@ -81,7 +115,7 @@ namespace Uncas.PodCastPlayer.Model
         public EpisodeMediaInfo MediaInfo { get; set; }
 
         /// <summary>
-        /// Gets or sets the media URL.
+        /// Gets the media URL.
         /// </summary>
         /// <value>The media URL.</value>
         public Uri MediaUrl
@@ -91,10 +125,15 @@ namespace Uncas.PodCastPlayer.Model
                 return this.mediaUrl;
             }
 
-            set
+            private set
             {
                 this.mediaUrl = value;
-                this.FileName = value.Segments.Last();
+                if (value != null
+                    && value.Segments != null
+                    && value.Segments.Length > 0)
+                {
+                    this.FileName = value.Segments.Last();
+                }
             }
         }
 
@@ -105,10 +144,10 @@ namespace Uncas.PodCastPlayer.Model
         public bool PendingDownload { get; set; }
 
         /// <summary>
-        /// Gets or sets the associated pod cast.
+        /// Gets the associated pod cast.
         /// </summary>
         /// <value>The pod cast.</value>
-        public PodCast PodCast { get; set; }
+        public PodCast PodCast { get; private set; }
 
         /// <summary>
         /// Gets the title of the episode.
@@ -131,6 +170,7 @@ namespace Uncas.PodCastPlayer.Model
         /// <param name="podCast">The pod cast.</param>
         /// <param name="pendingDownload">if set to <c>true</c> [pending download].</param>
         /// <returns>The episode.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Model.ModelException"></exception>
         public static Episode ConstructEpisode(
             string id,
             DateTime date,
@@ -140,6 +180,11 @@ namespace Uncas.PodCastPlayer.Model
             PodCast podCast,
             bool pendingDownload)
         {
+            if (mediaUrl == null)
+            {
+                throw new ModelException("MediaUrl is required");
+            }
+
             var result =
                 new Episode(
                 id,
@@ -156,8 +201,19 @@ namespace Uncas.PodCastPlayer.Model
         /// Updates from other episode.
         /// </summary>
         /// <param name="other">The other episode.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Model.ModelException"></exception>
         public void UpdateFromOtherEpisode(Episode other)
         {
+            if (other == null)
+            {
+                return;
+            }
+
+            if (other.mediaUrl == null)
+            {
+                throw new ModelException("MediaUrl is required");
+            }
+
             this.Date = other.Date;
             this.Description = other.Description;
             this.MediaUrl = other.MediaUrl;
@@ -167,8 +223,11 @@ namespace Uncas.PodCastPlayer.Model
                 this.MediaInfo = new EpisodeMediaInfo();
             }
 
-            this.MediaInfo.FileSizeInBytes =
-                other.MediaInfo.FileSizeInBytes;
+            if (other.MediaInfo != null)
+            {
+                this.MediaInfo.FileSizeInBytes =
+                    other.MediaInfo.FileSizeInBytes;
+            }
         }
 
         #endregion

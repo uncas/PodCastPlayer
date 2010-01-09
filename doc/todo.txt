@@ -39,8 +39,24 @@ X Display more episode info: date, title, size
 X Select episodes to download
   X EpisodeService.DownloadEpisode
 X Resolve inconsistencies with fileName/path...
+X Implement SqLite repository
 
-- Implement SqLite repository:
+- Repository documentation in header of methods:
+  X Model (none!)
+  X ViewModel (none!)
+  X Repository (created RepositoryException class)
+  - SQLiteRepository (overføre til interfaces)
+    X BaseRepository
+    X DBEpisode
+    X DBEpisodeExtensions
+    - DBPodCast
+    - EpisodeRepository
+    - PodCastRepository
+    - SQLiteRepositoryFactory
+  - AppServices
+  - Utility
+  - Wpf
+  - Fakes
 
 - Store info that an episode has already been downloaded
 

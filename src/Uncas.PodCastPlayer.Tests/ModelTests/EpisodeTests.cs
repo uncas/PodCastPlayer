@@ -37,6 +37,7 @@ namespace Uncas.PodCastPlayer.Tests.ModelTests
                 new Uri("http://www.xxx.dk"),
                 podCast,
                 false);
+            one.MediaInfo = null;
             var other = Episode.ConstructEpisode(
                 "x",
                 DateTime.Now,

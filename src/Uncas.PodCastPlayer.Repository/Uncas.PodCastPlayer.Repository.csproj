@@ -53,6 +53,7 @@
     <Compile Include="IPodCastRepository.cs" />
     <Compile Include="IRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\UncasPodCastPlayerKey.snk">

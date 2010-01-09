@@ -54,6 +54,7 @@
     <Compile Include="EpisodeMediaInfo.cs" />
     <Compile Include="PodCast.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ModelException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\UncasPodCastPlayerKey.snk">
