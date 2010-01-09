@@ -9,6 +9,7 @@ namespace Uncas.PodCastPlayer.Wpf
     using System;
     using System.IO;
     using System.Windows;
+    using System.Windows.Threading;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.SQLiteRepository;
     using Uncas.PodCastPlayer.Utility;
@@ -65,6 +66,9 @@ namespace Uncas.PodCastPlayer.Wpf
                     downloader);
             this.Startup +=
                 new StartupEventHandler(this.App_Startup);
+            this.DispatcherUnhandledException +=
+                new DispatcherUnhandledExceptionEventHandler(
+                    this.App_DispatcherUnhandledException);
         }
 
         #endregion
@@ -159,6 +163,19 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             // Starts background downloader:
             this.backgroundDownloader.Start();
+        }
+
+        /// <summary>
+        /// Handles the DispatcherUnhandledException event of the App control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.Threading.DispatcherUnhandledExceptionEventArgs"/> instance containing the event data.</param>
+        private void App_DispatcherUnhandledException(
+            object sender,
+            DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.Exception.ToString());
+            e.Handled = true;
         }
 
         #endregion

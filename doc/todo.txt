@@ -41,6 +41,8 @@ X Select episodes to download
 X Resolve inconsistencies with fileName/path...
 X Implement SqLite repository
 
+- Installer
+
 - Repository documentation in header of methods:
   X Model (none!)
   X ViewModel (none!)
@@ -59,6 +61,12 @@ X Implement SqLite repository
   - Fakes
 
 - Store info that an episode has already been downloaded
+
+- When updating episode list: possibility to cancel the update
+
+- Change layout of:
+  - pod cast list
+  - create pod cast window
 
 - Split Downloader in two responsibilities:
   - 1) download stream
