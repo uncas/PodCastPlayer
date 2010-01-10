@@ -34,6 +34,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets the episode repository.
         /// </summary>
         /// <value>The episode repository.</value>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public IEpisodeRepository EpisodeRepository
         {
             get
@@ -47,6 +48,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Gets the pod cast repository.
         /// </summary>
         /// <value>The pod cast repository.</value>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public IPodCastRepository PodCastRepository
         {
             get

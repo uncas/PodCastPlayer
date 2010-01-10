@@ -16,12 +16,6 @@ namespace Uncas.PodCastPlayer.Utility
     public interface IPodCastDownloader
     {
         /// <summary>
-        /// Occurs when an episode buffer has been downloaded.
-        /// </summary>
-        event EventHandler<EpisodeDownloadEventArgs>
-            EpisodeBufferDownloaded;
-
-        /// <summary>
         /// Downloads the episode.
         /// </summary>
         /// <param name="episode">The episode.</param>

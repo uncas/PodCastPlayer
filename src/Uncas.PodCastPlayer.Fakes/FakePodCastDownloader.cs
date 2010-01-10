@@ -19,12 +19,6 @@ namespace Uncas.PodCastPlayer.Fakes
         #region IPodCastDownloader Members
 
         /// <summary>
-        /// Occurs when an episode buffer has been downloaded.
-        /// </summary>
-        public event EventHandler<EpisodeDownloadEventArgs>
-            EpisodeBufferDownloaded;
-
-        /// <summary>
         /// Downloads the episode list.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
@@ -55,19 +49,6 @@ namespace Uncas.PodCastPlayer.Fakes
             Episode episode,
             string fileName)
         {
-            if (this.EpisodeBufferDownloaded != null)
-            {
-                var eventArgs =
-                    new EpisodeDownloadEventArgs
-                    {
-                        BytesDownloaded = 1,
-                        FileSizeInBytes = 1
-                    };
-                this.EpisodeBufferDownloaded(
-                    this,
-                    eventArgs);
-            }
-
             return new EpisodeMediaInfo
             {
                 DownloadedBytes = 1,

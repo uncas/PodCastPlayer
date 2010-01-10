@@ -6,10 +6,13 @@
 
 namespace Uncas.PodCastPlayer.Utility
 {
+    // TODO: REFACTOR: dependency on many namespaces:
+    // Maybe split in two classes:
+    // - one class for fetching info from web
+    // - one class for saving file
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -21,19 +24,14 @@ namespace Uncas.PodCastPlayer.Utility
     /// <summary>
     /// Handles downloads of pod casts.
     /// </summary>
-    /// <remarks>See http://www.codeproject.com/KB/IP/MyDownloader.aspx.</remarks>
+    /// <remarks>See http://www.codeproject.com/KB/IP/MyDownloader.aspx for more deails.</remarks>
     public class PodCastDownloader : IPodCastDownloader
     {
         #region IPodCastDownloader Members
 
+        /// TODO: REFACTOR: Split into 1) download and 2) save
         /// <summary>
-        /// Occurs when an episode buffer has been downloaded.
-        /// </summary>
-        public event EventHandler<EpisodeDownloadEventArgs>
-            EpisodeBufferDownloaded;
-
-        /// <summary>
-        /// Downloads the episode.
+        /// Downloads and saves the episode media in a file.
         /// </summary>
         /// <param name="episode">The episode.</param>
         /// <param name="fileName">Name of the file.</param>
@@ -114,33 +112,6 @@ namespace Uncas.PodCastPlayer.Utility
         #endregion
 
         #region Private methods
-
-        /// <summary>
-        /// Checks if the response supports partial content.
-        /// </summary>
-        /// <param name="response">The response.</param>
-        /// <returns>True if it supports partial content.</returns>
-        private static bool CheckIfResponseSupportsPartialContent(
-            HttpWebResponse response)
-        {
-            bool supportsPartialContent = false;
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                // The server ignored our range request.
-                // The download must restart.
-                // TODO: FEATURE: Save the whole response.
-                supportsPartialContent = false;
-            }
-            else if (response.StatusCode ==
-                HttpStatusCode.PartialContent)
-            {
-                // The server accepted our range request.
-                // TODO: FEATURE: Append the partial response.
-                supportsPartialContent = true;
-            }
-
-            return supportsPartialContent;
-        }
 
         /// <summary>
         /// Downloads the buffer.
@@ -249,7 +220,8 @@ namespace Uncas.PodCastPlayer.Utility
                 }
 
                 // Gets episode info:
-                Episode episode = Episode.ConstructEpisode(
+                Episode episode =
+                    Episode.ConstructEpisode(
                     item.Id,
                     item.PublishDate.Date,
                     item.Title.Text,
@@ -268,27 +240,6 @@ namespace Uncas.PodCastPlayer.Utility
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Gets the response.
-        /// </summary>
-        /// <param name="webRequest">The web request.</param>
-        /// <param name="desiredOffset">The desired offset.</param>
-        /// <returns>The response.</returns>
-        private static HttpWebResponse GetResponse(
-            HttpWebRequest webRequest,
-            int desiredOffset)
-        {
-            if (desiredOffset > 0)
-            {
-                webRequest.AddRange(desiredOffset);
-            }
-
-            // Retrieves the response from the server:
-            var response =
-                (HttpWebResponse)webRequest.GetResponse();
-            return response;
         }
 
         /// <summary>
@@ -320,10 +271,6 @@ namespace Uncas.PodCastPlayer.Utility
                 }
 
                 bytesTotal += bytesRead;
-                this.NotifyOfDownloadStatus(
-                    bytesRead,
-                    fileSize,
-                    bytesTotal);
             }
 
             return bytesTotal;
@@ -335,13 +282,11 @@ namespace Uncas.PodCastPlayer.Utility
         /// <param name="filePath">The file path.</param>
         /// <param name="fileSize">Size of the file.</param>
         /// <param name="responseStream">The response stream.</param>
-        /// <param name="appendData">if set to <c>true</c> [append data].</param>
         /// <returns>The number of bytes downloaded.</returns>
         private int DownloadStream(
             string filePath,
             long fileSize,
-            Stream responseStream,
-            bool appendData)
+            Stream responseStream)
         {
             // A buffer for storing retrieved data:
             byte[] downBuffer = new byte[2048];
@@ -355,13 +300,9 @@ namespace Uncas.PodCastPlayer.Utility
             }
 
             int bytesTotal = 0;
-            FileMode fileMode =
-                appendData ?
-                FileMode.Append :
-                FileMode.Create;
             using (var fileStream = new FileStream(
                  filePath,
-                 fileMode,
+                 FileMode.Create,
                  FileAccess.Write,
                  FileShare.None))
             {
@@ -389,56 +330,14 @@ namespace Uncas.PodCastPlayer.Utility
             HttpWebRequest webRequest,
             long fileSize)
         {
-            // TODO: FEATURE: Proper offset!
-            int desiredOffset = 0;
             var response =
-                GetResponse(
-                    webRequest,
-                    desiredOffset);
-            bool supportsPartialContent =
-                CheckIfResponseSupportsPartialContent(
-                    response);
+                (HttpWebResponse)webRequest.GetResponse();
             var responseStream =
                 response.GetResponseStream();
             return this.DownloadStream(
                 fileName,
                 fileSize,
-                responseStream,
-                supportsPartialContent);
-        }
-
-        /// <summary>
-        /// Notifies the of download status.
-        /// </summary>
-        /// <param name="bytesRead">The bytes read.</param>
-        /// <param name="fileSize">Size of the file.</param>
-        /// <param name="bytesTotal">The bytes total.</param>
-        private void NotifyOfDownloadStatus(
-            int bytesRead,
-            long fileSize,
-            int bytesTotal)
-        {
-            if (this.EpisodeBufferDownloaded != null)
-            {
-                var eventArgs =
-                    new EpisodeDownloadEventArgs
-                    {
-                        BytesDownloaded = bytesTotal,
-                        FileSizeInBytes = fileSize
-                    };
-                this.EpisodeBufferDownloaded(
-                    this,
-                    eventArgs);
-            }
-
-            Trace.WriteLine(
-                string.Format(
-                    CultureInfo.CurrentCulture,
-                    "{0}: {1}/{2} = {3:P1}",
-                    bytesRead,
-                    bytesTotal,
-                    fileSize,
-                    (1D * bytesTotal) / (1D * fileSize)));
+                responseStream);
         }
 
         #endregion

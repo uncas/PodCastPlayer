@@ -15,12 +15,14 @@ namespace Uncas.PodCastPlayer.Repository
         /// Gets the episode repository.
         /// </summary>
         /// <value>The episode repository.</value>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         IEpisodeRepository EpisodeRepository { get; }
 
         /// <summary>
         /// Gets the pod cast repository.
         /// </summary>
         /// <value>The pod cast repository.</value>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         IPodCastRepository PodCastRepository { get; }
     }
 }

@@ -42,18 +42,18 @@ X Resolve inconsistencies with fileName/path...
 X Implement SqLite repository
 X Installer
 
-- Repository documentation in header of methods:
+- Exception documentation in header of methods:
   X Model (none!)
   X ViewModel (none!)
   X Repository (created RepositoryException class)
-  - SQLiteRepository (overføre til interfaces)
+  X SQLiteRepository (overføre til interfaces)
     X BaseRepository
     X DBEpisode
     X DBEpisodeExtensions
     X DBPodCast
     X EpisodeRepository
     X PodCastRepository
-    - SQLiteRepositoryFactory
+    X SQLiteRepositoryFactory
   - Utility
   - AppServices
   - Wpf
