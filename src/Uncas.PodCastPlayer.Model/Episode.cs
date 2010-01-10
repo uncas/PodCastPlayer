@@ -209,11 +209,6 @@ namespace Uncas.PodCastPlayer.Model
                 return;
             }
 
-            if (other.mediaUrl == null)
-            {
-                throw new ModelException("MediaUrl is required");
-            }
-
             this.Date = other.Date;
             this.Description = other.Description;
             this.MediaUrl = other.MediaUrl;

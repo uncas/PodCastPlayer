@@ -22,7 +22,7 @@ namespace Uncas.PodCastPlayer.Utility
         /// <param name="fileSize">Size of the file.</param>
         /// <param name="stream">The stream.</param>
         /// <returns>The number of bytes saved.</returns>
-        public int SaveStream(
+        public long SaveStream(
             string filePath,
             long fileSize,
             Stream stream)
@@ -47,7 +47,6 @@ namespace Uncas.PodCastPlayer.Utility
             {
                 bytesTotal =
                   DownloadBuffers(
-                    fileSize,
                     stream,
                     downBuffer,
                     bytesTotal,
@@ -89,14 +88,12 @@ namespace Uncas.PodCastPlayer.Utility
         /// <summary>
         /// Downloads the buffers.
         /// </summary>
-        /// <param name="fileSize">Size of the file.</param>
         /// <param name="responseStream">The response stream.</param>
         /// <param name="downBuffer">Down buffer.</param>
         /// <param name="bytesTotal">The bytes total.</param>
         /// <param name="fileStream">The file stream.</param>
         /// <returns>The total number of bytes downloaded.</returns>
         private static int DownloadBuffers(
-            long fileSize,
             Stream responseStream,
             byte[] downBuffer,
             int bytesTotal,

@@ -1,18 +1,21 @@
 ﻿//-------------
-// <copyright file="IEpisodeSaver.cs" company="Uncas">
+// <copyright file="FakeEpisodeSaver.cs" company="Uncas">
 //     Copyright (c) Ole Lynge Sørensen. All rights reserved.
 // </copyright>
 //-------------
 
-namespace Uncas.PodCastPlayer.Utility
+namespace Uncas.PodCastPlayer.Fakes
 {
     using System.IO;
+    using Uncas.PodCastPlayer.Utility;
 
     /// <summary>
-    /// Handles saving episode media.
+    /// Fake implementation of episode saving.
     /// </summary>
-    public interface IEpisodeSaver
+    public class FakeEpisodeSaver : IEpisodeSaver
     {
+        #region IEpisodeSaver Members
+
         /// <summary>
         /// Saves the stream.
         /// </summary>
@@ -20,9 +23,14 @@ namespace Uncas.PodCastPlayer.Utility
         /// <param name="fileSize">Size of the file.</param>
         /// <param name="stream">The stream.</param>
         /// <returns>The number of bytes saved.</returns>
-        long SaveStream(
+        public long SaveStream(
             string filePath,
             long fileSize,
-            Stream stream);
+            Stream stream)
+        {
+            return fileSize;
+        }
+
+        #endregion
     }
 }

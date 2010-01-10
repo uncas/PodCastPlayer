@@ -44,7 +44,8 @@ namespace Uncas.PodCastPlayer.Wpf
             var service =
                 new EpisodeService(
                 App.Repositories,
-                App.Downloader);
+                App.Downloader,
+                App.EpisodeSaver);
             this.episodesListBox.ItemsSource =
                 service.GetDownloadIndex();
         }

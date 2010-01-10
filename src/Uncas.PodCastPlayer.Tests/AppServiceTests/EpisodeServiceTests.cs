@@ -21,7 +21,8 @@ namespace Uncas.PodCastPlayer.Tests.AppServiceTests
         private readonly EpisodeService service =
                 new EpisodeService(
                 TestApp.Repositories,
-                TestApp.PodCastDownloader);
+                TestApp.PodCastDownloader,
+                TestApp.EpisodeSaver);
 
         /// <summary>
         /// Adds the episode to download list_1_ OK.

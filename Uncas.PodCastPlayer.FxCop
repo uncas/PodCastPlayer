@@ -21,13 +21,13 @@
   <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
-  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.AppServices/bin/Debug/Uncas.PodCastPlayer.AppServices.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Model/bin/Debug/Uncas.PodCastPlayer.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Repository/bin/Debug/Uncas.PodCastPlayer.Repository.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.SQLiteRepository/bin/Debug/Uncas.PodCastPlayer.SQLiteRepository.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Utility/bin/Debug/Uncas.PodCastPlayer.Utility.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.ViewModel/bin/Debug/Uncas.PodCastPlayer.ViewModel.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Wpf/bin/Debug/Uncas.PodCastPlayer.Wpf.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.AppServices/bin/x86/Debug/Uncas.PodCastPlayer.AppServices.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Model/bin/x86/Debug/Uncas.PodCastPlayer.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Repository/bin/x86/Debug/Uncas.PodCastPlayer.Repository.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.SQLiteRepository/bin/x86/Debug/Uncas.PodCastPlayer.SQLiteRepository.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Utility/bin/x86/Debug/Uncas.PodCastPlayer.Utility.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.ViewModel/bin/x86/Debug/Uncas.PodCastPlayer.ViewModel.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/src/Uncas.PodCastPlayer.Wpf/bin/x86/Debug/Uncas.PodCastPlayer.Wpf.exe" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>

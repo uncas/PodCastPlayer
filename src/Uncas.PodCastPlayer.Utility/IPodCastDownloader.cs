@@ -16,16 +16,6 @@ namespace Uncas.PodCastPlayer.Utility
     public interface IPodCastDownloader
     {
         /// <summary>
-        /// Downloads the episode.
-        /// </summary>
-        /// <param name="episode">The episode.</param>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>Info about the downloaded media.</returns>
-        EpisodeMediaInfo DownloadEpisode(
-            Episode episode,
-            string fileName);
-
-        /// <summary>
         /// Downloads the episode list.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
@@ -39,5 +29,13 @@ namespace Uncas.PodCastPlayer.Utility
         /// <returns>Details about the pod cast.</returns>
         /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         PodCast DownloadPodCastInfo(Uri podCastUrl);
+
+        /// <summary>
+        /// Gets the episode stream.
+        /// </summary>
+        /// <param name="mediaUrl">The media URL.</param>
+        /// <returns>The episode stream.</returns>
+        EpisodeMedia GetEpisodeStream(
+            Uri mediaUrl);
     }
 }

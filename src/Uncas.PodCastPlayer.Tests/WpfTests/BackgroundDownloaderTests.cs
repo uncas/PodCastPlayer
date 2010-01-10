@@ -26,7 +26,8 @@ namespace Uncas.PodCastPlayer.Tests.WpfTests
             BackgroundDownloader downloader =
                 new BackgroundDownloader(
                     TestApp.Repositories,
-                    TestApp.PodCastDownloader);
+                    TestApp.PodCastDownloader,
+                    TestApp.EpisodeSaver);
 
             // Act:
             downloader.Dispose();
@@ -44,7 +45,8 @@ namespace Uncas.PodCastPlayer.Tests.WpfTests
             BackgroundDownloader downloader =
                 new BackgroundDownloader(
                     TestApp.Repositories,
-                    TestApp.PodCastDownloader);
+                    TestApp.PodCastDownloader,
+                    TestApp.EpisodeSaver);
 
             // Act
             downloader.Start();
@@ -63,7 +65,8 @@ namespace Uncas.PodCastPlayer.Tests.WpfTests
             BackgroundDownloader downloader =
                 new BackgroundDownloader(
                     TestApp.Repositories,
-                    TestApp.PodCastDownloader);
+                    TestApp.PodCastDownloader,
+                    TestApp.EpisodeSaver);
             downloader.Start();
             Thread.Sleep(100);
 

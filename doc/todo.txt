@@ -41,6 +41,9 @@ X Select episodes to download
 X Resolve inconsistencies with fileName/path...
 X Implement SqLite repository
 X Installer
+X Split Downloader in two responsibilities:
+  X 1) download stream
+  X 2) local save
 
 - Exception documentation in header of methods:
   X Model (none!)
@@ -68,11 +71,6 @@ X Installer
 - Change layout of:
   - pod cast list
   - create pod cast window
-
-- Split Downloader in two responsibilities:
-  - 1) download stream
-  - 2) local save
-  - maybe via repository for file data
 
 - Play selected episode
 

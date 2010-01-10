@@ -78,6 +78,7 @@
     <Compile Include="RepositoryTests\PodCastRepositoryTests.cs" />
     <Compile Include="TestApp.cs" />
     <Compile Include="UITests\PodCastDetailsTests.cs" />
+    <Compile Include="UtilityTests\EpisodeSaverTests.cs" />
     <Compile Include="UtilityTests\PodCastDownloaderTests.cs" />
   </ItemGroup>
   <ItemGroup>

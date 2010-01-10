@@ -8,6 +8,7 @@ namespace Uncas.PodCastPlayer.Fakes
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Utility;
 
@@ -40,27 +41,6 @@ namespace Uncas.PodCastPlayer.Fakes
         }
 
         /// <summary>
-        /// Downloads the episode.
-        /// </summary>
-        /// <param name="episode">The episode.</param>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>Info about the downloaded media.</returns>
-        public EpisodeMediaInfo DownloadEpisode(
-            Episode episode,
-            string fileName)
-        {
-            return new EpisodeMediaInfo
-            {
-                DownloadedBytes = 1,
-                FileSizeInBytes = 1
-            };
-        }
-
-        #endregion
-
-        #region IPodCastDownloader Members
-
-        /// <summary>
         /// Downloads the pod cast info.
         /// </summary>
         /// <param name="podCastUrl">The pod cast URL.</param>
@@ -69,6 +49,23 @@ namespace Uncas.PodCastPlayer.Fakes
             Uri podCastUrl)
         {
             return new PodCast(null, "X", podCastUrl);
+        }
+
+        /// <summary>
+        /// Gets the episode stream.
+        /// </summary>
+        /// <param name="mediaUrl">The media URL.</param>
+        /// <returns>The episode stream.</returns>
+        public EpisodeMedia GetEpisodeStream(
+            Uri mediaUrl)
+        {
+            Stream stream = new MemoryStream();
+            string textContent = "abcdefg";
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(textContent);
+            return new EpisodeMedia(
+                stream,
+                textContent.Length);
         }
 
         #endregion

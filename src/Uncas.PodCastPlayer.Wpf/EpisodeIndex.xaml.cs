@@ -43,7 +43,8 @@ namespace Uncas.PodCastPlayer.Wpf
             this.service =
                 new EpisodeService(
                 App.Repositories,
-                App.Downloader);
+                App.Downloader,
+                App.EpisodeSaver);
             this.podCastId = podCastId;
             this.Loaded +=
                 new RoutedEventHandler(

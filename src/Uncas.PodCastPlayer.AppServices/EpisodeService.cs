@@ -10,7 +10,6 @@ namespace Uncas.PodCastPlayer.AppServices
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Linq;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.Utility;
@@ -21,6 +20,11 @@ namespace Uncas.PodCastPlayer.AppServices
     /// </summary>
     public class EpisodeService : BaseService
     {
+        /// <summary>
+        /// The episode saver.
+        /// </summary>
+        private readonly IEpisodeSaver saver;
+
         #region Constructor
 
         /// <summary>
@@ -28,11 +32,14 @@ namespace Uncas.PodCastPlayer.AppServices
         /// </summary>
         /// <param name="repositories">The repositories.</param>
         /// <param name="downloader">The downloader.</param>
+        /// <param name="episodeSaver">The episode saver.</param>
         public EpisodeService(
             IRepositoryFactory repositories,
-            IPodCastDownloader downloader)
+            IPodCastDownloader downloader,
+            IEpisodeSaver episodeSaver)
             : base(repositories, downloader)
         {
+            this.saver = episodeSaver;
         }
 
         #endregion
@@ -146,10 +153,26 @@ namespace Uncas.PodCastPlayer.AppServices
                 Path.Combine(
                     absoluteFolderPath,
                     fileName);
+
+            // Gets stream:
+            EpisodeMedia podCastStream =
+                this.Downloader.GetEpisodeStream(
+                episode.MediaUrl);
+
+            // Saves stream:
+            long downloadedBytes =
+                this.saver.SaveStream(
+                filePath,
+                podCastStream.Length,
+                podCastStream.Stream);
+
+            // Returns info about how it all went:
             var mediaInfo =
-                this.Downloader.DownloadEpisode(
-                episode,
-                filePath);
+                new EpisodeMediaInfo
+                {
+                    FileSizeInBytes = podCastStream.Length,
+                    DownloadedBytes = downloadedBytes
+                };
 
             episode.MediaInfo = mediaInfo;
             episode.PendingDownload =

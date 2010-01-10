@@ -74,7 +74,7 @@
     <Compile Include="IEpisodeSaver.cs" />
     <Compile Include="IPodCastDownloader.cs" />
     <Compile Include="PodCastDownloader.cs" />
-    <Compile Include="EpisodeStream.cs" />
+    <Compile Include="EpisodeMedia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UtilityException.cs" />
   </ItemGroup>

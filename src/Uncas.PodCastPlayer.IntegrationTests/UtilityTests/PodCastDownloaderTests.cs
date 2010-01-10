@@ -8,7 +8,6 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
 {
     using System;
     using System.Diagnostics;
-    using System.IO;
     using NUnit.Framework;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Utility;
@@ -26,34 +25,23 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
             TestApp.PodCastDownloader;
 
         /// <summary>
-        /// Downloads an episode from hanselminutes.
+        /// Gets stream from a hanselminutes episode.
         /// </summary>
         [Test]
-        [Ignore]
-        public void DownloadEpisode_Hanselminutes_OK()
+        public void GetEpisodeStream_Hanselminutes_OK()
         {
             // Arrange:
-            Uri url = new Uri("http://perseus.franklins.net/hanselminutes_0079.mp3");
-
-            Episode episode = Episode.ConstructEpisode(
-                "a",
-                DateTime.Now,
-                "a",
-                "a",
-                url,
-                null,
-                false);
-            string fileName = Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.MyDocuments),
-                "test1.mp3");
+            Uri url =
+                new Uri(
+                    "http://perseus.franklins.net/hanselminutes_0079.mp3");
 
             // Act:
-            this.downloader.DownloadEpisode(
-                episode,
-                fileName);
+            var result =
+                this.downloader.GetEpisodeStream(
+                url);
 
             // Assert:
+            Trace.WriteLine(result.Length);
         }
 
         /// <summary>
@@ -98,6 +86,37 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
 
             // Assert:
             Trace.WriteLine(podCast);
+        }
+
+        /// <summary>
+        /// Downloads the pod cast info_ null uri_ OK.
+        /// </summary>
+        [Test]
+        public void DownloadPodCastInfo_NullUri_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.downloader.DownloadPodCastInfo(null);
+
+            // Assert:
+        }
+
+        /// <summary>
+        /// Downloads the pod cast info_ false uri_ OK.
+        /// </summary>
+        [Test]
+        [ExpectedException(typeof(UtilityException))]
+        public void DownloadPodCastInfo_FalseUri_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.downloader.DownloadPodCastInfo(
+                new Uri(
+                    "http://www.xxxxx.dddddd"));
+
+            // Assert:
         }
 
         /// <summary>

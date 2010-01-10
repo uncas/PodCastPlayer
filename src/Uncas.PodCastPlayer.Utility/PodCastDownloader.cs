@@ -24,40 +24,6 @@ namespace Uncas.PodCastPlayer.Utility
     {
         #region IPodCastDownloader Members
 
-        /// TODO: OBSOLETE: Make AppService use IPodCastDownloader and IEpisodeSaver
-        /// <summary>
-        /// Downloads and saves the episode media in a file.
-        /// </summary>
-        /// <param name="episode">The episode.</param>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>Info about the downloaded media.</returns>
-        /// <remarks>
-        /// http://www.geekpedia.com/tutorial179_Creating-a-download-manager-in-Csharp.html
-        /// </remarks>
-        public EpisodeMediaInfo DownloadEpisode(
-            Episode episode,
-            string fileName)
-        {
-            // Gets stream:
-            EpisodeStream podCastStream =
-                GetEpisodeStream(episode.MediaUrl);
-
-            // Saves stream:
-            EpisodeSaver saver = new EpisodeSaver();
-            int downloadedBytes =
-                saver.SaveStream(
-                fileName,
-                podCastStream.Length,
-                podCastStream.Stream);
-
-            // Returns info about how it all went:
-            return new EpisodeMediaInfo
-            {
-                FileSizeInBytes = podCastStream.Length,
-                DownloadedBytes = downloadedBytes
-            };
-        }
-
         /// <summary>
         /// Downloads the episode list.
         /// </summary>
@@ -79,6 +45,11 @@ namespace Uncas.PodCastPlayer.Utility
         public PodCast DownloadPodCastInfo(
             Uri podCastUrl)
         {
+            if (podCastUrl == null)
+            {
+                return null;
+            }
+
             var feed = GetFeed(podCastUrl);
 
             string author = null;
@@ -93,6 +64,35 @@ namespace Uncas.PodCastPlayer.Utility
                 podCastUrl,
                 feed.Description.Text,
                 author);
+        }
+
+        /// <summary>
+        /// Gets the episode stream.
+        /// </summary>
+        /// <param name="mediaUrl">The media URL.</param>
+        /// <returns>The episode stream.</returns>
+        public EpisodeMedia GetEpisodeStream(
+            Uri mediaUrl)
+        {
+            var webRequest =
+                (HttpWebRequest)WebRequest.Create(
+                mediaUrl);
+
+            // Set default authentication for retrieving the file
+            webRequest.Credentials =
+                CredentialCache.DefaultCredentials;
+
+            // Retrieve the response from the server
+            var webResponse =
+                (HttpWebResponse)webRequest.GetResponse();
+
+            // Ask the server for the file size and store it
+            long fileSize = webResponse.ContentLength;
+
+            var responseStream = webResponse.GetResponseStream();
+            return new EpisodeMedia(
+                responseStream,
+                fileSize);
         }
 
         #endregion
@@ -148,37 +148,6 @@ namespace Uncas.PodCastPlayer.Utility
         }
 
         /// <summary>
-        /// Gets the episode stream.
-        /// </summary>
-        /// <param name="mediaUrl">The media URL.</param>
-        /// <returns>The episode stream.</returns>
-        private static EpisodeStream GetEpisodeStream(
-            Uri mediaUrl)
-        {
-            var webRequest =
-                (HttpWebRequest)WebRequest.Create(
-                mediaUrl);
-
-            // Set default authentication for retrieving the file
-            webRequest.Credentials =
-                CredentialCache.DefaultCredentials;
-
-            // Retrieve the response from the server
-            var webResponse =
-                (HttpWebResponse)webRequest.GetResponse();
-
-            // Ask the server for the file size and store it
-            long fileSize = webResponse.ContentLength;
-
-            var responseStream = webResponse.GetResponseStream();
-            EpisodeStream podCastStream =
-                new EpisodeStream(
-                responseStream,
-                fileSize);
-            return podCastStream;
-        }
-
-        /// <summary>
         /// Gets the exception.
         /// </summary>
         /// <param name="innerException">The inner exception.</param>
@@ -211,10 +180,6 @@ namespace Uncas.PodCastPlayer.Utility
                     feed = SyndicationFeed.Load(reader);
                 }
             }
-            catch (ArgumentNullException ex)
-            {
-                throw GetException(ex);
-            }
             catch (SecurityException ex)
             {
                 throw GetException(ex);
@@ -223,14 +188,14 @@ namespace Uncas.PodCastPlayer.Utility
             {
                 throw GetException(ex);
             }
-            catch (UriFormatException ex)
+            catch (WebException ex)
             {
                 throw GetException(ex);
             }
 
             return feed;
         }
-        
+
         #endregion
     }
 }

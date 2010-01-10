@@ -43,7 +43,7 @@ namespace Uncas.PodCastPlayer.Wpf
         /// Initializes a new instance of the <see cref="BackgroundDownloader"/> class.
         /// </summary>
         public BackgroundDownloader()
-            : this(App.Repositories, App.Downloader)
+            : this(App.Repositories, App.Downloader, App.EpisodeSaver)
         {
         }
 
@@ -52,13 +52,16 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         /// <param name="repositories">The repositories.</param>
         /// <param name="downloader">The downloader.</param>
+        /// <param name="episodeSaver">The episode saver.</param>
         public BackgroundDownloader(
             IRepositoryFactory repositories,
-            IPodCastDownloader downloader)
+            IPodCastDownloader downloader,
+            IEpisodeSaver episodeSaver)
         {
             this.service = new EpisodeService(
                 repositories,
-                downloader);
+                downloader,
+                episodeSaver);
 
             this.worker = new BackgroundWorker();
             this.worker.WorkerSupportsCancellation = true;

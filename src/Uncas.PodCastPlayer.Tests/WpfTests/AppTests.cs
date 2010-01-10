@@ -16,6 +16,15 @@ namespace Uncas.PodCastPlayer.Tests.WpfTests
     public class AppTests
     {
         /// <summary>
+        /// The wpf app.
+        /// </summary>
+        private App app = 
+            new App(
+                TestApp.Repositories,
+                TestApp.PodCastDownloader,
+                TestApp.EpisodeSaver);
+
+        /// <summary>
         /// App_s the fake_ OK.
         /// </summary>
         [Test]
@@ -24,9 +33,6 @@ namespace Uncas.PodCastPlayer.Tests.WpfTests
             // Arrange:
 
             // Act:
-            App app = new App(
-                TestApp.Repositories,
-                TestApp.PodCastDownloader);
 
             // Assert:
         }
@@ -38,12 +44,9 @@ namespace Uncas.PodCastPlayer.Tests.WpfTests
         public void Dispose_Fake_OK()
         {
             // Arrange:
-            App app = new App(
-                TestApp.Repositories,
-                TestApp.PodCastDownloader);
 
             // Act:
-            app.Dispose();
+            this.app.Dispose();
 
             // Assert:
         }

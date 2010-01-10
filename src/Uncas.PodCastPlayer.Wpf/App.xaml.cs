@@ -32,6 +32,11 @@ namespace Uncas.PodCastPlayer.Wpf
         private static IPodCastDownloader downloader;
 
         /// <summary>
+        /// The episode saver.
+        /// </summary>
+        private static IEpisodeSaver episodeSaver;
+
+        /// <summary>
         /// The repositories.
         /// </summary>
         private static IRepositoryFactory repositories;
@@ -47,7 +52,7 @@ namespace Uncas.PodCastPlayer.Wpf
         /// More than one instance of the <see cref="T:System.Windows.Application"/> class is created per <see cref="T:System.AppDomain"/>.
         /// </exception>
         public App()
-            : this(Repositories, Downloader)
+            : this(Repositories, Downloader, EpisodeSaver)
         {
         }
 
@@ -56,14 +61,17 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         /// <param name="repositories">The repositories.</param>
         /// <param name="downloader">The downloader.</param>
+        /// <param name="episodeSaver">The episode saver.</param>
         public App(
             IRepositoryFactory repositories,
-            IPodCastDownloader downloader)
+            IPodCastDownloader downloader,
+            IEpisodeSaver episodeSaver)
         {
             this.backgroundDownloader =
                 new BackgroundDownloader(
                     repositories,
-                    downloader);
+                    downloader,
+                    episodeSaver);
             this.Startup +=
                 new StartupEventHandler(this.App_Startup);
             this.DispatcherUnhandledException +=
@@ -90,6 +98,24 @@ namespace Uncas.PodCastPlayer.Wpf
                 }
 
                 return downloader;
+            }
+        }
+
+        /// <summary>
+        /// Gets the episode saver.
+        /// </summary>
+        /// <value>The episode saver.</value>
+        internal static IEpisodeSaver EpisodeSaver
+        {
+            get
+            {
+                if (episodeSaver == null)
+                {
+                    episodeSaver =
+                        new EpisodeSaver();
+                }
+
+                return episodeSaver;
             }
         }
 

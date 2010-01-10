@@ -25,6 +25,11 @@ namespace Uncas.PodCastPlayer.IntegrationTests
         private static IPodCastDownloader podCastDownloader;
 
         /// <summary>
+        /// The episode saver.
+        /// </summary>
+        private static IEpisodeSaver episodeSaver;
+
+        /// <summary>
         /// The fake repositories.
         /// </summary>
         private static IRepositoryFactory fakeRepositories;
@@ -37,6 +42,24 @@ namespace Uncas.PodCastPlayer.IntegrationTests
         #endregion
 
         #region Internal properties
+
+        /// <summary>
+        /// Gets the episode saver.
+        /// </summary>
+        /// <value>The episode saver.</value>
+        internal static IEpisodeSaver EpisodeSaver
+        {
+            get
+            {
+                if (episodeSaver == null)
+                {
+                    episodeSaver =
+                        new EpisodeSaver();
+                }
+
+                return episodeSaver;
+            }
+        }
 
         /// <summary>
         /// Gets the fake repositories.
