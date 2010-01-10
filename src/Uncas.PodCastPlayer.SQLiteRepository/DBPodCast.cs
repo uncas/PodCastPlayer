@@ -11,6 +11,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     using SubSonic.SqlGeneration.Schema;
     using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
+    using Uncas.PodCastPlayer.ViewModel;
 
     /// <summary>
     /// Represents a pod cast in the database.
@@ -60,29 +61,74 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         #endregion
 
         /// <summary>
+        /// Gets the URL as URI.
+        /// </summary>
+        /// <value>The URL as URI.</value>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
+        [SubSonicIgnore]
+        private Uri UrlAsUri
+        {
+            get
+            {
+                Uri url = null;
+                try
+                {
+                    url = new Uri(this.Url);
+                }
+                catch (ArgumentNullException ex)
+                {
+                    throw GetInvalidPodCastUrlException(ex);
+                }
+                catch (UriFormatException ex)
+                {
+                    throw GetInvalidPodCastUrlException(ex);
+                }
+
+                return url;
+            }
+        }
+
+        /// <summary>
+        /// Gets as a details view model.
+        /// </summary>
+        /// <returns>The details view model.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
+        public PodCastDetailsViewModel AsDetailsViewModel()
+        {
+            return new PodCastDetailsViewModel(
+                (int)this.PodCastId,
+                this.Name,
+                this.UrlAsUri,
+                this.Author,
+                this.Description);
+        }
+
+        /// <summary>
+        /// Gets as an index view model.
+        /// </summary>
+        /// <returns>The index view model.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
+        public PodCastIndexViewModel AsIndexViewModel()
+        {
+            return new PodCastIndexViewModel(
+                (int)this.PodCastId,
+                this.Name,
+                this.UrlAsUri);
+        }
+
+        /// <summary>
         /// Gets as a model pod cast.
         /// </summary>
         /// <returns>The model pod cast.</returns>
         /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
-        public PodCast AsModelPodCast()
+        public PodCast AsModel()
         {
-            try
-            {
-                return new PodCast(
-                    (int)this.PodCastId,
-                    this.Name,
-                    new Uri(this.Url),
-                    this.Description,
-                    this.Author);
-            }
-            catch (ArgumentNullException ex)
-            {
-                throw GetInvalidPodCastUrlException(ex);
-            }
-            catch (UriFormatException ex)
-            {
-                throw GetInvalidPodCastUrlException(ex);
-            }
+            return new PodCast(
+                (int)this.PodCastId,
+                this.Name,
+                this.UrlAsUri,
+                this.Description,
+                this.Author);
         }
 
         /// <summary>

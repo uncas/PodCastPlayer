@@ -78,7 +78,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
                 episode.Title,
                 episode.Description,
                 mediaUrl,
-                podCast.AsModelPodCast(),
+                podCast.AsModel(),
                 true);
         }
 

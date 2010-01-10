@@ -52,12 +52,14 @@ X Installer
     X DBEpisodeExtensions
     X DBPodCast
     X EpisodeRepository
-    - PodCastRepository
+    X PodCastRepository
     - SQLiteRepositoryFactory
-  - AppServices
   - Utility
+  - AppServices
   - Wpf
   - Fakes
+
+- IList -> ICollection -> IEnumerable ?!
 
 - Store info that an episode has already been downloaded
 

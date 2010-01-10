@@ -9,9 +9,9 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Uncas.PodCastPlayer.Model;
     using Uncas.PodCastPlayer.Repository;
     using Uncas.PodCastPlayer.ViewModel;
-    using Model = Uncas.PodCastPlayer.Model;
 
     /// <summary>
     /// Pod cast repository implemented with SQLite.
@@ -25,6 +25,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Initializes a new instance of the <see cref="PodCastRepository"/> class.
         /// </summary>
         /// <param name="databasePath">The database path.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public PodCastRepository(string databasePath)
             : base(databasePath)
         {
@@ -38,24 +39,45 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Deletes the pod cast.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public void DeletePodCast(int podCastId)
         {
-            this.DB.Delete<DBPodCast>(podCastId);
+            try
+            {
+                this.DB.Delete<DBPodCast>(podCastId);
+            }
+            catch (Exception ex)
+            {
+                // TODO: EXCEPTION: Unknown SubSonic exceptions
+                throw new RepositoryException(
+                    "Error trying to delete pod cast",
+                    ex);
+            }
         }
 
         /// <summary>
         /// Gets the pod casts.
         /// </summary>
         /// <returns>The pod casts.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public IList<PodCastIndexViewModel> GetPodCasts()
         {
-            var podCasts =
-                this.DB.All<DBPodCast>();
+            IQueryable<DBPodCast> podCasts = null;
+            try
+            {
+                podCasts =
+                    this.DB.All<DBPodCast>();
+            }
+            catch (Exception ex)
+            {
+                // TODO: EXCEPTION: Unknown SubSonic exceptions
+                throw new RepositoryException(
+                    "Error trying to get pod casts",
+                    ex);
+            }
+
             var result = podCasts.ToList()
-                .Select(pc => new PodCastIndexViewModel(
-                    (int)pc.PodCastId,
-                    pc.Name,
-                    new Uri(pc.Url)));
+                .Select(pc => pc.AsIndexViewModel());
             return result.ToList();
         }
 
@@ -64,21 +86,16 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>The pod cast.</returns>
-        public Model.PodCast GetPodCast(int podCastId)
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
+        public PodCast GetPodCast(int podCastId)
         {
-            var podCast =
-                this.DB.Single<DBPodCast>(podCastId);
+            var podCast = this.GetDBPodCast(podCastId);
             if (podCast == null)
             {
                 return null;
             }
 
-            return new Model.PodCast(
-                podCastId,
-                podCast.Name,
-                new Uri(podCast.Url),
-                podCast.Description,
-                podCast.Author);
+            return podCast.AsModel();
         }
 
         /// <summary>
@@ -86,32 +103,33 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>The pod cast.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public PodCastDetailsViewModel GetPodCastDetails(
             int podCastId)
         {
-            var podCast =
-                this.DB.Single<DBPodCast>(
-                podCastId);
+            var podCast = this.GetDBPodCast(podCastId);
             if (podCast == null)
             {
                 return null;
             }
 
-            return new PodCastDetailsViewModel(
-                podCastId,
-                podCast.Name,
-                new Uri(podCast.Url),
-                podCast.Author,
-                podCast.Description);
+            return podCast.AsDetailsViewModel();
         }
 
         /// <summary>
         /// Saves the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public void SavePodCast(
-            Model.PodCast podCast)
+            PodCast podCast)
         {
+            if (podCast == null
+                || podCast.Url == null)
+            {
+                return;
+            }
+
             DBPodCast pc = new DBPodCast
             {
                 Author = podCast.Author,
@@ -119,7 +137,19 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
                 Name = podCast.Name,
                 Url = podCast.Url.ToString()
             };
-            this.DB.Add<DBPodCast>(pc);
+
+            try
+            {
+                this.DB.Add<DBPodCast>(pc);
+            }
+            catch (Exception ex)
+            {
+                // TODO: EXCEPTION: Unknown SubSonic exceptions
+                throw new RepositoryException(
+                    "Error trying to add pod cast to database",
+                    ex);
+            }
+
             podCast.Id = (int)pc.PodCastId;
         }
 
@@ -127,12 +157,17 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// Saves the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public void SavePodCast(
             PodCastDetailsViewModel podCast)
         {
-            DBPodCast pc =
-                this.DB.Single<DBPodCast>(
-                podCast.Id);
+            if (podCast == null
+                || podCast.Url == null)
+            {
+                return;
+            }
+
+            var pc = this.GetDBPodCast(podCast.Id);
             if (pc == null)
             {
                 return;
@@ -144,9 +179,50 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             pc.Name = podCast.Name;
             pc.Url = podCast.Url.ToString();
 
-            this.DB.Update<DBPodCast>(pc);
+            try
+            {
+                this.DB.Update<DBPodCast>(pc);
+            }
+            catch (Exception ex)
+            {
+                // TODO: EXCEPTION: Unknown SubSonic exceptions
+                throw new RepositoryException(
+                    "Error trying to update pod cast in database",
+                    ex);
+            }
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets the DB pod cast.
+        /// </summary>
+        /// <param name="podCastId">The pod cast id.</param>
+        /// <returns>The DB pod cast.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
+        private DBPodCast GetDBPodCast(int? podCastId)
+        {
+            if (!podCastId.HasValue)
+            {
+                return null;
+            }
+
+            DBPodCast podCast = null;
+            try
+            {
+                podCast =
+                    this.DB.Single<DBPodCast>(
+                    podCastId);
+            }
+            catch (Exception ex)
+            {
+                // TODO: EXCEPTION: Unknown SubSonic exceptions
+                throw new RepositoryException(
+                    "Error trying to get pod cast",
+                    ex);
+            }
+
+            return podCast;
+        }
     }
 }
