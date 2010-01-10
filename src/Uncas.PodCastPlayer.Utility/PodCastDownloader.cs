@@ -12,7 +12,6 @@ namespace Uncas.PodCastPlayer.Utility
     // - one class for saving file
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -29,7 +28,7 @@ namespace Uncas.PodCastPlayer.Utility
     {
         #region IPodCastDownloader Members
 
-        /// TODO: REFACTOR: Split into 1) download and 2) save
+        /// TODO: REFACTOR: Split into 1) get stream and 2) save stream
         /// <summary>
         /// Downloads and saves the episode media in a file.
         /// </summary>
@@ -43,31 +42,21 @@ namespace Uncas.PodCastPlayer.Utility
             Episode episode,
             string fileName)
         {
-            var webRequest =
-                (HttpWebRequest)WebRequest.Create(
-                episode.MediaUrl);
+            // Gets stream:
+            EpisodeStream podCastStream =
+                GetEpisodeStream(episode.MediaUrl);
 
-            // Set default authentication for retrieving the file
-            webRequest.Credentials =
-                            CredentialCache.DefaultCredentials;
-
-            // Retrieve the response from the server
-            var webResponse =
-                (HttpWebResponse)webRequest.GetResponse();
-
-            // Ask the server for the file size and store it
-            long fileSize = webResponse.ContentLength;
-            Trace.WriteLine(fileSize);
-
+            // Saves stream:
             int downloadedBytes =
-                this.DownloadWithWebResponse(
+                SaveStream(
                 fileName,
-                webRequest,
-                fileSize);
+                podCastStream.Length,
+                podCastStream.Stream);
 
+            // Returns info about how it all went:
             return new EpisodeMediaInfo
             {
-                FileSizeInBytes = fileSize,
+                FileSizeInBytes = podCastStream.Length,
                 DownloadedBytes = downloadedBytes
             };
         }
@@ -112,33 +101,6 @@ namespace Uncas.PodCastPlayer.Utility
         #endregion
 
         #region Private methods
-
-        /// <summary>
-        /// Downloads the buffer.
-        /// </summary>
-        /// <param name="responseStream">The response stream.</param>
-        /// <param name="downBuffer">Down buffer.</param>
-        /// <param name="fileStream">The file stream.</param>
-        /// <returns>The number of bytes read.</returns>
-        private static int DownloadBuffer(
-            Stream responseStream,
-            byte[] downBuffer,
-            FileStream fileStream)
-        {
-            int bytesRead =
-                responseStream.Read(
-                downBuffer,
-                0,
-                downBuffer.Length);
-            if (bytesRead == 0)
-            {
-                return 0;
-            }
-
-            // Writes to the local hard drive:
-            fileStream.Write(downBuffer, 0, bytesRead);
-            return bytesRead;
-        }
 
         /// <summary>
         /// Gets the feed.
@@ -207,7 +169,6 @@ namespace Uncas.PodCastPlayer.Utility
 
             // Loads the pod cast:
             SyndicationFeed feed = GetFeed(podCastUrl);
-            Trace.WriteLine(feed.Title.Text);
             foreach (SyndicationItem item in feed.Items)
             {
                 // Gets enclosure info:
@@ -242,6 +203,72 @@ namespace Uncas.PodCastPlayer.Utility
             return result;
         }
 
+        #endregion
+
+        #region Retrieve stream
+
+        /// <summary>
+        /// Gets the episode stream.
+        /// </summary>
+        /// <param name="mediaUrl">The media URL.</param>
+        /// <returns>The episode stream.</returns>
+        private static EpisodeStream GetEpisodeStream(
+            Uri mediaUrl)
+        {
+            var webRequest =
+                (HttpWebRequest)WebRequest.Create(
+                mediaUrl);
+
+            // Set default authentication for retrieving the file
+            webRequest.Credentials =
+                CredentialCache.DefaultCredentials;
+
+            // Retrieve the response from the server
+            var webResponse =
+                (HttpWebResponse)webRequest.GetResponse();
+
+            // Ask the server for the file size and store it
+            long fileSize = webResponse.ContentLength;
+
+            var responseStream = webResponse.GetResponseStream();
+            EpisodeStream podCastStream =
+                new EpisodeStream(
+                responseStream,
+                fileSize);
+            return podCastStream;
+        }
+
+        #endregion
+
+        #region Save stream
+
+        /// <summary>
+        /// Downloads the buffer.
+        /// </summary>
+        /// <param name="responseStream">The response stream.</param>
+        /// <param name="downBuffer">Down buffer.</param>
+        /// <param name="fileStream">The file stream.</param>
+        /// <returns>The number of bytes read.</returns>
+        private static int DownloadBuffer(
+            Stream responseStream,
+            byte[] downBuffer,
+            FileStream fileStream)
+        {
+            int bytesRead =
+                responseStream.Read(
+                downBuffer,
+                0,
+                downBuffer.Length);
+            if (bytesRead == 0)
+            {
+                return 0;
+            }
+
+            // Writes to the local hard drive:
+            fileStream.Write(downBuffer, 0, bytesRead);
+            return bytesRead;
+        }
+
         /// <summary>
         /// Downloads the buffers.
         /// </summary>
@@ -251,7 +278,7 @@ namespace Uncas.PodCastPlayer.Utility
         /// <param name="bytesTotal">The bytes total.</param>
         /// <param name="fileStream">The file stream.</param>
         /// <returns>The total number of bytes downloaded.</returns>
-        private int DownloadBuffers(
+        private static int DownloadBuffers(
             long fileSize,
             Stream responseStream,
             byte[] downBuffer,
@@ -277,16 +304,16 @@ namespace Uncas.PodCastPlayer.Utility
         }
 
         /// <summary>
-        /// Downloads the stream.
+        /// Saves the stream to a file.
         /// </summary>
         /// <param name="filePath">The file path.</param>
         /// <param name="fileSize">Size of the file.</param>
-        /// <param name="responseStream">The response stream.</param>
-        /// <returns>The number of bytes downloaded.</returns>
-        private int DownloadStream(
+        /// <param name="stream">The stream.</param>
+        /// <returns>The number of bytes saved.</returns>
+        private static int SaveStream(
             string filePath,
             long fileSize,
-            Stream responseStream)
+            Stream stream)
         {
             // A buffer for storing retrieved data:
             byte[] downBuffer = new byte[2048];
@@ -307,37 +334,15 @@ namespace Uncas.PodCastPlayer.Utility
                  FileShare.None))
             {
                 bytesTotal =
-                  this.DownloadBuffers(
+                  DownloadBuffers(
                     fileSize,
-                    responseStream,
+                    stream,
                     downBuffer,
                     bytesTotal,
                     fileStream);
             }
 
             return bytesTotal;
-        }
-
-        /// <summary>
-        /// Downloads the file with web response.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="webRequest">The web request.</param>
-        /// <param name="fileSize">Size of the file.</param>
-        /// <returns>The number of bytes downloaded.</returns>
-        private int DownloadWithWebResponse(
-            string fileName,
-            HttpWebRequest webRequest,
-            long fileSize)
-        {
-            var response =
-                (HttpWebResponse)webRequest.GetResponse();
-            var responseStream =
-                response.GetResponseStream();
-            return this.DownloadStream(
-                fileName,
-                fileSize,
-                responseStream);
         }
 
         #endregion
