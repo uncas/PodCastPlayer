@@ -70,6 +70,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EpisodeSaver.cs" />
+    <Compile Include="IEpisodeSaver.cs" />
     <Compile Include="IPodCastDownloader.cs" />
     <Compile Include="PodCastDownloader.cs" />
     <Compile Include="EpisodeStream.cs" />

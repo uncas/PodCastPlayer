@@ -6,10 +6,6 @@
 
 namespace Uncas.PodCastPlayer.Utility
 {
-    // TODO: REFACTOR: dependency on many namespaces:
-    // Maybe split in two classes:
-    // - one class for fetching info from web
-    // - one class for saving file
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -28,7 +24,7 @@ namespace Uncas.PodCastPlayer.Utility
     {
         #region IPodCastDownloader Members
 
-        /// TODO: REFACTOR: Split into 1) get stream and 2) save stream
+        /// TODO: OBSOLETE: Make AppService use IPodCastDownloader and IEpisodeSaver
         /// <summary>
         /// Downloads and saves the episode media in a file.
         /// </summary>
@@ -47,8 +43,9 @@ namespace Uncas.PodCastPlayer.Utility
                 GetEpisodeStream(episode.MediaUrl);
 
             // Saves stream:
+            EpisodeSaver saver = new EpisodeSaver();
             int downloadedBytes =
-                SaveStream(
+                saver.SaveStream(
                 fileName,
                 podCastStream.Length,
                 podCastStream.Stream);
@@ -103,59 +100,6 @@ namespace Uncas.PodCastPlayer.Utility
         #region Private methods
 
         /// <summary>
-        /// Gets the feed.
-        /// </summary>
-        /// <param name="podCastUrl">The pod cast URL.</param>
-        /// <returns>The retrieved feed.</returns>
-        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
-        private static SyndicationFeed GetFeed(
-            Uri podCastUrl)
-        {
-            SyndicationFeed feed = null;
-
-            // Loads the pod cast:
-            try
-            {
-                using (XmlReader reader =
-                    XmlReader.Create(podCastUrl.ToString()))
-                {
-                    feed = SyndicationFeed.Load(reader);
-                }
-            }
-            catch (ArgumentNullException ex)
-            {
-                throw GetException(ex);
-            }
-            catch (SecurityException ex)
-            {
-                throw GetException(ex);
-            }
-            catch (FileNotFoundException ex)
-            {
-                throw GetException(ex);
-            }
-            catch (UriFormatException ex)
-            {
-                throw GetException(ex);
-            }
-
-            return feed;
-        }
-
-        /// <summary>
-        /// Gets the exception.
-        /// </summary>
-        /// <param name="innerException">The inner exception.</param>
-        /// <returns>The utility exception.</returns>
-        private static UtilityException GetException(
-            Exception innerException)
-        {
-            return new UtilityException(
-                "Exception in PodCastDownloader",
-                innerException);
-        }
-
-        /// <summary>
         /// Reads the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
@@ -203,10 +147,6 @@ namespace Uncas.PodCastPlayer.Utility
             return result;
         }
 
-        #endregion
-
-        #region Retrieve stream
-
         /// <summary>
         /// Gets the episode stream.
         /// </summary>
@@ -238,113 +178,59 @@ namespace Uncas.PodCastPlayer.Utility
             return podCastStream;
         }
 
-        #endregion
-
-        #region Save stream
-
         /// <summary>
-        /// Downloads the buffer.
+        /// Gets the exception.
         /// </summary>
-        /// <param name="responseStream">The response stream.</param>
-        /// <param name="downBuffer">Down buffer.</param>
-        /// <param name="fileStream">The file stream.</param>
-        /// <returns>The number of bytes read.</returns>
-        private static int DownloadBuffer(
-            Stream responseStream,
-            byte[] downBuffer,
-            FileStream fileStream)
+        /// <param name="innerException">The inner exception.</param>
+        /// <returns>The utility exception.</returns>
+        private static UtilityException GetException(
+            Exception innerException)
         {
-            int bytesRead =
-                responseStream.Read(
-                downBuffer,
-                0,
-                downBuffer.Length);
-            if (bytesRead == 0)
-            {
-                return 0;
-            }
-
-            // Writes to the local hard drive:
-            fileStream.Write(downBuffer, 0, bytesRead);
-            return bytesRead;
+            return new UtilityException(
+                "Exception in PodCastDownloader",
+                innerException);
         }
 
         /// <summary>
-        /// Downloads the buffers.
+        /// Gets the feed.
         /// </summary>
-        /// <param name="fileSize">Size of the file.</param>
-        /// <param name="responseStream">The response stream.</param>
-        /// <param name="downBuffer">Down buffer.</param>
-        /// <param name="bytesTotal">The bytes total.</param>
-        /// <param name="fileStream">The file stream.</param>
-        /// <returns>The total number of bytes downloaded.</returns>
-        private static int DownloadBuffers(
-            long fileSize,
-            Stream responseStream,
-            byte[] downBuffer,
-            int bytesTotal,
-            FileStream fileStream)
+        /// <param name="podCastUrl">The pod cast URL.</param>
+        /// <returns>The retrieved feed.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        private static SyndicationFeed GetFeed(
+           Uri podCastUrl)
         {
-            while (true)
+            SyndicationFeed feed = null;
+
+            // Loads the pod cast:
+            try
             {
-                int bytesRead =
-                    DownloadBuffer(
-                    responseStream,
-                    downBuffer,
-                    fileStream);
-                if (bytesRead == 0)
+                using (XmlReader reader =
+                    XmlReader.Create(podCastUrl.ToString()))
                 {
-                    break;
+                    feed = SyndicationFeed.Load(reader);
                 }
-
-                bytesTotal += bytesRead;
             }
-
-            return bytesTotal;
-        }
-
-        /// <summary>
-        /// Saves the stream to a file.
-        /// </summary>
-        /// <param name="filePath">The file path.</param>
-        /// <param name="fileSize">Size of the file.</param>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The number of bytes saved.</returns>
-        private static int SaveStream(
-            string filePath,
-            long fileSize,
-            Stream stream)
-        {
-            // A buffer for storing retrieved data:
-            byte[] downBuffer = new byte[2048];
-
-            // Creates the directory if it does not exist:
-            DirectoryInfo directory =
-                new FileInfo(filePath).Directory;
-            if (!directory.Exists)
+            catch (ArgumentNullException ex)
             {
-                directory.Create();
+                throw GetException(ex);
             }
-
-            int bytesTotal = 0;
-            using (var fileStream = new FileStream(
-                 filePath,
-                 FileMode.Create,
-                 FileAccess.Write,
-                 FileShare.None))
+            catch (SecurityException ex)
             {
-                bytesTotal =
-                  DownloadBuffers(
-                    fileSize,
-                    stream,
-                    downBuffer,
-                    bytesTotal,
-                    fileStream);
+                throw GetException(ex);
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw GetException(ex);
+            }
+            catch (UriFormatException ex)
+            {
+                throw GetException(ex);
             }
 
-            return bytesTotal;
+            return feed;
         }
-
+        
         #endregion
     }
 }
