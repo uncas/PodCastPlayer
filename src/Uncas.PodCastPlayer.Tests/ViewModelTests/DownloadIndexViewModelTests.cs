@@ -39,5 +39,19 @@ namespace Uncas.PodCastPlayer.Tests.ViewModelTests
 
             // Assert:
         }
+
+        /// <summary>
+        /// Froms the episode_ null_ OK.
+        /// </summary>
+        [Test]
+        public void FromEpisode_Null_OK()
+        {
+            // Arrange:
+
+            // Act:
+            DownloadIndexViewModel.FromEpisode(null);
+
+            // Assert:
+        }
     }
 }

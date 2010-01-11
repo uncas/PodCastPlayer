@@ -72,6 +72,27 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
         }
 
         /// <summary>
+        /// Downloads the episode list_ blog_ no enclosures.
+        /// </summary>
+        [Test]
+        public void DownloadEpisodeList_Blog_NoEnclosures()
+        {
+            // Arrange:
+            var podCast =
+                new PodCast(
+                    1,
+                    "hanselman.com",
+                    new Uri("http://feeds.feedburner.com/ScottHanselman"));
+
+            // Act:
+            var episodes =
+                this.downloader.DownloadEpisodeList(
+                podCast);
+
+            // Assert:
+        }
+
+        /// <summary>
         /// Downloads the pod cast info_ hanselminutes_ OK.
         /// </summary>
         [Test]
@@ -115,6 +136,23 @@ namespace Uncas.PodCastPlayer.IntegrationTests.UtilityTests
             this.downloader.DownloadPodCastInfo(
                 new Uri(
                     "http://www.xxxxx.dddddd"));
+
+            // Assert:
+        }
+
+        /// <summary>
+        /// Downloads the pod cast info_ false uri_ OK.
+        /// </summary>
+        [Test]
+        [ExpectedException(typeof(UtilityException))]
+        public void DownloadPodCastInfo_NoSuchPage_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.downloader.DownloadPodCastInfo(
+                new Uri(
+                    "http://www.dr.dk/asdasdsawww.xxxxsss"));
 
             // Assert:
         }

@@ -180,11 +180,7 @@ namespace Uncas.PodCastPlayer.Utility
                     feed = SyndicationFeed.Load(reader);
                 }
             }
-            catch (SecurityException ex)
-            {
-                throw GetException(ex);
-            }
-            catch (FileNotFoundException ex)
+            catch (XmlException ex)
             {
                 throw GetException(ex);
             }
