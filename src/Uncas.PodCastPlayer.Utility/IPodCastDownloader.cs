@@ -8,7 +8,7 @@ namespace Uncas.PodCastPlayer.Utility
 {
     using System;
     using System.Collections.Generic;
-    using Uncas.PodCastPlayer.Model;
+    using Model;
 
     /// <summary>
     /// Handles download of pod cast.
@@ -20,6 +20,7 @@ namespace Uncas.PodCastPlayer.Utility
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
         /// <returns>A list of episodes.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         IList<Episode> DownloadEpisodeList(PodCast podCast);
 
         /// <summary>
@@ -28,6 +29,7 @@ namespace Uncas.PodCastPlayer.Utility
         /// <param name="podCastUrl">The pod cast URL.</param>
         /// <returns>Details about the pod cast.</returns>
         /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         PodCast DownloadPodCastInfo(Uri podCastUrl);
 
         /// <summary>
@@ -35,6 +37,7 @@ namespace Uncas.PodCastPlayer.Utility
         /// </summary>
         /// <param name="mediaUrl">The media URL.</param>
         /// <returns>The episode stream.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         EpisodeMedia GetEpisodeStream(
             Uri mediaUrl);
     }

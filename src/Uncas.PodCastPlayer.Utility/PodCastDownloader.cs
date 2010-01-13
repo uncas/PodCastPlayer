@@ -8,13 +8,11 @@ namespace Uncas.PodCastPlayer.Utility
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Security;
     using System.ServiceModel.Syndication;
     using System.Xml;
-    using Uncas.PodCastPlayer.Model;
+    using Model;
 
     /// <summary>
     /// Handles downloads of pod casts.
@@ -29,9 +27,15 @@ namespace Uncas.PodCastPlayer.Utility
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
         /// <returns>A list of episodes.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         public IList<Episode> DownloadEpisodeList(
             PodCast podCast)
         {
+            if (podCast == null)
+            {
+                return null;
+            }
+
             return FetchEpisodeList(
                 podCast);
         }
@@ -51,9 +55,14 @@ namespace Uncas.PodCastPlayer.Utility
             }
 
             var feed = GetFeed(podCastUrl);
+            if (feed == null)
+            {
+                return null;
+            }
 
             string author = null;
-            if (feed.Authors.Count > 0)
+            if (feed.Authors != null
+                && feed.Authors.Count > 0)
             {
                 author = feed.Authors.First().Name;
             }
@@ -71,9 +80,15 @@ namespace Uncas.PodCastPlayer.Utility
         /// </summary>
         /// <param name="mediaUrl">The media URL.</param>
         /// <returns>The episode stream.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         public EpisodeMedia GetEpisodeStream(
             Uri mediaUrl)
         {
+            if (mediaUrl == null)
+            {
+                return null;
+            }
+
             var webRequest =
                 (HttpWebRequest)WebRequest.Create(
                 mediaUrl);
@@ -83,11 +98,21 @@ namespace Uncas.PodCastPlayer.Utility
                 CredentialCache.DefaultCredentials;
 
             // Retrieve the response from the server
-            var webResponse =
-                (HttpWebResponse)webRequest.GetResponse();
+            HttpWebResponse webResponse;
+            try
+            {
+                webResponse =
+                    (HttpWebResponse)webRequest.GetResponse();
+            }
+            catch (WebException ex)
+            {
+                throw new UtilityException(
+                    "Error retrieving response.",
+                    ex);
+            }
 
             // Ask the server for the file size and store it
-            long fileSize = webResponse.ContentLength;
+            var fileSize = webResponse.ContentLength;
 
             var responseStream = webResponse.GetResponseStream();
             return new EpisodeMedia(
@@ -104,19 +129,19 @@ namespace Uncas.PodCastPlayer.Utility
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
         /// <returns>A list of episodes.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         private static IList<Episode> FetchEpisodeList(
             PodCast podCast)
         {
-            Uri podCastUrl = podCast.Url;
-
             var result = new List<Episode>();
 
             // Loads the pod cast:
-            SyndicationFeed feed = GetFeed(podCastUrl);
-            foreach (SyndicationItem item in feed.Items)
+            var feed = GetFeed(podCast.Url);
+            foreach (var item in feed.Items)
             {
                 // Gets enclosure info:
-                var enclosure = item.Links.Where(
+                var enclosure =
+                    item.Links.Where(
                     l => l.RelationshipType == "enclosure")
                     .SingleOrDefault();
                 if (enclosure == null)
@@ -125,7 +150,7 @@ namespace Uncas.PodCastPlayer.Utility
                 }
 
                 // Gets episode info:
-                Episode episode =
+                var episode =
                     Episode.ConstructEpisode(
                     item.Id,
                     item.PublishDate.Date,
@@ -169,15 +194,13 @@ namespace Uncas.PodCastPlayer.Utility
         private static SyndicationFeed GetFeed(
            Uri podCastUrl)
         {
-            SyndicationFeed feed = null;
-
             // Loads the pod cast:
             try
             {
-                using (XmlReader reader =
+                using (var reader =
                     XmlReader.Create(podCastUrl.ToString()))
                 {
-                    feed = SyndicationFeed.Load(reader);
+                    return SyndicationFeed.Load(reader);
                 }
             }
             catch (XmlException ex)
@@ -188,8 +211,6 @@ namespace Uncas.PodCastPlayer.Utility
             {
                 throw GetException(ex);
             }
-
-            return feed;
         }
 
         #endregion

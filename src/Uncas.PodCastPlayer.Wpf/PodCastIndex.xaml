@@ -12,10 +12,10 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Label Content="{Binding Name}" Grid.Column="0" />
-                        <Button Content="Episodes" Grid.Column="1" Click="Episodes_Click" />
+                        <Button Content="Episodes" Grid.Column="1" Click="Episodes_Click" HorizontalAlignment="Right" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

@@ -20,6 +20,7 @@ namespace Uncas.PodCastPlayer.Utility
         /// <param name="fileSize">Size of the file.</param>
         /// <param name="stream">The stream.</param>
         /// <returns>The number of bytes saved.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         long SaveStream(
             string filePath,
             long fileSize,

@@ -44,6 +44,9 @@ X Installer
 X Split Downloader in two responsibilities:
   X 1) download stream
   X 2) local save
+X Change layout of:
+  X pod cast list
+  X create pod cast window
 
 - Exception documentation in header of methods:
   X Model (none!)
@@ -57,7 +60,10 @@ X Split Downloader in two responsibilities:
     X EpisodeRepository
     X PodCastRepository
     X SQLiteRepositoryFactory
-  - Utility
+  X Utility
+    X EpisodeMedia
+    X EpisodeSaver
+    X PodCastDownloader
   - AppServices
   - Wpf
   - Fakes
@@ -67,10 +73,6 @@ X Split Downloader in two responsibilities:
 - Store info that an episode has already been downloaded
 
 - When updating episode list: possibility to cancel the update
-
-- Change layout of:
-  - pod cast list
-  - create pod cast window
 
 - Play selected episode
 
