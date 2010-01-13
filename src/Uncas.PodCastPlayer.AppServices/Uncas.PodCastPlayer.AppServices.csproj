@@ -69,6 +69,7 @@
     <Compile Include="EpisodeService.cs" />
     <Compile Include="PodCastService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\UncasPodCastPlayerKey.snk">

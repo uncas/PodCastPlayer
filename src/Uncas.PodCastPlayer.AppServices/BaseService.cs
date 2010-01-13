@@ -35,10 +35,23 @@ namespace Uncas.PodCastPlayer.AppServices
         /// </summary>
         /// <param name="repositories">The repositories.</param>
         /// <param name="downloader">The downloader.</param>
+        /// <exception cref="Uncas.PodCastPlayer.AppServices.ServiceException"></exception>
         protected internal BaseService(
             IRepositoryFactory repositories,
             IPodCastDownloader downloader)
         {
+            if (repositories == null)
+            {
+                throw new ServiceException(
+                    "Repositories must be specified.");
+            }
+
+            if (downloader == null)
+            {
+                throw new ServiceException(
+                    "Downloader must be specified.");
+            }
+
             this.repositories = repositories;
             this.downloader = downloader;
         }
@@ -53,10 +66,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// <value>The downloader.</value>
         protected IPodCastDownloader Downloader
         {
-            get
-            {
-                return this.downloader;
-            }
+            get { return this.downloader; }
         }
 
         /// <summary>
@@ -65,10 +75,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// <value>The episode repository.</value>
         protected IEpisodeRepository EpisodeRepository
         {
-            get
-            {
-                return this.Repositories.EpisodeRepository;
-            }
+            get { return this.Repositories.EpisodeRepository; }
         }
 
         /// <summary>
@@ -77,22 +84,16 @@ namespace Uncas.PodCastPlayer.AppServices
         /// <value>The pod cast repository.</value>
         protected IPodCastRepository PodCastRepository
         {
-            get
-            {
-                return this.Repositories.PodCastRepository;
-            }
+            get { return this.Repositories.PodCastRepository; }
         }
 
         /// <summary>
         /// Gets the repositories.
         /// </summary>
         /// <value>The repositories.</value>
-        protected IRepositoryFactory Repositories
+        private IRepositoryFactory Repositories
         {
-            get
-            {
-                return this.repositories;
-            }
+            get { return this.repositories; }
         }
 
         #endregion

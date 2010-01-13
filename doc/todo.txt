@@ -65,6 +65,9 @@ X Change layout of:
     X EpisodeSaver
     X PodCastDownloader
   - AppServices
+    X BaseService
+    - EpisodeService
+    - PodCastService
   - Wpf
   - Fakes
 

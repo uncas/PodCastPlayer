@@ -91,7 +91,7 @@ namespace Uncas.PodCastPlayer.Wpf
                     this.service.CreatePodCast(
                     podCastUrl);
             }
-            catch (UtilityException)
+            catch (ServiceException)
             {
                 DisplayErrorMessage("Invalid pod cast");
                 return;

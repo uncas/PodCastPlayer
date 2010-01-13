@@ -10,10 +10,10 @@ namespace Uncas.PodCastPlayer.AppServices
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using Uncas.PodCastPlayer.Model;
-    using Uncas.PodCastPlayer.Repository;
-    using Uncas.PodCastPlayer.Utility;
-    using Uncas.PodCastPlayer.ViewModel;
+    using Model;
+    using Repository;
+    using Utility;
+    using ViewModel;
 
     /// <summary>
     /// Service for episodes.
@@ -33,12 +33,19 @@ namespace Uncas.PodCastPlayer.AppServices
         /// <param name="repositories">The repositories.</param>
         /// <param name="downloader">The downloader.</param>
         /// <param name="episodeSaver">The episode saver.</param>
+        /// <exception cref="Uncas.PodCastPlayer.AppServices.ServiceException"></exception>
         public EpisodeService(
             IRepositoryFactory repositories,
             IPodCastDownloader downloader,
             IEpisodeSaver episodeSaver)
             : base(repositories, downloader)
         {
+            if (episodeSaver == null)
+            {
+                throw new ServiceException(
+                    "Episode saver must be specified.");
+            }
+
             this.saver = episodeSaver;
         }
 
@@ -55,6 +62,12 @@ namespace Uncas.PodCastPlayer.AppServices
             int podCastId,
             string episodeId)
         {
+            if (string.IsNullOrEmpty(episodeId))
+            {
+                throw new ServiceException(
+                    "Episode id must be specified");
+            }
+
             this.EpisodeRepository.AddEpisodeToDownloadList(
                 podCastId,
                 episodeId);
