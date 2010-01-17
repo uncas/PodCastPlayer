@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="AppServiceTests\EpisodeServiceTests.cs" />
     <Compile Include="AppServiceTests\PodCastServiceTests.cs" />
+    <Compile Include="AppServiceTests\ServiceExceptionTests.cs" />
     <Compile Include="BaseTest.cs" />
     <Compile Include="ModelTests\EpisodeTests.cs" />
     <Compile Include="ModelTests\PodCastTests.cs" />

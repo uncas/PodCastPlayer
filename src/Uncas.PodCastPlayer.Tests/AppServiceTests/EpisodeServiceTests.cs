@@ -25,15 +25,72 @@ namespace Uncas.PodCastPlayer.Tests.AppServiceTests
                 TestApp.EpisodeSaver);
 
         /// <summary>
+        /// Constructor_s the null_ OK.
+        /// </summary>
+        [Test]
+        [ExpectedException(typeof(ServiceException))]
+        public void Constructor_000_OK()
+        {
+            var episodeService =
+                new EpisodeService(
+                    null,
+                    null,
+                    null);
+        }
+
+        /// <summary>
+        /// Constructor_s the null_ OK.
+        /// </summary>
+        [Test]
+        [ExpectedException(typeof(ServiceException))]
+        public void Constructor_110_OK()
+        {
+            var episodeService =
+                new EpisodeService(
+                    TestApp.Repositories,
+                    TestApp.PodCastDownloader,
+                    null);
+        }
+
+        /// <summary>
+        /// Constructor_s the null_ OK.
+        /// </summary>
+        [Test]
+        [ExpectedException(typeof(ServiceException))]
+        public void Constructor_101_OK()
+        {
+            var episodeService =
+                new EpisodeService(
+                    TestApp.Repositories,
+                    null,
+                    TestApp.EpisodeSaver);
+        }
+
+        /// <summary>
         /// Adds the episode to download list_1_ OK.
         /// </summary>
         [Test]
-        public void AddEpisodeToDownloadList_1_OK()
+        public void AddEpisodeToDownloadList_1x_OK()
         {
             // Arrange:
 
             // Act:
             this.service.AddEpisodeToDownloadList(1, "x");
+
+            // Assert:
+        }
+
+        /// <summary>
+        /// Adds the episode to download list_1_ OK.
+        /// </summary>
+        [Test]
+        [ExpectedException(typeof(ServiceException))]
+        public void AddEpisodeToDownloadList_1Null_OK()
+        {
+            // Arrange:
+
+            // Act:
+            this.service.AddEpisodeToDownloadList(1, null);
 
             // Assert:
         }

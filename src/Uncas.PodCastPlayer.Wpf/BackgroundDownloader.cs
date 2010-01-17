@@ -21,9 +21,19 @@ namespace Uncas.PodCastPlayer.Wpf
         #region Private fields
 
         /// <summary>
-        /// The service.
+        /// The downloader.
         /// </summary>
-        private readonly EpisodeService service;
+        private readonly IPodCastDownloader downloader;
+
+        /// <summary>
+        /// The episode saver.
+        /// </summary>
+        private readonly IEpisodeSaver episodeSaver;
+
+        /// <summary>
+        /// The repositories.
+        /// </summary>
+        private readonly IRepositoryFactory repositories;
 
         /// <summary>
         /// The timer.
@@ -34,6 +44,11 @@ namespace Uncas.PodCastPlayer.Wpf
         /// The background worker.
         /// </summary>
         private readonly BackgroundWorker worker;
+
+        /// <summary>
+        /// The service.
+        /// </summary>
+        private EpisodeService service;
 
         #endregion
 
@@ -50,19 +65,9 @@ namespace Uncas.PodCastPlayer.Wpf
             IPodCastDownloader downloader,
             IEpisodeSaver episodeSaver)
         {
-            try
-            {
-                this.service = new EpisodeService(
-                        repositories,
-                        downloader,
-                        episodeSaver);
-            }
-            catch (ServiceException)
-            {
-                // TODO: EXCEPTION: Pass info along with event handler:
-                // Background downloader does not work properly. You can continue work, but no pod casts will be downloaded.
-            }
-
+            this.repositories = repositories;
+            this.downloader = downloader;
+            this.episodeSaver = episodeSaver;
             this.worker = new BackgroundWorker
                               {
                                   WorkerSupportsCancellation = true
@@ -75,6 +80,38 @@ namespace Uncas.PodCastPlayer.Wpf
             this.timer = new Timer(1000d);
             this.timer.Elapsed +=
                 this.Timer_Elapsed;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the service.
+        /// </summary>
+        private EpisodeService Service
+        {
+            get
+            {
+                if (this.service == null)
+                {
+                    try
+                    {
+                        this.service = new EpisodeService(
+                                this.repositories,
+                                this.downloader,
+                                this.episodeSaver);
+                    }
+                    catch (ServiceException ex)
+                    {
+                        App.HandleException(
+                            "Background downloader does not work properly. You can continue work, but no pod casts will be downloaded.",
+                            ex);
+                    }
+                }
+
+                return this.service;
+            }
         }
 
         #endregion
@@ -136,7 +173,7 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             DoWorkEventArgs e)
         {
-            this.service.DownloadPendingEpisodes();
+            this.Service.DownloadPendingEpisodes();
         }
 
         /// <summary>
@@ -148,6 +185,33 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RunWorkerCompletedEventArgs e)
         {
+            if (e.Error != null)
+            {
+                var message = string.Empty;
+                if (e.Error is RepositoryException)
+                {
+                    message =
+                        "Error saving info about downloads in progress.";
+                }
+
+                if (e.Error is UtilityException)
+                {
+                    message =
+                        "Error downloading episode in background.";
+                }
+                
+                if (e.Error is ServiceException)
+                {
+                    message =
+                        "Error in background download service.";
+                }
+                
+                App.HandleException(
+                    message,
+                    e.Error);
+                return;
+            }
+
             if (!e.Cancelled)
             {
                 this.timer.Start();

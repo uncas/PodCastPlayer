@@ -9,7 +9,9 @@ namespace Uncas.PodCastPlayer.Wpf
     using System;
     using System.Windows;
     using System.Windows.Controls;
-    using Uncas.PodCastPlayer.AppServices;
+    using AppServices;
+    using Repository;
+    using ViewModel;
 
     /// <summary>
     /// Interaction logic for PodCastDetails.xaml
@@ -21,7 +23,7 @@ namespace Uncas.PodCastPlayer.Wpf
         /// <summary>
         /// The service.
         /// </summary>
-        private readonly PodCastService service;
+        private PodCastService service;
 
         /// <summary>
         /// The id of the pod cast.
@@ -43,13 +45,8 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             this.InitializeComponent();
             this.podCastId = podCastId;
-            this.service =
-                new PodCastService(
-                    App.Repositories,
-                    App.Downloader);
             this.Loaded +=
-                new RoutedEventHandler(
-                    this.PodCastDetails_Loaded);
+                this.PodCastDetails_Loaded;
         }
 
         #endregion
@@ -74,10 +71,38 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            if (this.podCastId != null)
+            try
             {
-                var podCast =
-                    this.service.GetPodCast(this.podCastId);
+                this.service =
+                    new PodCastService(
+                        App.Repositories,
+                        App.Downloader);
+            }
+            catch (ServiceException ex)
+            {
+                App.HandleException(
+                    "Service not initialized.",
+                    ex);
+                return;
+            }
+
+            if (this.podCastId.HasValue)
+            {
+                PodCastDetailsViewModel podCast;
+                try
+                {
+                    podCast = 
+                        this.service.GetPodCast(
+                        this.podCastId.Value);
+                }
+                catch (RepositoryException ex)
+                {
+                    App.HandleException(
+                        "Error retrieving pod cast details",
+                        ex);
+                    return;
+                }
+
                 this.nameTextBox.Text = podCast.Name;
                 this.urlTextBox.Text = podCast.Url.ToString();
                 this.descriptionTextBlock.Text = podCast.Description;
@@ -85,8 +110,7 @@ namespace Uncas.PodCastPlayer.Wpf
             }
 
             this.deleteButton.Click +=
-                new RoutedEventHandler(
-                    this.DeleteButton_Click);
+                this.DeleteButton_Click;
         }
 
         /// <summary>
@@ -109,7 +133,23 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            this.service.DeletePodCast(this.podCastId.Value);
+            if (!this.podCastId.HasValue)
+            {
+                return;
+            }
+
+            try
+            {
+                this.service.DeletePodCast(this.podCastId.Value);
+            }
+            catch (RepositoryException ex)
+            {
+                App.HandleException(
+                    "Error deleting pod cast info.",
+                    ex);
+                return;
+            }
+
             this.BackToIndex();
         }
 

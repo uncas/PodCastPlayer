@@ -11,9 +11,9 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
-    using Uncas.PodCastPlayer.Model;
-    using Uncas.PodCastPlayer.Repository;
-    using Uncas.PodCastPlayer.ViewModel;
+    using Model;
+    using Repository;
+    using ViewModel;
 
     /// <summary>
     /// Pod cast repository implemented with SQLite.
@@ -47,7 +47,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             int podCastId,
             string episodeId)
         {
-            DBEpisode episode = null;
+            DBEpisode episode;
             try
             {
                 episode =
@@ -90,7 +90,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public EpisodeIndexViewModel GetEpisodes(
             int podCastId)
         {
-            DBPodCast podCast = null;
+            DBPodCast podCast;
             try
             {
                 podCast =
@@ -110,7 +110,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
                 return null;
             }
 
-            IEnumerable<DBEpisode> episodes = null;
+            IEnumerable<DBEpisode> episodes;
             try
             {
                 episodes =
@@ -144,8 +144,8 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public IList<Episode> GetEpisodesToDownload()
         {
-            IList<DBEpisode> episodes = null;
-            IList<DBPodCast> podCasts = null;
+            IList<DBEpisode> episodes;
+            IList<DBPodCast> podCasts;
             try
             {
                 episodes =
@@ -195,7 +195,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
         public void UpdateEpisode(
             Episode episode)
         {
-            DBEpisode e = null;
+            DBEpisode e;
             try
             {
                 e = this.DB.Single<DBEpisode>(
@@ -231,7 +231,7 @@ namespace Uncas.PodCastPlayer.SQLiteRepository
             int podCastId,
             IList<Episode> episodes)
         {
-            IQueryable<DBEpisode> oldEpisodes = null;
+            IQueryable<DBEpisode> oldEpisodes;
             try
             {
                 oldEpisodes =

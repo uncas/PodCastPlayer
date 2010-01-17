@@ -50,11 +50,11 @@ namespace Uncas.PodCastPlayer.Wpf
                     App.Downloader,
                     App.EpisodeSaver);
             }
-            catch (ServiceException)
+            catch (ServiceException ex)
             {
-                MessageBox.Show("Download index cannot be displayed.");
-                
-                // TODO: LOG exception.
+                App.HandleException(
+                    "Download index cannot be displayed.",
+                    ex);
                 return;
             }
 
@@ -63,11 +63,11 @@ namespace Uncas.PodCastPlayer.Wpf
                 this.episodesListBox.ItemsSource =
                     service.GetDownloadIndex();
             }
-            catch (RepositoryException)
+            catch (RepositoryException ex)
             {
-                MessageBox.Show("Download index data could not be retrieved.");
-                
-                // TODO: LOG exception.
+                App.HandleException(
+                    "Download index data could not be retrieved.",
+                    ex);
                 throw;
             }
         }

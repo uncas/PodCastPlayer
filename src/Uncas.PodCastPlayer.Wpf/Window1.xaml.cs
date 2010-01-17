@@ -23,8 +23,7 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             InitializeComponent();
             this.Loaded +=
-                new RoutedEventHandler(
-                    this.Window1_Loaded);
+                this.Window1_Loaded;
         }
 
         #endregion
@@ -39,11 +38,9 @@ namespace Uncas.PodCastPlayer.Wpf
             RoutedEventArgs e)
         {
             this.podCastsButton.Click +=
-                new RoutedEventHandler(
-                    this.PodCastsButton_Click);
+                this.PodCastsButton_Click;
             this.downloadsButton.Click +=
-                new RoutedEventHandler(
-                    this.DownloadsButton_Click);
+                this.DownloadsButton_Click;
             this.ShowPodCastIndex();
         }
 
@@ -56,7 +53,7 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            DownloadIndex downloads = new DownloadIndex();
+            var downloads = new DownloadIndex();
             this.contentControl.Content = downloads;
         }
 
@@ -65,14 +62,12 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         private void ShowPodCastIndex()
         {
-            PodCastIndex podCastIndex = new PodCastIndex();
+            var podCastIndex = new PodCastIndex();
             podCastIndex.PodCastSelected +=
-                new System.EventHandler<PodCastSelectedEventArgs>(
-                    this.PodCastIndex_PodCastSelected);
+                this.PodCastIndex_PodCastSelected;
             podCastIndex.EpisodesSelected +=
-                new EventHandler<PodCastSelectedEventArgs>(
-                    this.PodCastIndex_EpisodesSelected);
-            podCastIndex.NewPodCastClick += new EventHandler(this.PodCastIndex_NewPodCastClick);
+                this.PodCastIndex_EpisodesSelected;
+            podCastIndex.NewPodCastClick += this.PodCastIndex_NewPodCastClick;
 
             this.contentControl.Content = podCastIndex;
         }
@@ -86,10 +81,9 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             EventArgs e)
         {
-            PodCastCreate podCastNew = new PodCastCreate();
+            var podCastNew = new PodCastCreate();
             podCastNew.PodCastCreated +=
-                new EventHandler<PodCastSelectedEventArgs>(
-                    this.PodCastNew_PodCastCreated);
+                this.PodCastNew_PodCastCreated;
             this.contentControl.Content = podCastNew;
         }
 
@@ -116,7 +110,7 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             if (e.PodCastId.HasValue)
             {
-                EpisodeIndex index =
+                var index =
                     new EpisodeIndex(
                     e.PodCastId.Value);
                 contentControl.Content = index;
@@ -153,13 +147,12 @@ namespace Uncas.PodCastPlayer.Wpf
         /// <param name="e">The <see cref="Uncas.PodCastPlayer.Wpf.PodCastSelectedEventArgs"/> instance containing the event data.</param>
         private void ShowDetails(PodCastSelectedEventArgs e)
         {
-            PodCastDetails details =
+            var details =
                 new PodCastDetails(
                     e.PodCastId);
             contentControl.Content = details;
             details.PodCastSaved +=
-                new EventHandler(
-                    this.Details_PodCastSaved);
+                this.Details_PodCastSaved;
         }
 
         /// <summary>

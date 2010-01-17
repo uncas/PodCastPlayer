@@ -9,22 +9,26 @@ namespace Uncas.PodCastPlayer.Wpf
     using System;
     using System.Windows;
     using System.Windows.Controls;
-    using Uncas.PodCastPlayer.AppServices;
-    using Uncas.PodCastPlayer.Utility;
-    using Uncas.PodCastPlayer.ViewModel;
+    using AppServices;
+    using Repository;
+    using Utility;
+    using ViewModel;
 
     /// <summary>
     /// Interaction logic for PodCastCreate.xaml
     /// </summary>
     public partial class PodCastCreate : UserControl
     {
+        #region Private fields
+
         /// <summary>
         /// The pod cast service.
         /// </summary>
-        private PodCastService service =
-            new PodCastService(
-                App.Repositories,
-                App.Downloader);
+        private PodCastService service;
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastCreate"/> class.
@@ -33,15 +37,23 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             this.InitializeComponent();
             this.createButton.Click +=
-                new RoutedEventHandler(
-                    this.CreateButton_Click);
+                this.CreateButton_Click;
+            this.Loaded += this.PodCastCreate_Loaded;
         }
+
+        #endregion
+
+        #region Events
 
         /// <summary>
         /// Occurs when the pod cast has been created.
         /// </summary>
         internal event EventHandler<PodCastSelectedEventArgs>
             PodCastCreated;
+
+        #endregion
+
+        #region Private methods
 
         /// <summary>
         /// Displays the error message.
@@ -51,6 +63,30 @@ namespace Uncas.PodCastPlayer.Wpf
             string message)
         {
             MessageBox.Show(message);
+        }
+
+        /// <summary>
+        /// Handles the Loaded event of the PodCastCreate control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        private void PodCastCreate_Loaded(
+            object sender,
+            RoutedEventArgs e)
+        {
+            try
+            {
+                this.service =
+                    new PodCastService(
+                        App.Repositories,
+                        App.Downloader);
+            }
+            catch (ServiceException ex)
+            {
+                App.HandleException(
+                    "Service did not initialize.",
+                    ex);
+            }
         }
 
         /// <summary>
@@ -68,15 +104,10 @@ namespace Uncas.PodCastPlayer.Wpf
                 return;
             }
 
-            Uri podCastUrl = null;
+            Uri podCastUrl;
             try
             {
                 podCastUrl = new Uri(urlTextBox.Text);
-            }
-            catch (ArgumentNullException)
-            {
-                DisplayErrorMessage("No url provided");
-                return;
             }
             catch (UriFormatException)
             {
@@ -84,16 +115,26 @@ namespace Uncas.PodCastPlayer.Wpf
                 return;
             }
 
-            PodCastNewViewModel result = null;
+            PodCastNewViewModel result;
             try
             {
                 result =
                     this.service.CreatePodCast(
                     podCastUrl);
             }
-            catch (ServiceException)
+            catch (UtilityException ex)
             {
-                DisplayErrorMessage("Invalid pod cast");
+                // TODO: EXCEPTION: Resolve ambiguity: This can mean either 1) the uri is not a valid feed/pod cast, 2) the utility had problems retrieving the pod cast info.
+                App.HandleException(
+                    "Invalid pod cast or problems retrieving pod cast info.",
+                    ex);
+                return;
+            }
+            catch (RepositoryException ex)
+            {
+                App.HandleException(
+                    "Unable to save new pod cast info.",
+                    ex);
                 return;
             }
 
@@ -111,8 +152,10 @@ namespace Uncas.PodCastPlayer.Wpf
             }
             else
             {
-                DisplayErrorMessage("Error adding pod cast");
+                DisplayErrorMessage("Pod cast not created properly.");
             }
         }
+
+        #endregion
     }
 }

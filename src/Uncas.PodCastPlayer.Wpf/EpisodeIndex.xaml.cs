@@ -50,11 +50,11 @@ namespace Uncas.PodCastPlayer.Wpf
                     App.Downloader,
                     App.EpisodeSaver);
             }
-            catch (ServiceException)
+            catch (ServiceException ex)
             {
-                MessageBox.Show("Service could not be loaded.");
-                
-                // TODO: Log exception.
+                App.HandleException(
+                    "Service could not be loaded.",
+                    ex);
                 return;
             }
 
@@ -152,17 +152,17 @@ namespace Uncas.PodCastPlayer.Wpf
                 // Updates from service:
                 this.service.UpdateEpisodes(this.podCastId);
             }
-            catch (UtilityException)
+            catch (UtilityException ex)
             {
-                MessageBox.Show("Episode index could not be retrieved from the internet.");
-                
-                // TODO: LOG exception info.
+                App.HandleException(
+                    "Episode index could not be retrieved from the internet.",
+                    ex);
             }
-            catch (RepositoryException)
+            catch (RepositoryException ex)
             {
-                MessageBox.Show("Updated episode index could not be saved.");
-                
-                // TODO: LOG exception info.
+                App.HandleException(
+                    "Updated episode index could not be saved.",
+                    ex);
             }
 
             // Updates the list of episodes:

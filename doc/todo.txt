@@ -68,16 +68,16 @@ X Change layout of:
     X BaseService
     X EpisodeService
     X PodCastService
-  - Wpf
+  X Wpf
     X PodCastSelectedEventArgs.cs
     X DownloadIndex.xaml.cs
     X EpisodeIndex.xaml.cs
-    - PodCastCreate.xaml.cs
-    - PodCastDetails.xaml.cs
-    - PodCastIndex.xaml.cs
-    - Window1.xaml.cs
-    - BackgroundDownloader ???
-    - App.xaml.cs
+    X PodCastCreate.xaml.cs
+    X PodCastDetails.xaml.cs
+    X PodCastIndex.xaml.cs
+    X Window1.xaml.cs
+    X BackgroundDownloader ???
+    X App.xaml.cs
   - Fakes
 
 - IList -> ICollection -> IEnumerable ?!

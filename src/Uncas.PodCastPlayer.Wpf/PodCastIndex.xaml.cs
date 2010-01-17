@@ -9,18 +9,25 @@ namespace Uncas.PodCastPlayer.Wpf
     using System;
     using System.Windows;
     using System.Windows.Controls;
-    using Uncas.PodCastPlayer.AppServices;
-    using Uncas.PodCastPlayer.ViewModel;
+    using AppServices;
+    using Repository;
+    using ViewModel;
 
     /// <summary>
     /// Interaction logic for PodCastIndex.xaml
     /// </summary>
     public sealed partial class PodCastIndex : UserControl
     {
+        #region private fields
+
         /// <summary>
         /// The pod cast service.
         /// </summary>
         private PodCastService service;
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PodCastIndex"/> class.
@@ -28,13 +35,13 @@ namespace Uncas.PodCastPlayer.Wpf
         public PodCastIndex()
         {
             this.InitializeComponent();
-            this.service = new PodCastService(
-                App.Repositories,
-                App.Downloader);
             this.Loaded +=
-                new RoutedEventHandler(
-                    this.PodCastIndex_Loaded);
+                this.PodCastIndex_Loaded;
         }
+
+        #endregion
+
+        #region Events
 
         /// <summary>
         /// Occurs when [pod cast selected].
@@ -53,6 +60,10 @@ namespace Uncas.PodCastPlayer.Wpf
         internal event EventHandler<PodCastSelectedEventArgs>
             EpisodesSelected;
 
+        #endregion
+
+        #region Private methods
+
         /// <summary>
         /// Handles the Loaded event of the PodCastIndex control.
         /// </summary>
@@ -62,14 +73,37 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            podCastsListBox.ItemsSource =
-                this.service.GetPodCasts();
+            try
+            {
+                this.service = new PodCastService(
+                    App.Repositories,
+                    App.Downloader);
+            }
+            catch (ServiceException ex)
+            {
+                App.HandleException(
+                    "Error initializing service.",
+                    ex);
+                return;
+            }
+
+            try
+            {
+                podCastsListBox.ItemsSource =
+                    this.service.GetPodCasts();
+            }
+            catch (RepositoryException ex)
+            {
+                App.HandleException(
+                    "Error retrieving pod cast index.",
+                    ex);
+                return;
+            }
+
             podCastsListBox.SelectionChanged +=
-                new SelectionChangedEventHandler(
-                    this.PodCastsListBox_SelectionChanged);
+                this.PodCastsListBox_SelectionChanged;
             addPodCastButton.Click +=
-                new RoutedEventHandler(
-                    this.AddPodCastButton_Click);
+                this.AddPodCastButton_Click;
         }
 
         /// <summary>
@@ -113,19 +147,21 @@ namespace Uncas.PodCastPlayer.Wpf
             PodCastIndexViewModel selectedPodCast,
             EventHandler<PodCastSelectedEventArgs> eventHandler)
         {
-            if (eventHandler != null)
+            if (eventHandler == null)
             {
-                int? podCastId =
-                    selectedPodCast != null ?
-                    selectedPodCast.Id :
-                    null;
-                var podCastSelectedArgs =
-                    new PodCastSelectedEventArgs(
-                        podCastId);
-                eventHandler(
-                    this,
-                    podCastSelectedArgs);
+                return;
             }
+
+            var podCastId =
+                selectedPodCast != null ?
+                selectedPodCast.Id :
+                null;
+            var podCastSelectedArgs =
+                new PodCastSelectedEventArgs(
+                    podCastId);
+            eventHandler(
+                this,
+                podCastSelectedArgs);
         }
 
         /// <summary>
@@ -144,5 +180,7 @@ namespace Uncas.PodCastPlayer.Wpf
                 podCast,
                 this.EpisodesSelected);
         }
+
+        #endregion
     }
 }

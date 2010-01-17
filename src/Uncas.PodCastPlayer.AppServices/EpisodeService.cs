@@ -174,12 +174,6 @@ namespace Uncas.PodCastPlayer.AppServices
             Debug.Assert(
                 episode != null,
                 "A non-null episode is required internally.");
-            if (episode == null)
-            {
-                throw new ServiceException(
-                    "Episode is required.");
-            }
-
             var fileName = episode.FileName;
             var relativeFolderPath =
                 Path.Combine(

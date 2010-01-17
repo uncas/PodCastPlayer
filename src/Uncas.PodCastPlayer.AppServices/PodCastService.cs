@@ -78,15 +78,10 @@ namespace Uncas.PodCastPlayer.AppServices
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>Details of the pod cast.</returns>
         /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
-        public PodCastDetailsViewModel GetPodCast(int? podCastId)
+        public PodCastDetailsViewModel GetPodCast(int podCastId)
         {
-            if (!podCastId.HasValue)
-            {
-                return null;
-            }
-
             return this.PodCastRepository.GetPodCastDetails(
-                podCastId.Value);
+                podCastId);
         }
 
         /// <summary>

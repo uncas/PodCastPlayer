@@ -7,6 +7,7 @@
 namespace Uncas.PodCastPlayer.Wpf
 {
     using System;
+    using System.Globalization;
     using System.IO;
     using System.Windows;
     using System.Windows.Threading;
@@ -118,14 +119,14 @@ namespace Uncas.PodCastPlayer.Wpf
             {
                 if (repositories == null)
                 {
-                    string myMusicPath =
+                    var myMusicPath =
                         Environment.GetFolderPath(
                         Environment.SpecialFolder.MyMusic);
-                    string podCastsPath =
+                    var podCastsPath =
                         Path.Combine(
                         myMusicPath,
                         "PodCasts");
-                    string repositorypath =
+                    var repositorypath =
                         Path.Combine(
                         podCastsPath,
                         "PodCastPlayer.db");
@@ -139,6 +140,26 @@ namespace Uncas.PodCastPlayer.Wpf
         }
 
         #endregion
+
+        /// <summary>
+        /// Handles the exception.
+        /// </summary>
+        /// <param name="customMessage">The custom message.</param>
+        /// <param name="exception">The exception.</param>
+        public static void HandleException(
+            string customMessage,
+            Exception exception)
+        {
+            var messageToShow =
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    "{0}\n\n{1}",
+                    customMessage,
+                    exception);
+            MessageBox.Show(messageToShow);
+
+            // TODO: LOG EXCEPTION.
+        }
 
         #region IDisposable Members
 
@@ -176,7 +197,9 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(e.Exception.ToString());
+            HandleException(
+                "Unhandled exception.",
+                e.Exception);
             e.Handled = true;
         }
 
