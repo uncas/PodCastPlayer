@@ -8,7 +8,8 @@ namespace Uncas.PodCastPlayer.Wpf
 {
     using System.Windows;
     using System.Windows.Controls;
-    using Uncas.PodCastPlayer.AppServices;
+    using AppServices;
+    using Repository;
 
     /// <summary>
     /// Interaction logic for DownloadIndex.xaml
@@ -24,8 +25,7 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             this.InitializeComponent();
             this.Loaded +=
-                new RoutedEventHandler(
-                    this.DownloadIndex_Loaded);
+                this.DownloadIndex_Loaded;
         }
 
         #endregion
@@ -41,13 +41,35 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            var service =
-                new EpisodeService(
-                App.Repositories,
-                App.Downloader,
-                App.EpisodeSaver);
-            this.episodesListBox.ItemsSource =
-                service.GetDownloadIndex();
+            EpisodeService service;
+            try
+            {
+                service =
+                    new EpisodeService(
+                    App.Repositories,
+                    App.Downloader,
+                    App.EpisodeSaver);
+            }
+            catch (ServiceException)
+            {
+                MessageBox.Show("Download index cannot be displayed.");
+                
+                // TODO: LOG exception.
+                return;
+            }
+
+            try
+            {
+                this.episodesListBox.ItemsSource =
+                    service.GetDownloadIndex();
+            }
+            catch (RepositoryException)
+            {
+                MessageBox.Show("Download index data could not be retrieved.");
+                
+                // TODO: LOG exception.
+                throw;
+            }
         }
 
         #endregion

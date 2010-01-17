@@ -6,8 +6,8 @@
 
 namespace Uncas.PodCastPlayer.AppServices
 {
-    using Uncas.PodCastPlayer.Repository;
-    using Uncas.PodCastPlayer.Utility;
+    using Repository;
+    using Utility;
 
     /// <summary>
     /// A base service class.
@@ -36,7 +36,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// <param name="repositories">The repositories.</param>
         /// <param name="downloader">The downloader.</param>
         /// <exception cref="Uncas.PodCastPlayer.AppServices.ServiceException"></exception>
-        protected internal BaseService(
+        protected BaseService(
             IRepositoryFactory repositories,
             IPodCastDownloader downloader)
         {

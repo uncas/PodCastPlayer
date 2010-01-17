@@ -8,6 +8,7 @@ namespace Uncas.PodCastPlayer.AppServices
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using Model;
@@ -20,10 +21,14 @@ namespace Uncas.PodCastPlayer.AppServices
     /// </summary>
     public class EpisodeService : BaseService
     {
+        #region Private fields
+
         /// <summary>
         /// The episode saver.
         /// </summary>
         private readonly IEpisodeSaver saver;
+
+        #endregion
 
         #region Constructor
 
@@ -58,6 +63,8 @@ namespace Uncas.PodCastPlayer.AppServices
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <param name="episodeId">The episode id.</param>
+        /// <exception cref="Uncas.PodCastPlayer.AppServices.ServiceException"></exception>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public void AddEpisodeToDownloadList(
             int podCastId,
             string episodeId)
@@ -65,9 +72,11 @@ namespace Uncas.PodCastPlayer.AppServices
             if (string.IsNullOrEmpty(episodeId))
             {
                 throw new ServiceException(
-                    "Episode id must be specified");
+                    "Episode id must be specified.");
             }
 
+            // Adds episode to download list
+            // and passes exceptions through.
             this.EpisodeRepository.AddEpisodeToDownloadList(
                 podCastId,
                 episodeId);
@@ -76,6 +85,9 @@ namespace Uncas.PodCastPlayer.AppServices
         /// <summary>
         /// Downloads the pending episodes.
         /// </summary>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
+        /// <exception cref="Uncas.PodCastPlayer.AppServices.ServiceException"></exception>
         public void DownloadPendingEpisodes()
         {
             while (true)
@@ -98,6 +110,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// Gets an index of the episodes to download.
         /// </summary>
         /// <returns>An index of the episodes to download.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         [SuppressMessage(
             "Microsoft.Design",
             "CA1024:UsePropertiesWhereAppropriate",
@@ -112,6 +125,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>An index of episodes.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public EpisodeIndexViewModel GetEpisodes(
             int podCastId)
         {
@@ -123,6 +137,8 @@ namespace Uncas.PodCastPlayer.AppServices
         /// Updates the episodes.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public void UpdateEpisodes(int podCastId)
         {
             // Gets pod cast info:
@@ -149,31 +165,43 @@ namespace Uncas.PodCastPlayer.AppServices
         /// Downloads the episode.
         /// </summary>
         /// <param name="episode">The episode.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
+        /// <exception cref="Uncas.PodCastPlayer.AppServices.ServiceException"></exception>
         private void DownloadEpisode(
            Episode episode)
         {
-            string fileName = episode.FileName;
-            string relativeFolderPath =
+            Debug.Assert(
+                episode != null,
+                "A non-null episode is required internally.");
+            if (episode == null)
+            {
+                throw new ServiceException(
+                    "Episode is required.");
+            }
+
+            var fileName = episode.FileName;
+            var relativeFolderPath =
                 Path.Combine(
                 "PodCasts",
                 episode.PodCast.Name);
-            string absoluteFolderPath =
+            var absoluteFolderPath =
                 Path.Combine(
                     Environment.GetFolderPath(
                         Environment.SpecialFolder.MyMusic),
                     relativeFolderPath);
-            string filePath =
+            var filePath =
                 Path.Combine(
                     absoluteFolderPath,
                     fileName);
 
             // Gets stream:
-            EpisodeMedia podCastStream =
+            var podCastStream =
                 this.Downloader.GetEpisodeStream(
                 episode.MediaUrl);
 
             // Saves stream:
-            long downloadedBytes =
+            var downloadedBytes =
                 this.saver.SaveStream(
                 filePath,
                 podCastStream.Length,

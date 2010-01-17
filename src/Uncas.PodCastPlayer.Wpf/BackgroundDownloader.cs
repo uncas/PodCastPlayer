@@ -9,14 +9,14 @@ namespace Uncas.PodCastPlayer.Wpf
     using System;
     using System.ComponentModel;
     using System.Timers;
-    using Uncas.PodCastPlayer.AppServices;
-    using Uncas.PodCastPlayer.Repository;
-    using Uncas.PodCastPlayer.Utility;
+    using AppServices;
+    using Repository;
+    using Utility;
 
     /// <summary>
     /// Handles background downloads.
     /// </summary>
-    public class BackgroundDownloader : IDisposable
+    public sealed class BackgroundDownloader : IDisposable
     {
         #region Private fields
 
@@ -42,14 +42,6 @@ namespace Uncas.PodCastPlayer.Wpf
         /// <summary>
         /// Initializes a new instance of the <see cref="BackgroundDownloader"/> class.
         /// </summary>
-        public BackgroundDownloader()
-            : this(App.Repositories, App.Downloader, App.EpisodeSaver)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundDownloader"/> class.
-        /// </summary>
         /// <param name="repositories">The repositories.</param>
         /// <param name="downloader">The downloader.</param>
         /// <param name="episodeSaver">The episode saver.</param>
@@ -58,24 +50,31 @@ namespace Uncas.PodCastPlayer.Wpf
             IPodCastDownloader downloader,
             IEpisodeSaver episodeSaver)
         {
-            this.service = new EpisodeService(
-                repositories,
-                downloader,
-                episodeSaver);
+            try
+            {
+                this.service = new EpisodeService(
+                        repositories,
+                        downloader,
+                        episodeSaver);
+            }
+            catch (ServiceException)
+            {
+                // TODO: EXCEPTION: Pass info along with event handler:
+                // Background downloader does not work properly. You can continue work, but no pod casts will be downloaded.
+            }
 
-            this.worker = new BackgroundWorker();
-            this.worker.WorkerSupportsCancellation = true;
+            this.worker = new BackgroundWorker
+                              {
+                                  WorkerSupportsCancellation = true
+                              };
             this.worker.DoWork +=
-                new DoWorkEventHandler(
-                    this.Worker_DoWork);
+                this.Worker_DoWork;
             this.worker.RunWorkerCompleted +=
-                new RunWorkerCompletedEventHandler(
-                    this.Worker_RunWorkerCompleted);
+                this.Worker_RunWorkerCompleted;
 
             this.timer = new Timer(1000d);
             this.timer.Elapsed +=
-                new ElapsedEventHandler(
-                    this.Timer_Elapsed);
+                this.Timer_Elapsed;
         }
 
         #endregion
@@ -115,7 +114,7 @@ namespace Uncas.PodCastPlayer.Wpf
         /// Releases unmanaged and - optionally - managed resources
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {

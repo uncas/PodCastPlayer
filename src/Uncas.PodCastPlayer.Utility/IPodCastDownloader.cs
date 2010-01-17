@@ -29,7 +29,6 @@ namespace Uncas.PodCastPlayer.Utility
         /// <param name="podCastUrl">The pod cast URL.</param>
         /// <returns>Details about the pod cast.</returns>
         /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
-        /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
         PodCast DownloadPodCastInfo(Uri podCastUrl);
 
         /// <summary>

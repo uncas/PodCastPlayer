@@ -9,10 +9,9 @@ namespace Uncas.PodCastPlayer.AppServices
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using Uncas.PodCastPlayer.Model;
-    using Uncas.PodCastPlayer.Repository;
-    using Uncas.PodCastPlayer.Utility;
-    using Uncas.PodCastPlayer.ViewModel;
+    using Repository;
+    using Utility;
+    using ViewModel;
 
     /// <summary>
     /// Service for pod casts.
@@ -26,6 +25,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// </summary>
         /// <param name="repositories">The repositories.</param>
         /// <param name="downloader">The downloader.</param>
+        /// <exception cref="Uncas.PodCastPlayer.AppServices.ServiceException"></exception>
         public PodCastService(
             IRepositoryFactory repositories,
             IPodCastDownloader downloader)
@@ -41,6 +41,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// Deletes the pod cast.
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public void DeletePodCast(int podCastId)
         {
             this.PodCastRepository.DeletePodCast(podCastId);
@@ -50,6 +51,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// Gets the pod casts.
         /// </summary>
         /// <returns>A list of pod casts.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         [SuppressMessage(
            "Microsoft.Design",
            "CA1024:UsePropertiesWhereAppropriate",
@@ -63,6 +65,7 @@ namespace Uncas.PodCastPlayer.AppServices
         /// Saves the pod cast.
         /// </summary>
         /// <param name="podCast">The pod cast.</param>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public void SavePodCast(
             PodCastDetailsViewModel podCast)
         {
@@ -74,8 +77,14 @@ namespace Uncas.PodCastPlayer.AppServices
         /// </summary>
         /// <param name="podCastId">The pod cast id.</param>
         /// <returns>Details of the pod cast.</returns>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public PodCastDetailsViewModel GetPodCast(int? podCastId)
         {
+            if (!podCastId.HasValue)
+            {
+                return null;
+            }
+
             return this.PodCastRepository.GetPodCastDetails(
                 podCastId.Value);
         }
@@ -86,11 +95,12 @@ namespace Uncas.PodCastPlayer.AppServices
         /// <param name="podCastUrl">The pod cast URL.</param>
         /// <returns>A view of the new pod cast.</returns>
         /// <exception cref="Uncas.PodCastPlayer.Utility.UtilityException"></exception>
+        /// <exception cref="Uncas.PodCastPlayer.Repository.RepositoryException"></exception>
         public PodCastNewViewModel CreatePodCast(
             Uri podCastUrl)
         {
             // Gets pod cast info from utility:
-            PodCast podCast =
+            var podCast =
                 this.Downloader.DownloadPodCastInfo(
                 podCastUrl);
 

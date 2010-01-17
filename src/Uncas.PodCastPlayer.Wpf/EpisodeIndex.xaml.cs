@@ -8,8 +8,10 @@ namespace Uncas.PodCastPlayer.Wpf
 {
     using System.Windows;
     using System.Windows.Controls;
-    using Uncas.PodCastPlayer.AppServices;
-    using Uncas.PodCastPlayer.ViewModel;
+    using AppServices;
+    using Repository;
+    using Utility;
+    using ViewModel;
 
     /// <summary>
     /// Interaction logic for EpisodeIndex.xaml
@@ -40,15 +42,25 @@ namespace Uncas.PodCastPlayer.Wpf
             int podCastId)
         {
             this.InitializeComponent();
-            this.service =
-                new EpisodeService(
-                App.Repositories,
-                App.Downloader,
-                App.EpisodeSaver);
+            try
+            {
+                this.service =
+                    new EpisodeService(
+                    App.Repositories,
+                    App.Downloader,
+                    App.EpisodeSaver);
+            }
+            catch (ServiceException)
+            {
+                MessageBox.Show("Service could not be loaded.");
+                
+                // TODO: Log exception.
+                return;
+            }
+
             this.podCastId = podCastId;
             this.Loaded +=
-                new RoutedEventHandler(
-                    this.EpisodeIndex_Loaded);
+                this.EpisodeIndex_Loaded;
         }
 
         #endregion
@@ -69,10 +81,23 @@ namespace Uncas.PodCastPlayer.Wpf
             var episode =
                 (EpisodeIndexItemViewModel)
                 downloadButton.DataContext;
-            string episodeId = episode.Id;
-            this.service.AddEpisodeToDownloadList(
-                this.podCastId,
-                episodeId);
+            var episodeId = episode.Id;
+
+            try
+            {
+                this.service.AddEpisodeToDownloadList(
+                    this.podCastId,
+                    episodeId);
+            }
+            catch (ServiceException)
+            {
+                MessageBox.Show("Could not be added to download list.");
+            }
+            catch (RepositoryException)
+            {
+                MessageBox.Show("Could not be added to download list.");
+            }
+
             this.LoadEpisodes();
         }
 
@@ -86,8 +111,7 @@ namespace Uncas.PodCastPlayer.Wpf
             RoutedEventArgs e)
         {
             this.updateEpisodesButton.Click +=
-                new RoutedEventHandler(
-                    this.UpdateEpisodesButton_Click);
+                this.UpdateEpisodesButton_Click;
             this.LoadEpisodes();
         }
 
@@ -96,13 +120,22 @@ namespace Uncas.PodCastPlayer.Wpf
         /// </summary>
         private void LoadEpisodes()
         {
-            var episodeIndex =
-                this.service.GetEpisodes(
-                this.podCastId);
-            this.podCastNameTextBlock.Text =
-                episodeIndex.PodCastName;
-            this.episodesListBox.ItemsSource =
-                episodeIndex.Episodes;
+            try
+            {
+                var episodeIndex =
+                    this.service.GetEpisodes(
+                    this.podCastId);
+                this.podCastNameTextBlock.Text =
+                    episodeIndex.PodCastName;
+                this.episodesListBox.ItemsSource =
+                    episodeIndex.Episodes;
+            }
+            catch (RepositoryException)
+            {
+                MessageBox.Show(
+                    "Episode index could not be retrieved from storage.");
+                return;
+            }
         }
 
         /// <summary>
@@ -114,8 +147,23 @@ namespace Uncas.PodCastPlayer.Wpf
             object sender,
             RoutedEventArgs e)
         {
-            // Updates from service:
-            this.service.UpdateEpisodes(this.podCastId);
+            try
+            {
+                // Updates from service:
+                this.service.UpdateEpisodes(this.podCastId);
+            }
+            catch (UtilityException)
+            {
+                MessageBox.Show("Episode index could not be retrieved from the internet.");
+                
+                // TODO: LOG exception info.
+            }
+            catch (RepositoryException)
+            {
+                MessageBox.Show("Updated episode index could not be saved.");
+                
+                // TODO: LOG exception info.
+            }
 
             // Updates the list of episodes:
             this.LoadEpisodes();

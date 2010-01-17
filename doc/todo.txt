@@ -64,11 +64,20 @@ X Change layout of:
     X EpisodeMedia
     X EpisodeSaver
     X PodCastDownloader
-  - AppServices
+  X AppServices
     X BaseService
-    - EpisodeService
-    - PodCastService
+    X EpisodeService
+    X PodCastService
   - Wpf
+    X PodCastSelectedEventArgs.cs
+    X DownloadIndex.xaml.cs
+    X EpisodeIndex.xaml.cs
+    - PodCastCreate.xaml.cs
+    - PodCastDetails.xaml.cs
+    - PodCastIndex.xaml.cs
+    - Window1.xaml.cs
+    - BackgroundDownloader ???
+    - App.xaml.cs
   - Fakes
 
 - IList -> ICollection -> IEnumerable ?!

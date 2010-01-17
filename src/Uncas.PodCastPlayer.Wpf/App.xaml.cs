@@ -10,9 +10,9 @@ namespace Uncas.PodCastPlayer.Wpf
     using System.IO;
     using System.Windows;
     using System.Windows.Threading;
-    using Uncas.PodCastPlayer.Repository;
-    using Uncas.PodCastPlayer.SQLiteRepository;
-    using Uncas.PodCastPlayer.Utility;
+    using Repository;
+    using SQLiteRepository;
+    using Utility;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -73,10 +73,9 @@ namespace Uncas.PodCastPlayer.Wpf
                     downloader,
                     episodeSaver);
             this.Startup +=
-                new StartupEventHandler(this.App_Startup);
+                this.App_Startup;
             this.DispatcherUnhandledException +=
-                new DispatcherUnhandledExceptionEventHandler(
-                    this.App_DispatcherUnhandledException);
+                App_DispatcherUnhandledException;
         }
 
         #endregion
@@ -91,13 +90,8 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             get
             {
-                if (downloader == null)
-                {
-                    downloader =
-                        new PodCastDownloader();
-                }
-
-                return downloader;
+                return downloader ??
+                    (downloader = new PodCastDownloader());
             }
         }
 
@@ -109,13 +103,8 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             get
             {
-                if (episodeSaver == null)
-                {
-                    episodeSaver =
-                        new EpisodeSaver();
-                }
-
-                return episodeSaver;
+                return episodeSaver ??
+                    (episodeSaver = new EpisodeSaver());
             }
         }
 
@@ -179,6 +168,19 @@ namespace Uncas.PodCastPlayer.Wpf
         #region Private methods
 
         /// <summary>
+        /// Handles the DispatcherUnhandledException event of the App control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.Threading.DispatcherUnhandledExceptionEventArgs"/> instance containing the event data.</param>
+        private static void App_DispatcherUnhandledException(
+            object sender,
+            DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.Exception.ToString());
+            e.Handled = true;
+        }
+
+        /// <summary>
         /// Handles the Startup event of the App control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -189,19 +191,6 @@ namespace Uncas.PodCastPlayer.Wpf
         {
             // Starts background downloader:
             this.backgroundDownloader.Start();
-        }
-
-        /// <summary>
-        /// Handles the DispatcherUnhandledException event of the App control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.Windows.Threading.DispatcherUnhandledExceptionEventArgs"/> instance containing the event data.</param>
-        private void App_DispatcherUnhandledException(
-            object sender,
-            DispatcherUnhandledExceptionEventArgs e)
-        {
-            MessageBox.Show(e.Exception.ToString());
-            e.Handled = true;
         }
 
         #endregion
