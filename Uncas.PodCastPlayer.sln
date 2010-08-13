@@ -1,16 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Model", "src\Uncas.PodCastPlayer.Model\Uncas.PodCastPlayer.Model.csproj", "{990A3CDC-71BB-4235-9B19-FE87D3F81266}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Tests", "src\Uncas.PodCastPlayer.Tests\Uncas.PodCastPlayer.Tests.csproj", "{3C6DDE9F-A35E-403A-98B5-4D3A9BA4CAA9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Repository", "src\Uncas.PodCastPlayer.Repository\Uncas.PodCastPlayer.Repository.csproj", "{BFFE8668-0233-4CF0-98C7-E39934692C9E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Utility", "src\Uncas.PodCastPlayer.Utility\Uncas.PodCastPlayer.Utility.csproj", "{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.ViewModel", "src\Uncas.PodCastPlayer.ViewModel\Uncas.PodCastPlayer.ViewModel.csproj", "{CCC24751-87D9-4FD1-BBB6-F723231933D1}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - User Interface Layer", "1 - User Interface Layer", "{46FC1739-0983-4CAC-BE15-D58EAC2D1B5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Application Layer", "2 - Application Layer", "{599E2286-EBC0-4952-9F55-BE663F7F5E69}"
@@ -20,6 +10,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Tests", "5 - Tests", "{3A545D54-F05F-455B-8D11-057BB46327FB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infrastructure Layer", "4 - Infrastructure Layer", "{15B90C88-7168-43AA-A1E8-E5D8B64B8E11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Model", "src\Uncas.PodCastPlayer.Model\Uncas.PodCastPlayer.Model.csproj", "{990A3CDC-71BB-4235-9B19-FE87D3F81266}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Tests", "src\Uncas.PodCastPlayer.Tests\Uncas.PodCastPlayer.Tests.csproj", "{3C6DDE9F-A35E-403A-98B5-4D3A9BA4CAA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Repository", "src\Uncas.PodCastPlayer.Repository\Uncas.PodCastPlayer.Repository.csproj", "{BFFE8668-0233-4CF0-98C7-E39934692C9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.Utility", "src\Uncas.PodCastPlayer.Utility\Uncas.PodCastPlayer.Utility.csproj", "{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.ViewModel", "src\Uncas.PodCastPlayer.ViewModel\Uncas.PodCastPlayer.ViewModel.csproj", "{CCC24751-87D9-4FD1-BBB6-F723231933D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncas.PodCastPlayer.AppServices", "src\Uncas.PodCastPlayer.AppServices\Uncas.PodCastPlayer.AppServices.csproj", "{DD33AE6A-8372-49A9-9F92-EF7E3259A4F8}"
 EndProject
@@ -124,15 +124,15 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{9B8DA5E7-DF0F-4FE9-9036-ABE23D70F594} = {46FC1739-0983-4CAC-BE15-D58EAC2D1B5A}
+		{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A} = {599E2286-EBC0-4952-9F55-BE663F7F5E69}
+		{DD33AE6A-8372-49A9-9F92-EF7E3259A4F8} = {599E2286-EBC0-4952-9F55-BE663F7F5E69}
+		{990A3CDC-71BB-4235-9B19-FE87D3F81266} = {B569A087-CEE8-4C8E-8B58-F424355778F1}
 		{BFFE8668-0233-4CF0-98C7-E39934692C9E} = {B569A087-CEE8-4C8E-8B58-F424355778F1}
 		{CCC24751-87D9-4FD1-BBB6-F723231933D1} = {B569A087-CEE8-4C8E-8B58-F424355778F1}
-		{990A3CDC-71BB-4235-9B19-FE87D3F81266} = {B569A087-CEE8-4C8E-8B58-F424355778F1}
 		{DAC1C1DD-7058-474E-87F2-1C607158510C} = {B569A087-CEE8-4C8E-8B58-F424355778F1}
 		{3C6DDE9F-A35E-403A-98B5-4D3A9BA4CAA9} = {3A545D54-F05F-455B-8D11-057BB46327FB}
 		{7A4207E9-3507-447A-8181-867EAA3F76CF} = {3A545D54-F05F-455B-8D11-057BB46327FB}
 		{A5BA852A-636C-4DCE-954F-75ED2DE5E07A} = {3A545D54-F05F-455B-8D11-057BB46327FB}
-		{A0609EFB-4C30-4A16-BE7A-5C71CE94A39A} = {599E2286-EBC0-4952-9F55-BE663F7F5E69}
-		{DD33AE6A-8372-49A9-9F92-EF7E3259A4F8} = {599E2286-EBC0-4952-9F55-BE663F7F5E69}
-		{9B8DA5E7-DF0F-4FE9-9036-ABE23D70F594} = {46FC1739-0983-4CAC-BE15-D58EAC2D1B5A}
 	EndGlobalSection
 EndGlobal
