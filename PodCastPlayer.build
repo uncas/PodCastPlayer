@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="PodCastPlayer" default="all">
+<project name="PodCastPlayer" default="build">
 
     <property name="configuration" value="Debug" />
 
@@ -12,7 +12,7 @@
 
     <property name="FxCop"
         value="C:\Program Files\Microsoft FxCop 1.36\FxCopCmd.exe" />
-    <property name="msbuild" value="C:\WINDOWS\Microsoft.NET\Framework\v3.5\msbuild.exe" />
+    <property name="msbuild" value="C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\msbuild.exe" />
     <property name="sqlite" value="C:\Program Files\Tools\sqlite3.exe" />
     <property name="svn" value="C:\Program Files\Subversion\bin\svn.exe" />
     <property name="NUnit.folder" value="C:\Program Files\NUnit 2.4.8\bin" />

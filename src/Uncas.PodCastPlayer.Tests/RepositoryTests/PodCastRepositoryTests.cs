@@ -74,7 +74,7 @@ namespace Uncas.PodCastPlayer.Tests.RepositoryTests
         /// Gets the pod casts.
         /// </summary>
         [Test]
-        public void GetPodCasts_All_OK()
+        public virtual void GetPodCasts_All_OK()
         {
             // Act:
             var podCasts

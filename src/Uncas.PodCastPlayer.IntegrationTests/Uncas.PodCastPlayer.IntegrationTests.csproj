@@ -95,6 +95,10 @@
       <Project>{DD33AE6A-8372-49A9-9F92-EF7E3259A4F8}</Project>
       <Name>Uncas.PodCastPlayer.AppServices</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Uncas.PodCastPlayer.EntityFrameworkRepository\Uncas.PodCastPlayer.EntityFrameworkRepository.csproj">
+      <Project>{0FE5FBC7-461C-449C-B2DE-08CB5362F574}</Project>
+      <Name>Uncas.PodCastPlayer.EntityFrameworkRepository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Uncas.PodCastPlayer.Fakes\Uncas.PodCastPlayer.Fakes.csproj">
       <Project>{7A4207E9-3507-447A-8181-867EAA3F76CF}</Project>
       <Name>Uncas.PodCastPlayer.Fakes</Name>

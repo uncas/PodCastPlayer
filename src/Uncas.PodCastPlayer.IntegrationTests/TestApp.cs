@@ -6,10 +6,9 @@
 
 namespace Uncas.PodCastPlayer.IntegrationTests
 {
-    using System.IO;
+    using Uncas.PodCastPlayer.EntityFrameworkRepository;
     using Uncas.PodCastPlayer.Fakes;
     using Uncas.PodCastPlayer.Repository;
-    using Uncas.PodCastPlayer.SQLiteRepository;
     using Uncas.PodCastPlayer.Utility;
 
     /// <summary>
@@ -106,7 +105,9 @@ namespace Uncas.PodCastPlayer.IntegrationTests
             {
                 if (realRepositories == null)
                 {
-                    string currentDir =
+                    realRepositories =
+                        new EntityFrameworkRepositoryFactory();
+                    /*string currentDir =
                         Directory.GetCurrentDirectory();
                     string repositoryPath =
                         Path.Combine(
@@ -114,7 +115,7 @@ namespace Uncas.PodCastPlayer.IntegrationTests
                         "PodCastPlayerTests.db");
                     realRepositories =
                         new SQLiteRepositoryFactory(
-                            repositoryPath);
+                            repositoryPath);*/
                 }
 
                 return realRepositories;

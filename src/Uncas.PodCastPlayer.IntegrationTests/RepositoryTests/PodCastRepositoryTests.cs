@@ -7,7 +7,6 @@
 namespace Uncas.PodCastPlayer.IntegrationTests.RepositoryTests
 {
     using NUnit.Framework;
-    using Uncas.PodCastPlayer.Repository;
 
     /// <summary>
     /// Testing pod cast repository.
@@ -22,6 +21,11 @@ namespace Uncas.PodCastPlayer.IntegrationTests.RepositoryTests
         public PodCastRepositoryTests()
             : base(TestApp.RealRepositories)
         {
+        }
+
+        public override void GetPodCasts_All_OK()
+        {
+            base.GetPodCasts_All_OK();
         }
     }
 }
