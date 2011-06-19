@@ -35,6 +35,7 @@
         <exec program="${msbuild}">
             <arg value="Uncas.PodCastPlayer.sln" />
             <arg value="/p:Configuration=${configuration}" />
+            <arg value="/t:Rebuild" />
         </exec>
     </target>
 
